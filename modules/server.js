@@ -1,0 +1,68 @@
+import browserSync from 'browser-sync';
+import { Reporter } from './reporter';
+
+export class Server extends Reporter {
+	setConfig(cfg = {}) {
+		if (!cfg.root) this.errThrow('Server entry is not defined');
+
+		this.config = {
+			initial: cfg,
+			debug: false,
+			root: cfg.root,
+			port: 8080,
+			host: 'localhost',
+			open: true,
+			injectChanges: true,
+			...cfg,
+		};
+	}
+
+	onServerStarted(urls) {
+		if (!urls) return;
+		this.log('[👀 Server started ]');
+		this.table(Object.fromEntries(urls));
+	}
+
+	startServer(cfg) {
+		try {
+			this.setConfig(cfg);
+			this.debugLog('Server starting');
+
+			this.server = browserSync.create();
+			this.server.init({
+				server: this.config.root,
+				port: this.config.port,
+				ui: {
+					port: this.config.port - 1000,
+				},
+				files: [this.config.root],
+				open: this.config.open,
+				notify: this.config.debug,
+				logLevel: this.config.debug ? 'debug' : 'silent',
+				injectChanges: this.config.injectChanges,
+				callbacks: {
+					ready: (err, bs) => {
+						// eslint-disable-next-line no-underscore-dangle
+						this.onServerStarted(bs.options.get('urls')._root.entries);
+					},
+				},
+			});
+
+			return this.server;
+		} catch (err) {
+			this.errLog('Server error:', err);
+			return null;
+		}
+	}
+
+	stopServer() {
+		this.server?.exit();
+	}
+
+	restartServer() {
+		this.stopServer();
+		this.startServer(this.config.initial);
+	}
+}
+
+export default Server;

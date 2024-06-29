@@ -1,0 +1,20 @@
+{
+	"description": "Modern and simple bundler. Bun | Pug or HTML | SCSS or CSS | JS | SVG Sprite | Image optimizations",
+	"author": "jsqrt",
+	"license": "MIT",
+	"name": "bun-bundler",
+	"version": "0.1.10",
+	"main": "index.js",
+	"dependencies": {
+		"browser-sync": "^3.0.2",
+		"bun": "^1.1.17",
+		"jsdom": "^24.1.0",
+		"pug": "^3.0.3",
+		"sass": "^1.77.6",
+		"sharp": "^0.33.4"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/jsqrt/bun-bundler.git"
+	}
+}
