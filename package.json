@@ -3,7 +3,7 @@
 	"author": "jsqrt",
 	"license": "MIT",
 	"name": "bun-bundler",
-	"version": "0.1.10",
+	"version": "0.1.11",
 	"main": "index.js",
 	"dependencies": {
 		"browser-sync": "^3.0.2",
