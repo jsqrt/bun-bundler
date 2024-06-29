@@ -1,4 +1,4 @@
-import { Bundler } from '../bundler.mjs';
+import { Bundler } from '../index.mjs';
 import { Server } from './server';
 import { SpriteBuilder } from './sprite-builder';
 import { ImageProcessor } from './image-processor';
