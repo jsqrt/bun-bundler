@@ -9,6 +9,17 @@ import { Reporter } from './modules/reporter';
 const pug = require('pug');
 const sass = require('sass');
 
+/**
+ * The `Bundler` class is responsible for compiling and bundling various types of assets, including HTML, CSS, and JavaScript files. It extends the `Reporter` class, which provides logging and error handling functionality.
+ *
+ * The `Bundler` class has the following key features:
+ * - Supports various file types and extensions for HTML, CSS, and JavaScript files.
+ * - Provides methods for compiling and bundling these asset types, including Pug templates, Sass/SCSS styles, and JavaScript files.
+ * - Handles file watching and incremental rebuilds during development.
+ * - Provides configuration options for customizing the build process, such as output directories, production mode, and callbacks for various build events.
+ *
+ * The `Bundler` class is designed to be used as part of a larger build system or development workflow, providing a flexible and extensible way to manage the compilation and bundling of web assets.
+ */
 export class Bundler extends Reporter {
 	get SUPPORTED_EXTENSIONS() {
 		return {
@@ -18,6 +29,13 @@ export class Bundler extends Reporter {
 		};
 	}
 
+	/**
+	 * Constructs a new instance of the `Bundler` class, which extends the `Reporter` class.
+	 *
+	 * The constructor initializes the following properties:
+	 * - `watchDebounce`: Stores a reference to the debounce timer used for file watching.
+	 * - `config`: An object that holds the configuration options for the `Bundler` instance, including the `rootDir` property which is set to the current working directory.
+	 */
 	constructor() {
 		super();
 
@@ -27,6 +45,18 @@ export class Bundler extends Reporter {
 		};
 	}
 
+	/**
+	 * Compiles a set of files of a specific type (e.g. HTML, CSS, JavaScript) and writes the compiled output to a specified distribution directory.
+	 *
+	 * @param {Object} options - The options object for the compilation process.
+	 * @param {string[]} options.filePaths - An array of file paths to be compiled.
+	 * @param {string} options.type - The type of files being compiled (e.g. 'CSS', 'Pug', 'Scripts').
+	 * @param {function(string): string} options.renderFn - A function that takes a file path and returns the compiled output.
+	 * @param {string} [options.newFileExt] - The new file extension to be used for the compiled output files.
+	 * @param {string} options.dist - The directory path where the compiled output files will be written.
+	 * @param {string} [options.extensionSkip] - The file extension to skip during the compilation process.
+	 * @returns {Promise<void>} - A Promise that resolves when the compilation process is complete.
+	 */
 	async compile({ filePaths, type, renderFn, newFileExt, dist, extensionSkip }) {
 		if (!filePaths.length) {
 			this.errThrow(`${type} - No files to compile`);
@@ -56,6 +86,14 @@ export class Bundler extends Reporter {
 			}),
 		);
 
+		/**
+		 * Writes the compiled output files to the specified distribution directory.
+		 *
+		 * @param {Object[]} compiledData - An array of objects containing the compiled output and file names.
+		 * @param {string} compiledData[].compilationRes - The compiled output for the file.
+		 * @param {string} compiledData[].fileName - The name of the compiled output file.
+		 * @param {string} dist - The directory path where the compiled output files will be written.
+		 */
 		const createDistFiles = () => {
 			Object.values(compiledData).forEach(({ compilationRes, fileName }) => {
 				writeFileSync(path.join(dist, fileName), compilationRes);
@@ -65,6 +103,17 @@ export class Bundler extends Reporter {
 		createDistFiles();
 	}
 
+	/**
+	 * Compiles the Sass/SCSS files and writes the resulting CSS files to the specified distribution directory.
+	 *
+	 * @param {Object} options - The options object for the compilation process.
+	 * @param {string[]} options.filePaths - An array of file paths to the Sass/SCSS files to be compiled.
+	 * @param {string} options.type - The type of compilation being performed (e.g. 'CSS').
+	 * @param {string} options.newFileExt - The new file extension to use for the compiled output files.
+	 * @param {string} options.dist - The directory path where the compiled output files will be written.
+	 * @param {function(string): {css: string}} options.renderFn - A function that takes a file path and returns the compiled CSS output.
+	 * @returns {Promise<void>} - A Promise that resolves when the compilation process is complete.
+	 */
 	async compileStyles() {
 		this.debugLog('Styles compilation');
 		createDir(this.config.cssDist);
@@ -82,6 +131,18 @@ export class Bundler extends Reporter {
 		}
 	}
 
+	/**
+	 * Compiles the Pug/HTML files and writes the resulting HTML files to the specified distribution directory.
+	 *
+	 * @param {Object} options - The options object for the compilation process.
+	 * @param {string[]} options.filePaths - An array of file paths to the Pug/HTML files to be compiled.
+	 * @param {string} options.extensionSkip - The file extension to skip during compilation.
+	 * @param {string} options.type - The type of compilation being performed (e.g. 'Pug').
+	 * @param {string} options.newFileExt - The new file extension to use for the compiled output files.
+	 * @param {string} options.dist - The directory path where the compiled output files will be written.
+	 * @param {function(string): string} options.renderFn - A function that takes a file path and returns the compiled HTML output.
+	 * @returns {Promise<void>} - A Promise that resolves when the compilation process is complete.
+	 */
 	async compilePug() {
 		this.debugLog('HTML compilation');
 		try {
@@ -109,6 +170,11 @@ export class Bundler extends Reporter {
 		}
 	}
 
+	/**
+	 * Compiles the JavaScript files and writes the resulting JavaScript files to the specified distribution directory.
+	 *
+	 * @returns {Promise<void>} - A Promise that resolves when the compilation process is complete.
+	 */
 	async compileScripts() {
 		this.debugLog('Scripts compilation');
 		createDir(this.config.jsDist);
@@ -133,6 +199,14 @@ export class Bundler extends Reporter {
 		}
 	}
 
+	/**
+	 * Transfers the static files specified in the configuration to the distribution directory.
+	 *
+	 * This method iterates through the `staticFolders` configuration, copies each folder recursively to the
+	 * distribution directory, and logs any errors that occur during the process.
+	 *
+	 * @returns {Promise<void>} - A Promise that resolves when the transfer of all static files is complete.
+	 */
 	async transferStatics() {
 		this.debugLog('Bundling statics');
 		const staticData = this.config.staticFolders;
@@ -150,6 +224,17 @@ export class Bundler extends Reporter {
 		);
 	}
 
+	/**
+	 * Checks if a file has been changed during a watch mode operation.
+	 *
+	 * This function examines the list of changed files and file extensions to determine if a given file has been modified.
+	 *
+	 * @param {Object} options - The options object.
+	 * @param {string[]} options.extname - The file extension(s) to check for changes.
+	 * @param {string[]} options.folder - The folder path(s) to check for changes.
+	 * @param {boolean} options.isWatchMode - Indicates whether the operation is in watch mode.
+	 * @returns {boolean} - `true` if the file has been changed, `false` otherwise.
+	 */
 	isFileChangedDuringWatch({ extname, folder, isWatchMode }) {
 		if (!isWatchMode) return true;
 
@@ -163,13 +248,34 @@ export class Bundler extends Reporter {
 		if (
 			folder?.length &&
 			changedFiles.find((filePath) =>
-				folder.find((folderPath) => resolve('./', filePath).startsWith(folderPath)),
+				folder.find((folderPath) => path.resolve(filePath).startsWith(path.resolve(folderPath))),
 			)
 		) {
 			return true;
 		} else return false;
 	}
 
+	/**
+	 * Sets the configuration for the application.
+	 *
+	 * This method initializes the configuration object with the provided settings, including directories, file paths, and callback functions.
+	 *
+	 * @param {Object} cfg - The configuration object.
+	 * @param {string} cfg.dist - The directory where the compiled output will be stored.
+	 * @param {string} cfg.html - The directory containing the HTML/Pug files.
+	 * @param {string} [cfg.sass] - The directory containing the Sass files.
+	 * @param {string} [cfg.js] - The directory containing the JavaScript files.
+	 * @param {string[]} [cfg.staticFolders] - An array of directories containing static assets.
+	 * @param {string} [cfg.cssDist] - The directory where the compiled CSS files will be stored.
+	 * @param {string} [cfg.jsDist] - The directory where the compiled JavaScript files will be stored.
+	 * @param {string} [cfg.htmlDist] - The directory where the compiled HTML files will be stored.
+	 * @param {function} [cfg.onStart] - A callback function to be executed when the build process starts.
+	 * @param {function} [cfg.onBuildComplete] - A callback function to be executed when the build process completes.
+	 * @param {function} [cfg.onCriticalError] - A callback function to be executed when a critical error occurs.
+	 * @param {boolean} [cfg.debug] - A flag indicating whether debug mode is enabled.
+	 * @param {string} [mode] - The mode of operation, either 'watch' or 'build'.
+	 * @returns {void}
+	 */
 	setConfig(cfg, mode) {
 		if (!cfg) this.errThrow('Config is not defined');
 		if (!cfg.dist) this.errThrow('Dist directory is not defined');
@@ -205,6 +311,15 @@ export class Bundler extends Reporter {
 		}
 	}
 
+	/**
+	 * Bundles the application assets, including HTML, CSS, JavaScript, and static files.
+	 * This method can be used in both build and watch modes.
+	 *
+	 * @param {Object} [options] - The options object.
+	 * @param {function} [options.onBuildComplete] - A callback function to be executed when the build process completes.
+	 * @param {string} [options.mode] - The mode of operation, either 'watch' or 'build'.
+	 * @returns {Promise<void>} - A Promise that resolves when the bundling process is complete.
+	 */
 	async bundle({ onBuildComplete, mode } = {}) {
 		try {
 			const isWatchMode = mode === 'watch';
@@ -224,6 +339,14 @@ export class Bundler extends Reporter {
 				createDir(this.config.distDir);
 			}
 
+			/**
+			 * Checks if a file needs to be compiled based on the provided file extension or folder.
+			 *
+			 * @param {Object} options - The options object.
+			 * @param {string} [options.extname] - The file extension to check.
+			 * @param {string} [options.folder] - The folder to check.
+			 * @returns {boolean} - `true` if the file needs to be compiled, `false` otherwise.
+			 */
 			const needCompile = ({ extname, folder }) =>
 				this.isFileChangedDuringWatch({ extname, folder, isWatchMode });
 
@@ -241,6 +364,12 @@ export class Bundler extends Reporter {
 		}
 	}
 
+	/**
+	 * Builds the application by bundling the necessary assets.
+	 *
+	 * @param {Object} cfg - The configuration object.
+	 * @returns {Promise<void>} - A Promise that resolves when the bundling process is complete.
+	 */
 	build(cfg) {
 		this.setConfig(cfg);
 		exec(this.config.onStart);
@@ -250,6 +379,13 @@ export class Bundler extends Reporter {
 		});
 	}
 
+	/**
+	 * Rebuilds the application bundle when files change during watch mode.
+	 *
+	 * This method is called when a file change is detected during watch mode. It refreshes the configuration, rebuilds the application bundle, and clears the lists of changed files and extensions.
+	 *
+	 * After the build is complete, it executes the `onWatchUpdate` callback from the configuration.
+	 */
 	watchBuild() {
 		this.config.refresh();
 
@@ -263,6 +399,9 @@ export class Bundler extends Reporter {
 		exec(this.config.onWatchUpdate);
 	}
 
+	/**
+	 * Stops the file watcher and cleans up the watcher instance.
+	 */
 	unwatch() {
 		if (this.watcher) {
 			this.watcher.close();
@@ -270,21 +409,46 @@ export class Bundler extends Reporter {
 		}
 	}
 
-	registerWatchFileChanged(fileName) {
-		const extName = path.extname(fileName);
+	/**
+	 * Registers a file as having been changed during watch mode.
+	 *
+	 * This method updates the `watchChangedFileList` and `watchChangedExtList` dictionaries to track which files and file extensions have been modified. This information is used to determine which parts of the application need to be rebuilt during the next watch mode build.
+	 *
+	 * @param {string} fileUrl - The absolute path of the file that was changed.
+	 * @returns {void}
+	 */
+	registerWatchFileChanged(fileUrl) {
+		const extName = path.extname(fileUrl);
 		if (!extName) return;
 
-		this.watchChangedFileList[fileName] = true;
+		this.watchChangedFileList[fileUrl] = true;
 		this.watchChangedExtList[extName] = true;
 	}
 
-	handleWatchChangeFile(fileName, reloadInterval) {
+	/**
+	 * Handles a file change event during watch mode.
+	 *
+	 * This method is called when a file change is detected during watch mode. It registers the changed file in the `watchChangedFileList` and `watchChangedExtList` dictionaries, and then debounces the `watchBuild` method to avoid triggering multiple rebuilds for rapid file changes.
+	 *
+	 * @param {string} fileUrl - The full path of the changed file.
+	 * @param {number} [reloadInterval=300] - The debounce interval in milliseconds before triggering the `watchBuild` method.
+	 */
+	handleWatchChangeFile(fileUrl, reloadInterval) {
 		const interval = typeof reloadInterval === 'number' && reloadInterval >= 0 ? reloadInterval : 300;
 		clearTimeout(this.watchDebounce);
-		this.registerWatchFileChanged(fileName);
+		this.registerWatchFileChanged(fileUrl);
 		this.watchDebounce = setTimeout(this.watchBuild.bind(this), interval);
 	}
 
+	/**
+	 * Starts the file watcher and sets up the necessary event handlers.
+	 *
+	 * This method is responsible for initializing the file watcher, registering the necessary event handlers, and triggering the initial bundle build. It also sets up the `watchChangedFileList` and `watchChangedExtList` dictionaries to track changes during watch mode.
+	 *
+	 * @param {Object} cfg - The configuration object for the file watcher.
+	 * @returns {null} - Returns `null` if the method completes successfully.
+	 * @throws {Error} - Throws an error if the watch directory cannot be resolved.
+	 */
 	watch(cfg) {
 		try {
 			this.setConfig(cfg, 'watch');
@@ -301,7 +465,8 @@ export class Bundler extends Reporter {
 			this.unwatch();
 			this.watcher = fs.watch(this.config.watchDir, { recursive: true }, (eventType, fileName) => {
 				this.debugLog(eventType);
-				this.handleWatchChangeFile(fileName, eventType === 'rename' && 100);
+				const fileUrl = path.resolve(this.config.watchDir, fileName);
+				this.handleWatchChangeFile(fileUrl, eventType === 'rename' && 100);
 			});
 			this.bundle();
 		} catch (error) {
