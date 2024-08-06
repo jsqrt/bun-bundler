@@ -375,7 +375,7 @@ export class Bundler extends Reporter {
 		exec(this.config.onStart);
 		this.bundle({
 			mode: 'build',
-			onBuildComplete: this.config.onBuildComplete,
+			onBuildComplete: () => exec(this.config.onBuildComplete),
 		});
 	}
 
@@ -468,7 +468,9 @@ export class Bundler extends Reporter {
 				const fileUrl = path.resolve(this.config.watchDir, fileName);
 				this.handleWatchChangeFile(fileUrl, eventType === 'rename' && 100);
 			});
-			this.bundle();
+			this.bundle({
+				onBuildComplete: () => exec(this.config.onBuildComplete),
+			});
 		} catch (error) {
 			this.errLog(error.message);
 		}
