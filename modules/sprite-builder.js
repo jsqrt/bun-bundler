@@ -99,14 +99,16 @@ export class SpriteBuilder extends Reporter {
 
 					if (!svg || !iconName) return;
 
+					const viewBox = svg.getAttribute('viewBox');
+
 					const HTMLUseChunk = `
-					<svg>
+					<svg viewBox="${viewBox}">
 						<use xlink:href="images/sprite/sprite.svg#${iconName}"></use>
 					</svg>
 				`;
 
 					icons[iconName] = {
-						viewBox: svg.getAttribute('viewBox'),
+						viewBox: svg.getAttribute('viewBox') || '0 0 18 18',
 						paths: svg.innerHTML,
 					};
 
