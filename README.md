@@ -10,7 +10,7 @@
 - Static assets
 - Realtime file watching and hot reloading
 
-## Build example.
+## Let`s get started: imports ❇️
 
 ```javascript
 import path from 'path';
@@ -20,14 +20,16 @@ import { SpriteBuilder, ImageProcessor } from 'bun-bundler/modules';
 const bundler = new Bundler();
 const spriteBuilder = new SpriteBuilder();
 const imgProcessor = new ImageProcessor();
-
-const dist = path.resolve('./build');
 const src = path.resolve('./src');
-const debugMode = false;
+```
+
+## Build scripts example - ultra flexible ✨
+
+```javascript
+const dist = path.resolve('./build');
 
 bundler.build({
 	production: process.env.NODE_ENV === 'production',
-	debug: debugMode,
 	html: () => Bundler.utils.getDirFiles(`${src}/pug/pages/`),
 	sass: [`${src}/scss/app.scss`],
 	js: [`${src}/js/app.js`],
@@ -47,29 +49,17 @@ bundler.build({
 			dist: `${dist}/images/sprite/`,
 		});
 	},
-	onCriticalError: () => {},
 });
 ```
 
-## Dev build & watch example.
+## Now we ready to watch 👀
 
 ```javascript
-import path from 'path';
-import { Bundler } from 'bun-bundler';
-import { SpriteBuilder, Server, ImageProcessor } from 'bun-bundler/modules';
-
-const bundler = new Bundler();
-const spriteBuilder = new SpriteBuilder();
 const server = new Server();
-const imgProcessor = new ImageProcessor();
-
 const dist = path.resolve('./dev-dist');
-const src = path.resolve('./src');
-const debugMode = false;
 
 bundler.watch({
 	production: process.env.NODE_ENV === 'production',
-	debug: debugMode,
 	html: () => Bundler.utils.getDirFiles(`${src}/pug/pages/`),
 	sass: [`${src}/scss/app.scss`],
 	js: [`${src}/js/app.js`],
@@ -100,11 +90,12 @@ bundler.watch({
 	onCriticalError: () => {
 		server.stopServer();
 	},
+	debug: false,
 });
 ```
 
 ##
 
-## You can find complete template in [Glivera Bun Template](https://github.com/glivera-team/glivera-bun-template)
+## You can find full example of production template in [Glivera Bun Template](https://github.com/glivera-team/glivera-bun-template)
 
 ##
