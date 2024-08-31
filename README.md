@@ -39,11 +39,9 @@ bundler.build({
 	jsDist: `${dist}/js/`,
 	onBuildComplete: () => {
 		imgProcessor.process({
-			debug: debugMode,
 			root: `${dist}/images/`,
 		});
 		spriteBuilder.build({
-			debug: debugMode,
 			htmlDir: dist,
 			dist: `${dist}/images/sprite/`,
 		});
@@ -77,11 +75,11 @@ bundler.watch({
 	},
 	onBuildComplete: () => {
 		imgProcessor.process({
-			debug: debugMode,
+			debug: false,
 			root: `${dist}/images/`,
 		});
 		spriteBuilder.build({
-			debug: debugMode,
+			debug: false,
 			htmlDir: dist,
 			dist: `${dist}/images/sprite/`,
 		});
