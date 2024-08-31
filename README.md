@@ -5,7 +5,7 @@ A key feature is its support for PUG, a templating engine that enables efficient
 These scripts are suitable for both small projects and large-scale websites. 
 You can easily integrate the modules you need and combine Bun-bundler with other Node.js scripts, 
 offering flexibility and customization for your development workflow.
-Feel free to add issues, or ask directly <a href="https://t.me/jsqrt">t.me/jsqrt</a>
+Feel free to add issues, or ask directly <a href="https://t.me/tsqrt">t.me/jsqrt</a>
 
 ## Features.
 - Pug / HTML
