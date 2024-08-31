@@ -1,5 +1,12 @@
 ## Modern, simple and ultra fast HTML bundler [Bun | Node.js compatible].
 
+The reason this bundler exists is due to the significant shortcomings of other popular bundlers. 
+A key feature is its support for PUG, a templating engine that enables efficient front-end development. 
+These scripts are suitable for both small projects and large-scale websites. 
+You can easily integrate the modules you need and combine Bun-bundler with other Node.js scripts, 
+offering flexibility and customization for your development workflow.
+Feel free to add issues, or ask directly t.me/jsqrt
+
 ## Features.
 - Pug / HTML
 - SCSS / CSS
