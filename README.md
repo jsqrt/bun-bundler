@@ -68,7 +68,7 @@ bundler.watch({
 	onStart: () => {
 		server.startServer({
 			open: true,
-			debug: debugMode,
+			debug: false,
 			port: 8080,
 			root: dist,
 		});
