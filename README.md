@@ -1,7 +1,6 @@
-## Modern, simple and ultra fast HTML bundler.
+## Modern, simple and ultra fast HTML bundler [Bun | Node.js compatible].
 
 ## Features.
-
 - Pug / HTML
 - SCSS / CSS
 - JS
