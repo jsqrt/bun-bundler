@@ -1,5 +1,5 @@
 {
-	"description": "Modern, simple and ultra fast HTML bundler. Bun | Pug or HTML | SCSS or CSS | JS | SVG Sprite | Image optimizations",
+	"description": "Bun-Bundler: Modern, Simple, and Ultra-Fast HTML Bundler. Bun | Pug/HTML | SCSS/CSS | JS | SVG Sprite | Image optimizations",
 	"author": "jsqrt",
 	"license": "MIT",
 	"name": "bun-bundler",
