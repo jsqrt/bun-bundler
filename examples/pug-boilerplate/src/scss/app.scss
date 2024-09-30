@@ -1,0 +1,32 @@
+body {
+	background-color: #1d1d1d;
+	color: #fff;
+}
+
+.section {
+	padding: 10px;
+	line-height: 1.4;
+
+	.title {
+		font-size: 18px;
+		font-weight: bold;
+	}
+
+	svg {
+		width: 30px;
+		height: 30px;
+		color: tomato;
+	}
+
+	img {
+		width: 200px;
+		height: auto;
+		object-fit: contain;
+	}
+
+	code {
+		background-color: gray;
+		padding: 0 0.4rem;
+		border-radius: 0.4rem;
+	}
+}

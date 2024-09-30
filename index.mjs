@@ -79,7 +79,7 @@ export class Bundler extends Reporter {
 				if (extensionSkip && fileExtname === extensionSkip) {
 					res.compilationRes = readFileSync(filePath, 'utf-8');
 				} else {
-					res.compilationRes = await renderFn(filePath);
+					res.compilationRes = renderFn(filePath);
 				}
 
 				return res;
@@ -95,7 +95,8 @@ export class Bundler extends Reporter {
 		 * @param {string} dist - The directory path where the compiled output files will be written.
 		 */
 		const createDistFiles = () => {
-			Object.values(compiledData).forEach(({ compilationRes, fileName }) => {
+			Object.values(compiledData).forEach(({ compilationRes, fileName } = {}) => {
+				if (!compilationRes === null) return;
 				writeFileSync(path.join(dist, fileName), compilationRes);
 			});
 		};
@@ -144,7 +145,12 @@ export class Bundler extends Reporter {
 	 * @returns {Promise<void>} - A Promise that resolves when the compilation process is complete.
 	 */
 	async compilePug() {
-		this.debugLog('HTML compilation');
+		this.debugLog('Pug/html compilation');
+
+		const sitemap = this.config.htmlFiles
+			.filter((file) => fs.lstatSync(file).isFile())
+			.map((file) => path.basename(file).replace(/\.pug$/, '.html'));
+
 		try {
 			await this.compile({
 				filePaths: this.config.htmlFiles,
@@ -153,14 +159,20 @@ export class Bundler extends Reporter {
 				newFileExt: '.html',
 				dist: this.config.distDir,
 				renderFn: (filePath) => {
-					return pug.renderFile(filePath, {
+					const fullPath = path.resolve(filePath);
+					const isFile = fs.lstatSync(fullPath).isFile();
+
+					if (!isFile) {
+						this.debugLog(`Skipping: ${fullPath} is a directory.`);
+						return null;
+					}
+
+					return pug.renderFile(fullPath, {
 						pretty: false,
 						cache: false,
 						compileDebug: this.config.debug,
-						sitemap: this.config.htmlFiles.map((file) =>
-							path.basename(path.resolve(file).replace(/\.pug$/, '.html')),
-						),
 						readFileSync,
+						sitemap,
 					});
 				},
 			});
@@ -281,7 +293,16 @@ export class Bundler extends Reporter {
 		if (!cfg.dist) this.errThrow('Dist directory is not defined');
 		if (!cfg.html) this.errThrow('Html/pug directory is not defined');
 
-		const { html, dist, sass, js, staticFolders, cssDist, jsDist, htmlDist } = cfg;
+		const {
+			html = [],
+			dist = [],
+			sass = [],
+			js = [],
+			staticFolders = [],
+			cssDist = '',
+			jsDist = '',
+			htmlDist = '',
+		} = cfg;
 
 		this.config.initialCfg = cfg;
 		this.config.production = cfg.production;

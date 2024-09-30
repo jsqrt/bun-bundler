@@ -29,12 +29,14 @@ export class SpriteBuilder extends Reporter {
 	 * @param {string} config.htmlDir - The path to the directory containing the HTML files with the icons.
 	 * @param {string} config.dist - The path to the distribution directory where the generated sprite file will be written.
 	 * @param {boolean} config.debug - Enables debug mode, which logs additional information during the sprite building process.
+	 * @param {boolean} config.spriteIconSelector - Define selector of the sprite icon.
 	 */
-	setConfig({ htmlDir, dist, debug }) {
+	setConfig({ htmlDir, dist, debug, spriteIconSelector }) {
 		this.config = {
 			debug,
 			src: path.resolve(htmlDir),
 			dist,
+			spriteIconSelector: spriteIconSelector || '[data-sprite-icon]',
 		};
 	}
 
@@ -91,7 +93,7 @@ export class SpriteBuilder extends Reporter {
 				const pageContent = fs.readFileSync(path.resolve(srcDir, page), 'utf8');
 				const DOM = new JSDOM(pageContent, { virtualConsole });
 				const document = DOM.window.document;
-				const pageSvg = document.querySelectorAll('[data-sprite-icon]');
+				const pageSvg = document.querySelectorAll(this.config.spriteIconSelector);
 
 				pageSvg.forEach((svgWrap) => {
 					const iconName = svgWrap.dataset.spriteIcon;
@@ -148,6 +150,7 @@ export class SpriteBuilder extends Reporter {
 	 * @param {string} cfg.src - The source directory containing the HTML files.
 	 * @param {string} cfg.dist - The distribution directory where the generated sprite SVG file will be written.
 	 * @param {boolean} cfg.debug - A flag indicating whether debug mode is enabled.
+	 * @param {boolean} cfg.spriteIconSelector - Define the selector of the sprite icons.
 	 * @returns {Object} - An object containing the metadata for the extracted icons, keyed by their names.
 	 */
 	build(cfg) {
