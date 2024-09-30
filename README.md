@@ -73,11 +73,9 @@ const { images, fonts, statics } = directories;
 // Configure the bundler
 bundler.build({
 	...directories,
-
+	// ❇️ You can pass function(it will call on every render), or array of files
 	html: () => Bundler.utils.getDirFiles(directories.html),
-
 	staticFolders: [images, fonts, statics],
-
 	production: process.env.NODE_ENV === 'production',
 	onBuildComplete: () => {
 		imgProcessor.process({ root: directories.imagesDist });
@@ -102,7 +100,6 @@ bundler.watch({
 	...directories,
 	production: process.env.NODE_ENV === 'production',
 	staticFolders: [images, fonts, statics],
-
 	debug: debugMode,
 	html: () => Bundler.utils.getDirFiles(directories.html),
 	onStart: () => {
@@ -111,14 +108,17 @@ bundler.watch({
 			debug: debugMode,
 			port: 8080,
 			root: dist,
+			❇️ // custom BrowserSync config, if needed:
+			overrides: {},
 		});
 	},
 	onBuildComplete: () => {
+		// ❇️ image optimizations on every build (no caching)
 		imgProcessor.process({
 			debug: debugMode,
 			root: directories.imagesDist,
 		});
-
+		// ❇️ refresh sprite on every build (no caching)
 		spriteBuilder.build({
 			debug: debugMode,
 			htmlDir: dist,
