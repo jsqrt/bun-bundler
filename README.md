@@ -87,6 +87,8 @@ bundler.build({
 });
 ```
 
+We're ready to takeoff! Run `bun run build.mjs`
+
 ## Development Mode
 
 To enable file watching and dev-mode, use the following configuration:
@@ -130,6 +132,8 @@ bundler.watch({
 	},
 });
 ```
+
+Run `bun run dev.mjs`
 
 ## Examples and Boilerplate
 
