@@ -31,6 +31,7 @@ export class Server extends Reporter {
 			host: 'localhost',
 			open: true,
 			injectChanges: true,
+			overrides: {},
 			...cfg,
 		};
 	}
@@ -73,6 +74,7 @@ export class Server extends Reporter {
 						this.onServerStarted(bs.options.get('urls')._root.entries);
 					},
 				},
+				...this.config.overrides,
 			});
 
 			return this.server;
