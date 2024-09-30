@@ -165,7 +165,7 @@ export class Bundler extends Reporter {
 				},
 			});
 		} catch (error) {
-			this.errLog('Error while compiling pug files');
+			this.errLog('Error while compiling pug/html files');
 			this.errThrow(error);
 		}
 	}
@@ -281,7 +281,16 @@ export class Bundler extends Reporter {
 		if (!cfg.dist) this.errThrow('Dist directory is not defined');
 		if (!cfg.html) this.errThrow('Html/pug directory is not defined');
 
-		const { html, dist, sass, js, staticFolders, cssDist, jsDist, htmlDist } = cfg;
+		const {
+			html = [],
+			dist = [],
+			sass = [],
+			js = [],
+			staticFolders = [],
+			cssDist = '',
+			jsDist = '',
+			htmlDist = '',
+		} = cfg;
 
 		this.config.initialCfg = cfg;
 		this.config.production = cfg.production;
