@@ -124,7 +124,11 @@ export class Bundler extends Reporter {
 				type: 'CSS',
 				newFileExt: '.css',
 				dist: this.config.cssDist,
-				renderFn: (filePath) => sass.compile(filePath, { style: 'compressed' })?.css,
+				renderFn: (filePath) =>
+					sass.compile(filePath, {
+						style: 'compressed',
+						...this.config.sassConfigOverrides,
+					})?.css,
 			});
 		} catch (error) {
 			this.errLog('Error while compiling css/scss files');
@@ -171,8 +175,9 @@ export class Bundler extends Reporter {
 						pretty: false,
 						cache: false,
 						compileDebug: this.config.debug,
-						readFileSync,
 						sitemap,
+						readFileSync,
+						...this.config.pugCongigOverrides,
 					});
 				},
 			});
@@ -197,6 +202,7 @@ export class Bundler extends Reporter {
 				outdir: this.config.jsDist,
 				minify: this.config.production,
 				format: 'esm',
+				...this.config.jsConfigOverrides,
 			});
 
 			if (!result.success) {
@@ -302,6 +308,9 @@ export class Bundler extends Reporter {
 			cssDist = '',
 			jsDist = '',
 			htmlDist = '',
+			pugCongigOverrides = {},
+			jsConfigOverrides = {},
+			sassConfigOverrides = {},
 		} = cfg;
 
 		this.config.initialCfg = cfg;
@@ -323,6 +332,10 @@ export class Bundler extends Reporter {
 		this.config.refresh = () => {
 			this.setConfig(this.config.initialCfg, mode);
 		};
+
+		this.config.pugCongigOverrides = pugCongigOverrides;
+		this.config.jsConfigOverrides = jsConfigOverrides;
+		this.config.sassConfigOverrides = sassConfigOverrides;
 
 		if (mode === 'watch') {
 			if (!this.config.watchDir) {
