@@ -28,11 +28,11 @@ Bun-Bundler was created to address the limitations of other popular bundlers. It
 
 ### Installation
 
-npm install bun-bundler
+`npm install bun-bundler`
 
 or
 
-bun add bun-bundler
+`bun add bun-bundler`
 
 ### Basic Configuration
 
