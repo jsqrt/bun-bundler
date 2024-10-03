@@ -177,7 +177,7 @@ export class Bundler extends Reporter {
 						compileDebug: this.config.debug,
 						sitemap,
 						readFileSync,
-						...this.config.pugCongigOverrides,
+						...this.config.pugConfigOverrides,
 					});
 				},
 			});
@@ -308,7 +308,7 @@ export class Bundler extends Reporter {
 			cssDist = '',
 			jsDist = '',
 			htmlDist = '',
-			pugCongigOverrides = {},
+			pugConfigOverrides = {},
 			jsConfigOverrides = {},
 			sassConfigOverrides = {},
 		} = cfg;
@@ -333,7 +333,7 @@ export class Bundler extends Reporter {
 			this.setConfig(this.config.initialCfg, mode);
 		};
 
-		this.config.pugCongigOverrides = pugCongigOverrides;
+		this.config.pugConfigOverrides = pugConfigOverrides;
 		this.config.jsConfigOverrides = jsConfigOverrides;
 		this.config.sassConfigOverrides = sassConfigOverrides;
 
