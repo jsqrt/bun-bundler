@@ -80,3 +80,32 @@ export const exec = (func, attr = []) => {
 	if (!isFunction(func)) return func;
 	return func(...attr);
 };
+
+const findClosestFile = (entryDir, fileName) => {
+	if (!entryDir) return null;
+
+	const files = readdirSync(entryDir);
+	for (const file of files) {
+		if (file === fileName) return path.join(entryDir, file);
+	}
+	const parentDir = path.dirname(entryDir);
+	if (parentDir === entryDir) return null;
+
+	return findClosestFile(parentDir, fileName);
+};
+
+export function getSassFileConfig(entryDir) {
+	if (!entryDir) return null;
+
+	try {
+		const sassConfigUrl = findClosestFile(entryDir, '.sassrc');
+		if (!sassConfigUrl) return null;
+
+		const sassConfig = readFileSync(sassConfigUrl, 'utf8');
+		const sassConfigParsed = JSON.parse(sassConfig);
+		return sassConfigParsed;
+	} catch (err) {
+		this.debugLog(err);
+		return null;
+	}
+}
