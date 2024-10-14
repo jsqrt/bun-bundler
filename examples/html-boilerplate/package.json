@@ -2,8 +2,6 @@
 	"description": "HTML example of bun-bundler usage.",
 	"author": "jsqrt",
 	"license": "MIT",
-	"name": "bun-bundler",
-	"version": "0.1.14",
 	"main": "index.js",
 	"repository": {
 		"type": "git",
