@@ -3,7 +3,7 @@ import Bun from 'bun';
 import path, { basename, extname, resolve } from 'path';
 import fsPromises from 'fs/promises';
 import fs, { existsSync, readFileSync, writeFileSync } from 'fs';
-import { createDir, exec, getDirFiles, removeDir } from './utils.mjs';
+import { createDir, exec, getDirFiles, getSassFileConfig, removeDir } from './utils.mjs';
 import { Reporter } from './modules/reporter';
 
 const pug = require('pug');
@@ -313,8 +313,10 @@ export class Bundler extends Reporter {
 			sassConfigOverrides = {},
 		} = cfg;
 
-		this.config.initialCfg = cfg;
+		if (!this.config.initialCfg) this.config.initialCfg = cfg;
+
 		this.config.production = cfg.production;
+
 		this.config.htmlFiles = exec(html);
 		this.config.sassFiles = exec(sass);
 		this.config.jsFiles = exec(js);
@@ -335,7 +337,10 @@ export class Bundler extends Reporter {
 
 		this.config.pugConfigOverrides = pugConfigOverrides;
 		this.config.jsConfigOverrides = jsConfigOverrides;
-		this.config.sassConfigOverrides = sassConfigOverrides;
+		this.config.sassConfigOverrides = {
+			...(getSassFileConfig.call(this, this.config.rootDir) || {}),
+			...sassConfigOverrides,
+		};
 
 		if (mode === 'watch') {
 			if (!this.config.watchDir) {

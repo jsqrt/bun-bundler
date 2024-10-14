@@ -1,0 +1,9 @@
+include ./test
+include ./test3
+
+mixin test2
+	.some_element
+		for i in new Array(10)
+			+test
+				for i in new Array(3)
+					+test3

@@ -1,0 +1,1579 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Document</title>
+	<link rel="stylesheet" href="../css/app.css" />
+</head>
+
+<body>
+	<section class="section">
+		<h1 class="title">
+			Bun bundler simple HTML example. <br />Run <code>npm run build</code> / <code>npm run dev</code>
+		</h1>
+		<p>
+			Sprite icon:
+			<svg data-sprite-icon="sorting" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15.5 13.5">
+				<path
+					d="M12.47,15.53l3,3a.75.75,0,0,0,1.061,0l3-3A.75.75,0,0,0,18.47,14.47l-1.72,1.72V6a.75.75,0,0,0-1.5,0V16.189l-1.72-1.72A.75.75,0,0,0,12.47,15.53ZM8.53,5.47a.75.75,0,0,0-1.061,0l-3,3A.75.75,0,0,0,5.53,9.53l1.72-1.72V18a.75.75,0,0,0,1.5,0V7.811l1.72,1.72A.75.75,0,0,0,11.53,8.47Z"
+					transform="translate(-4.25 -5.25)" fill="currentColor" fill-rule="evenodd" />
+			</svg>
+		</p>
+		Image optimization:
+		<img src="images/alive.png" alt="image" />
+		<div class="info_block_in about_mod parallaxElement" style="transform: translate(0%, 25%)">
+			<div class="info_block_decor before_mod">
+				<svg class="info_block_dots before_mod" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 164 104">
+					<title>dots</title>
+					<path data-name="Rectangle" d="M0,0H4V4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,0h4V4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,0h4V4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,0h4V4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,0h4V4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,20H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,20h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,20h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,20h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,20h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,40H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,40h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,40h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,40h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,40h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,60H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,60h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,60h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,60h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,60h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,80H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,80h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,80h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,80h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,80h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,100H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,100h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,100h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,100h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,100h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,100h4v4h-4Z" fill="#fff"></path>
+				</svg>
+			</div>
+			<div class="info_block_decor after_mod">
+				<svg class="info_block_dots after_mod" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 164 104">
+					<title>dots</title>
+					<path data-name="Rectangle" d="M0,0H4V4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,0h4V4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,0h4V4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,0h4V4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,0h4V4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,20H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,20h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,20h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,20h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,20h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,40H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,40h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,40h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,40h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,40h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,60H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,60h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,60h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,60h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,60h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,80H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,80h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,80h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,80h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,80h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,100H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,100h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,100h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,100h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,100h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,100h4v4h-4Z" fill="#fff"></path>
+				</svg>
+			</div>
+
+			<div class="info_block_w_img">
+				<img loading="lazy" width="566" height="378"
+					src="https://glivera-team.com/wp-content/uploads/2024/02/og_logo.jpg" class="info_block_img"
+					alt="Contact us to get your site fast!" decoding="async" />
+			</div>
+			<h3 class="info_block_title about_mod">Contact us to get your site fast!</h3>
+		</div>
+		<div class="info_block_in about_mod parallaxElement" style="transform: translate(0%, 25%)">
+			<div class="info_block_decor before_mod">
+				<svg class="info_block_dots before_mod" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 164 104">
+					<title>dots</title>
+					<path data-name="Rectangle" d="M0,0H4V4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,0h4V4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,0h4V4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,0h4V4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,0h4V4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,20H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,20h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,20h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,20h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,20h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,40H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,40h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,40h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,40h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,40h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,60H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,60h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,60h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,60h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,60h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,80H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,80h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,80h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,80h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,80h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,100H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,100h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,100h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,100h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,100h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,100h4v4h-4Z" fill="#fff"></path>
+				</svg>
+			</div>
+			<div class="info_block_decor after_mod">
+				<svg class="info_block_dots after_mod" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 164 104">
+					<title>dots</title>
+					<path data-name="Rectangle" d="M0,0H4V4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,0h4V4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,0h4V4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,0h4V4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,0h4V4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,20H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,20h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,20h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,20h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,20h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,40H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,40h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,40h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,40h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,40h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,60H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,60h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,60h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,60h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,60h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,80H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,80h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,80h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,80h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,80h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,100H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,100h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,100h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,100h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,100h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,100h4v4h-4Z" fill="#fff"></path>
+				</svg>
+			</div>
+
+			<div class="info_block_w_img">
+				<img loading="lazy" width="566" height="378"
+					src="https://glivera-team.com/wp-content/uploads/2024/02/og_logo.jpg" class="info_block_img"
+					alt="Contact us to get your site fast!" decoding="async" />
+			</div>
+			<h3 class="info_block_title about_mod">Contact us to get your site fast!</h3>
+		</div>
+		<div class="info_block_in about_mod parallaxElement" style="transform: translate(0%, 25%)">
+			<div class="info_block_decor before_mod">
+				<svg class="info_block_dots before_mod" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 164 104">
+					<title>dots</title>
+					<path data-name="Rectangle" d="M0,0H4V4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,0h4V4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,0h4V4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,0h4V4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,0h4V4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,20H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,20h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,20h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,20h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,20h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,40H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,40h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,40h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,40h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,40h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,60H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,60h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,60h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,60h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,60h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,80H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,80h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,80h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,80h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,80h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,100H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,100h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,100h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,100h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,100h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,100h4v4h-4Z" fill="#fff"></path>
+				</svg>
+			</div>
+			<div class="info_block_decor after_mod">
+				<svg class="info_block_dots after_mod" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 164 104">
+					<title>dots</title>
+					<path data-name="Rectangle" d="M0,0H4V4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,0h4V4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,0h4V4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,0h4V4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,0h4V4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,20H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,20h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,20h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,20h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,20h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,40H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,40h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,40h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,40h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,40h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,60H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,60h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,60h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,60h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,60h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,80H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,80h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,80h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,80h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,80h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,100H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,100h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,100h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,100h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,100h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,100h4v4h-4Z" fill="#fff"></path>
+				</svg>
+			</div>
+
+			<div class="info_block_w_img">
+				<img loading="lazy" width="566" height="378"
+					src="https://glivera-team.com/wp-content/uploads/2024/02/og_logo.jpg" class="info_block_img"
+					alt="Contact us to get your site fast!" decoding="async" />
+			</div>
+			<h3 class="info_block_title about_mod">Contact us to get your site fast!</h3>
+		</div>
+		<div class="info_block_in about_mod parallaxElement" style="transform: translate(0%, 25%)">
+			<div class="info_block_decor before_mod">
+				<svg class="info_block_dots before_mod" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 164 104">
+					<title>dots</title>
+					<path data-name="Rectangle" d="M0,0H4V4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,0h4V4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,0h4V4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,0h4V4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,0h4V4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,20H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,20h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,20h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,20h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,20h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,40H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,40h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,40h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,40h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,40h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,60H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,60h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,60h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,60h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,60h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,80H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,80h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,80h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,80h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,80h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,100H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,100h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,100h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,100h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,100h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,100h4v4h-4Z" fill="#fff"></path>
+				</svg>
+			</div>
+			<div class="info_block_decor after_mod">
+				<svg class="info_block_dots after_mod" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 164 104">
+					<title>dots</title>
+					<path data-name="Rectangle" d="M0,0H4V4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,0h4V4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,0h4V4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,0h4V4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,0h4V4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,20H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,20h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,20h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,20h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,20h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,40H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,40h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,40h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,40h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,40h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,60H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,60h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,60h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,60h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,60h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,80H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,80h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,80h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,80h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,80h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,100H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,100h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,100h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,100h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,100h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,100h4v4h-4Z" fill="#fff"></path>
+				</svg>
+			</div>
+
+			<div class="info_block_w_img">
+				<img loading="lazy" width="566" height="378"
+					src="https://glivera-team.com/wp-content/uploads/2024/02/og_logo.jpg" class="info_block_img"
+					alt="Contact us to get your site fast!" decoding="async" />
+			</div>
+			<h3 class="info_block_title about_mod">Contact us to get your site fast!</h3>
+		</div>
+		<div class="info_block_in about_mod parallaxElement" style="transform: translate(0%, 25%)">
+			<div class="info_block_decor before_mod">
+				<svg class="info_block_dots before_mod" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 164 104">
+					<title>dots</title>
+					<path data-name="Rectangle" d="M0,0H4V4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,0h4V4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,0h4V4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,0h4V4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,0h4V4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,20H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,20h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,20h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,20h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,20h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,40H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,40h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,40h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,40h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,40h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,60H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,60h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,60h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,60h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,60h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,80H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,80h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,80h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,80h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,80h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,100H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,100h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,100h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,100h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,100h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,100h4v4h-4Z" fill="#fff"></path>
+				</svg>
+			</div>
+			<div class="info_block_decor after_mod">
+				<svg class="info_block_dots after_mod" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 164 104">
+					<title>dots</title>
+					<path data-name="Rectangle" d="M0,0H4V4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,0h4V4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,0h4V4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,0h4V4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,0h4V4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,20H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,20h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,20h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,20h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,20h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,40H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,40h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,40h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,40h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,40h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,60H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,60h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,60h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,60h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,60h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,80H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,80h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,80h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,80h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,80h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,100H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,100h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,100h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,100h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,100h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,100h4v4h-4Z" fill="#fff"></path>
+				</svg>
+			</div>
+
+			<div class="info_block_w_img">
+				<img loading="lazy" width="566" height="378"
+					src="https://glivera-team.com/wp-content/uploads/2024/02/og_logo.jpg" class="info_block_img"
+					alt="Contact us to get your site fast!" decoding="async" />
+			</div>
+			<h3 class="info_block_title about_mod">Contact us to get your site fast!</h3>
+		</div>
+		<div class="info_block_in about_mod parallaxElement" style="transform: translate(0%, 25%)">
+			<div class="info_block_decor before_mod">
+				<svg class="info_block_dots before_mod" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 164 104">
+					<title>dots</title>
+					<path data-name="Rectangle" d="M0,0H4V4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,0h4V4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,0h4V4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,0h4V4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,0h4V4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,20H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,20h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,20h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,20h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,20h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,40H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,40h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,40h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,40h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,40h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,60H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,60h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,60h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,60h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,60h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,80H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,80h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,80h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,80h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,80h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,100H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,100h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,100h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,100h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,100h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,100h4v4h-4Z" fill="#fff"></path>
+				</svg>
+			</div>
+			<div class="info_block_decor after_mod">
+				<svg class="info_block_dots after_mod" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 164 104">
+					<title>dots</title>
+					<path data-name="Rectangle" d="M0,0H4V4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,0h4V4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,0h4V4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,0h4V4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,0h4V4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,20H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,20h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,20h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,20h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,20h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,40H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,40h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,40h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,40h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,40h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,60H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,60h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,60h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,60h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,60h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,80H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,80h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,80h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,80h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,80h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,100H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,100h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,100h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,100h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,100h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,100h4v4h-4Z" fill="#fff"></path>
+				</svg>
+			</div>
+
+			<div class="info_block_w_img">
+				<img loading="lazy" width="566" height="378"
+					src="https://glivera-team.com/wp-content/uploads/2024/02/og_logo.jpg" class="info_block_img"
+					alt="Contact us to get your site fast!" decoding="async" />
+			</div>
+			<h3 class="info_block_title about_mod">Contact us to get your site fast!</h3>
+		</div>
+		<div class="info_block_in about_mod parallaxElement" style="transform: translate(0%, 25%)">
+			<div class="info_block_decor before_mod">
+				<svg class="info_block_dots before_mod" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 164 104">
+					<title>dots</title>
+					<path data-name="Rectangle" d="M0,0H4V4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,0h4V4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,0h4V4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,0h4V4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,0h4V4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,20H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,20h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,20h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,20h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,20h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,40H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,40h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,40h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,40h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,40h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,60H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,60h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,60h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,60h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,60h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,80H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,80h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,80h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,80h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,80h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,100H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,100h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,100h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,100h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,100h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,100h4v4h-4Z" fill="#fff"></path>
+				</svg>
+			</div>
+			<div class="info_block_decor after_mod">
+				<svg class="info_block_dots after_mod" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 164 104">
+					<title>dots</title>
+					<path data-name="Rectangle" d="M0,0H4V4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,0h4V4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,0h4V4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,0h4V4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,0h4V4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,20H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,20h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,20h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,20h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,20h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,40H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,40h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,40h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,40h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,40h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,60H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,60h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,60h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,60h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,60h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,80H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,80h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,80h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,80h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,80h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,100H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,100h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,100h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,100h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,100h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,100h4v4h-4Z" fill="#fff"></path>
+				</svg>
+			</div>
+
+			<div class="info_block_w_img">
+				<img loading="lazy" width="566" height="378"
+					src="https://glivera-team.com/wp-content/uploads/2024/02/og_logo.jpg" class="info_block_img"
+					alt="Contact us to get your site fast!" decoding="async" />
+			</div>
+			<h3 class="info_block_title about_mod">Contact us to get your site fast!</h3>
+		</div>
+		<div class="info_block_in about_mod parallaxElement" style="transform: translate(0%, 25%)">
+			<div class="info_block_decor before_mod">
+				<svg class="info_block_dots before_mod" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 164 104">
+					<title>dots</title>
+					<path data-name="Rectangle" d="M0,0H4V4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,0h4V4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,0h4V4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,0h4V4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,0h4V4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,20H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,20h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,20h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,20h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,20h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,40H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,40h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,40h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,40h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,40h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,60H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,60h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,60h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,60h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,60h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,80H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,80h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,80h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,80h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,80h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,100H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,100h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,100h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,100h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,100h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,100h4v4h-4Z" fill="#fff"></path>
+				</svg>
+			</div>
+			<div class="info_block_decor after_mod">
+				<svg class="info_block_dots after_mod" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 164 104">
+					<title>dots</title>
+					<path data-name="Rectangle" d="M0,0H4V4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,0h4V4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,0h4V4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,0h4V4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,0h4V4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,20H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,20h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,20h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,20h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,20h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,40H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,40h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,40h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,40h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,40h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,60H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,60h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,60h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,60h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,60h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,80H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,80h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,80h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,80h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,80h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,100H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,100h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,100h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,100h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,100h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,100h4v4h-4Z" fill="#fff"></path>
+				</svg>
+			</div>
+
+			<div class="info_block_w_img">
+				<img loading="lazy" width="566" height="378"
+					src="https://glivera-team.com/wp-content/uploads/2024/02/og_logo.jpg" class="info_block_img"
+					alt="Contact us to get your site fast!" decoding="async" />
+			</div>
+			<h3 class="info_block_title about_mod">Contact us to get your site fast!</h3>
+		</div>
+		<div class="info_block_in about_mod parallaxElement" style="transform: translate(0%, 25%)">
+			<div class="info_block_decor before_mod">
+				<svg class="info_block_dots before_mod" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 164 104">
+					<title>dots</title>
+					<path data-name="Rectangle" d="M0,0H4V4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,0h4V4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,0h4V4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,0h4V4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,0h4V4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,20H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,20h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,20h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,20h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,20h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,40H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,40h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,40h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,40h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,40h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,60H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,60h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,60h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,60h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,60h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,80H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,80h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,80h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,80h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,80h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,100H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,100h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,100h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,100h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,100h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,100h4v4h-4Z" fill="#fff"></path>
+				</svg>
+			</div>
+			<div class="info_block_decor after_mod">
+				<svg class="info_block_dots after_mod" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 164 104">
+					<title>dots</title>
+					<path data-name="Rectangle" d="M0,0H4V4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,0h4V4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,0h4V4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,0h4V4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,0h4V4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,20H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,20h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,20h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,20h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,20h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,40H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,40h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,40h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,40h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,40h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,60H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,60h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,60h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,60h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,60h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,80H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,80h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,80h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,80h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,80h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,100H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,100h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,100h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,100h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,100h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,100h4v4h-4Z" fill="#fff"></path>
+				</svg>
+			</div>
+
+			<div class="info_block_w_img">
+				<img loading="lazy" width="566" height="378"
+					src="https://glivera-team.com/wp-content/uploads/2024/02/og_logo.jpg" class="info_block_img"
+					alt="Contact us to get your site fast!" decoding="async" />
+			</div>
+			<h3 class="info_block_title about_mod">Contact us to get your site fast!</h3>
+		</div>
+		<div class="info_block_in about_mod parallaxElement" style="transform: translate(0%, 25%)">
+			<div class="info_block_decor before_mod">
+				<svg class="info_block_dots before_mod" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 164 104">
+					<title>dots</title>
+					<path data-name="Rectangle" d="M0,0H4V4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,0h4V4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,0h4V4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,0h4V4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,0h4V4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,20H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,20h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,20h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,20h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,20h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,40H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,40h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,40h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,40h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,40h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,60H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,60h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,60h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,60h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,60h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,80H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,80h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,80h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,80h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,80h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,100H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,100h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,100h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,100h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,100h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,100h4v4h-4Z" fill="#fff"></path>
+				</svg>
+			</div>
+			<div class="info_block_decor after_mod">
+				<svg class="info_block_dots after_mod" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 164 104">
+					<title>dots</title>
+					<path data-name="Rectangle" d="M0,0H4V4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,0h4V4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,0h4V4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,0h4V4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,0h4V4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,20H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,20h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,20h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,20h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,20h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,40H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,40h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,40h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,40h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,40h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,60H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,60h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,60h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,60h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,60h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,80H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,80h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,80h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,80h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,80h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,100H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,100h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,100h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,100h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,100h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,100h4v4h-4Z" fill="#fff"></path>
+				</svg>
+			</div>
+
+			<div class="info_block_w_img">
+				<img loading="lazy" width="566" height="378"
+					src="https://glivera-team.com/wp-content/uploads/2024/02/og_logo.jpg" class="info_block_img"
+					alt="Contact us to get your site fast!" decoding="async" />
+			</div>
+			<h3 class="info_block_title about_mod">Contact us to get your site fast!</h3>
+		</div>
+		<div class="info_block_in about_mod parallaxElement" style="transform: translate(0%, 25%)">
+			<div class="info_block_decor before_mod">
+				<svg class="info_block_dots before_mod" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 164 104">
+					<title>dots</title>
+					<path data-name="Rectangle" d="M0,0H4V4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,0h4V4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,0h4V4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,0h4V4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,0h4V4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,20H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,20h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,20h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,20h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,20h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,40H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,40h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,40h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,40h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,40h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,60H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,60h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,60h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,60h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,60h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,80H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,80h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,80h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,80h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,80h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,100H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,100h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,100h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,100h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,100h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,100h4v4h-4Z" fill="#fff"></path>
+				</svg>
+			</div>
+			<div class="info_block_decor after_mod">
+				<svg class="info_block_dots after_mod" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 164 104">
+					<title>dots</title>
+					<path data-name="Rectangle" d="M0,0H4V4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,0h4V4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,0h4V4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,0h4V4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,0h4V4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,20H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,20h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,20h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,20h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,20h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,40H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,40h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,40h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,40h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,40h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,60H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,60h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,60h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,60h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,60h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,80H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,80h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,80h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,80h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,80h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,100H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,100h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,100h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,100h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,100h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,100h4v4h-4Z" fill="#fff"></path>
+				</svg>
+			</div>
+
+			<div class="info_block_w_img">
+				<img loading="lazy" width="566" height="378"
+					src="https://glivera-team.com/wp-content/uploads/2024/02/og_logo.jpg" class="info_block_img"
+					alt="Contact us to get your site fast!" decoding="async" />
+			</div>
+			<h3 class="info_block_title about_mod">Contact us to get your site fast!</h3>
+		</div>
+		<div class="info_block_in about_mod parallaxElement" style="transform: translate(0%, 25%)">
+			<div class="info_block_decor before_mod">
+				<svg class="info_block_dots before_mod" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 164 104">
+					<title>dots</title>
+					<path data-name="Rectangle" d="M0,0H4V4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,0h4V4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,0h4V4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,0h4V4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,0h4V4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,20H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,20h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,20h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,20h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,20h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,40H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,40h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,40h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,40h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,40h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,60H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,60h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,60h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,60h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,60h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,80H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,80h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,80h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,80h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,80h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,100H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,100h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,100h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,100h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,100h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,100h4v4h-4Z" fill="#fff"></path>
+				</svg>
+			</div>
+			<div class="info_block_decor after_mod">
+				<svg class="info_block_dots after_mod" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 164 104">
+					<title>dots</title>
+					<path data-name="Rectangle" d="M0,0H4V4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,0h4V4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,0h4V4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,0h4V4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,0h4V4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,0h4V4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,20H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,20h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,20h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,20h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,20h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,20h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,40H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,40h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,40h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,40h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,40h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,40h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,60H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,60h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,60h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,60h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,60h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,60h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,80H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,80h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,80h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,80h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,80h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,80h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle" d="M0,100H4v4H0Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy" d="M20,100h4v4H20Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-2" d="M40,100h4v4H40Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-3" d="M60,100h4v4H60Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-4" d="M80,100h4v4H80Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-5" d="M100,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-6" d="M120,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-7" d="M140,100h4v4h-4Z" fill="#fff"></path>
+					<path data-name="Rectangle-Copy-8" d="M160,100h4v4h-4Z" fill="#fff"></path>
+				</svg>
+			</div>
+
+			<div class="info_block_w_img">
+				<img loading="lazy" width="566" height="378"
+					src="https://glivera-team.com/wp-content/uploads/2024/02/og_logo.jpg" class="info_block_img"
+					alt="Contact us to get your site fast!" decoding="async" />
+			</div>
+			<h3 class="info_block_title about_mod">Contact us to get your site fast!</h3>
+		</div>
+
+	</section>
+
+</body>
+
+</html>

@@ -1,0 +1,24 @@
+{
+	"description": "HTML example of bun-bundler usage.",
+	"author": "jsqrt",
+	"license": "MIT",
+	"name": "bun-bundler",
+	"version": "0.1.14",
+	"main": "index.js",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/jsqrt/bun-bundler.git"
+	},
+	"devDependencies": {
+		"bun-bundler": "file:../../"
+	},
+	"scripts": {
+		"start": "bun dev",
+		"dev": "cross-env NODE_ENV=development bun run dev-scripts/dev.mjs",
+		"build": "cross-env NODE_ENV=production bun run dev-scripts/build.mjs"
+	},
+	"dependencies": {
+		"cross-env": "^7.0.3",
+		"vite": "^5.4.8"
+	}
+}
