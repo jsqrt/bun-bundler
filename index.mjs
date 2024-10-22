@@ -177,6 +177,7 @@ export class Bundler extends Reporter {
 						compileDebug: this.config.debug,
 						sitemap,
 						readFileSync,
+						env: this.config.production ? 'production' : 'development',
 						...this.config.pugConfigOverrides,
 					});
 				},
