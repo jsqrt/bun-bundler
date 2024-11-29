@@ -1,7 +1,7 @@
 import path from 'path';
 import sharp from 'sharp';
 import { Reporter } from './reporter';
-import { getDirFiles } from '../utils.mjs';
+import { getFilesList } from '../utils.mjs';
 
 /**
  * The `ImageProcessor` class is responsible for processing and optimizing images in the production build.
@@ -15,7 +15,6 @@ import { getDirFiles } from '../utils.mjs';
  * - `sharpProcessing(files)`: Processes the given image files using the `sharp` library, applying the configured optimizations.
  * - `collectFiles(root)`: Collects all the image files in the configured root directory that match the allowed file types.
  * - `process(cfg)`: Processes the images in the configured root directory, applying the configured optimizations.
- * - `stopServer()`: Stops the server if it is running.
  *
  * The `ImageProcessor` class extends the `Reporter` class, which provides logging and error handling functionality.
  */
@@ -35,11 +34,15 @@ export class ImageProcessor extends Reporter {
 	 * @param {Object} [cfg.optimization] - The optimization settings for different file types.
 	 */
 	setConfig(cfg = {}) {
-		if (!cfg.root) this.errThrow('Server entry is not defined');
+		// cfg.root - old parameter
+		if (!cfg) this.errThrow('Sprite building: no config provided');
+
+		if (!cfg.root && !cfg.entry) this.errThrow('Image source entry is not defined');
+		if (!cfg.entry) cfg.entry = cfg.root;
 
 		this.config = {
 			debug: false,
-			root: cfg.root,
+			entry: cfg.entry,
 			reduceColors: false,
 			resize: { x: 1, y: 1 },
 			fileTypes: ['.png', '.jpg', '.jpeg', '.avif'],
@@ -115,11 +118,11 @@ export class ImageProcessor extends Reporter {
 	/**
 	 * Collects a list of file paths that match the configured file types.
 	 *
-	 * @param {string} root - The root directory to search for files.
+	 * @param {string} entry - The entry directory to search for files.
 	 * @returns {string[]} An array of file paths that match the configured file types.
 	 */
-	collectFiles(root) {
-		const files = getDirFiles(root, true).filter((filePath) => {
+	collectFiles(entry) {
+		const files = getFilesList(entry, true).filter((filePath) => {
 			return this.config.fileTypes.includes(path.extname(filePath));
 		});
 		return files;
@@ -133,11 +136,11 @@ export class ImageProcessor extends Reporter {
 	 * @param {object} cfg - The configuration object to use for processing the images.
 	 * @returns {null} This method does not return a value.
 	 */
-	process(cfg) {
+	start(cfg) {
 		try {
 			this.setConfig(cfg);
 			this.debugLog('Img processing');
-			this.filesToProcess = this.collectFiles(this.config.root);
+			this.filesToProcess = this.collectFiles(this.config.entry);
 			this.sharpProcessing(this.filesToProcess);
 			return null;
 		} catch (err) {
@@ -146,12 +149,7 @@ export class ImageProcessor extends Reporter {
 		}
 	}
 
-	/**
-	 * Stops the server, if it is running.
-	 */
-	stopServer() {
-		this.server?.close();
-	}
+	process = this.start;
 }
 
 export default ImageProcessor;

@@ -3,7 +3,7 @@ import Bun from 'bun';
 import path, { basename, extname, resolve } from 'path';
 import fsPromises from 'fs/promises';
 import fs, { existsSync, readFileSync, writeFileSync } from 'fs';
-import { createDir, exec, getDirFiles, getSassFileConfig, removeDir } from './utils.mjs';
+import { createDir, exec, getDirFiles, getFilesList, getSassFileConfig, removeDir } from './utils.mjs';
 import { Reporter } from './modules/reporter';
 
 const pug = require('pug');
@@ -520,6 +520,7 @@ export class Bundler extends Reporter {
 
 Bundler.utils = {
 	getDirFiles,
+	getFilesList,
 };
 
 export default Bundler;

@@ -31,7 +31,7 @@ const directories = {
 	cssDist: path.resolve(dist, './css/'),
 	jsDist: path.resolve(dist, './js/'),
 	imagesDist: path.resolve(dist, './images/'),
-	spriteDist: path.resolve(dist, './images/sprite'),
+	spriteDist: path.resolve(dist, './images/sprite/sprite.svg'),
 };
 
 const { images, fonts, statics } = directories;
@@ -46,13 +46,15 @@ bundler.build({
 	production: process.env.NODE_ENV === 'production',
 	onBuildComplete: () => {
 		// image optimizations on every build (no caching)
-		imgProcessor.process({
-			root: directories.imagesDist,
+		imgProcessor.start({
+			entry: directories.imagesDist,
 		});
 		// refresh sprite on every build (no caching)
-		spriteBuilder.build({
-			htmlDir: directories.dist,
+		spriteBuilder.start({
+			entry: directories.dist,
 			dist: directories.spriteDist,
+			spriteIconSelector: 'svg[data-sprite-icon]',
+			additionalIcons: './src/images/facebook.svg',
 		});
 	},
 });

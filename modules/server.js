@@ -51,7 +51,7 @@ export class Server extends Reporter {
 	 * @param {Object} cfg - The configuration options for the server.
 	 * @returns {Object|null} - The BrowserSync instance if the server was started successfully, or null if an error occurred.
 	 */
-	startServer(cfg) {
+	start(cfg) {
 		try {
 			this.setConfig(cfg);
 			this.debugLog('Server starting');
@@ -87,7 +87,7 @@ export class Server extends Reporter {
 	/**
 	 * Stops the BrowserSync server instance.
 	 */
-	stopServer() {
+	stop() {
 		this.server?.exit();
 	}
 
@@ -100,6 +100,9 @@ export class Server extends Reporter {
 		this.stopServer();
 		this.startServer(this.config.initial);
 	}
+
+	stopServer = this.stop;
+	startServer = this.start;
 }
 
 export default Server;

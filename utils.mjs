@@ -1,4 +1,4 @@
-import { existsSync, readdirSync, readFileSync, writeFileSync, mkdirSync, rmSync } from 'fs';
+import { statSync, existsSync, readdirSync, readFileSync, mkdirSync, rmSync } from 'fs';
 import path from 'path';
 
 export function readAllFilesInDirectory(directoryPath) {
@@ -52,6 +52,27 @@ export function getDirFiles(directoryPath, recursive) {
 		console.error('Error while reading files.', error);
 		return null;
 	}
+}
+
+export function getFilesList(entry) {
+	if (!entry) return [];
+
+	if (typeof entry === 'string') {
+		const entryUrl = path.resolve(entry);
+		const entryStat = statSync(entryUrl);
+		const isEntryDir = entryStat?.isDirectory();
+		if (!existsSync(entryUrl)) return [];
+
+		if (isEntryDir) {
+			return getDirFiles(entryUrl);
+		} else {
+			return [entryUrl];
+		}
+	} else if (Array.isArray(entry)) {
+		return entry;
+	}
+
+	return [];
 }
 
 export const createDir = (dirPath) => {

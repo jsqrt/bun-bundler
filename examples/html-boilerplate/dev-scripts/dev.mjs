@@ -30,7 +30,7 @@ const directories = {
 	cssDist: path.resolve(dist, './css/'),
 	jsDist: path.resolve(dist, './js/'),
 	imagesDist: path.resolve(dist, './images/'),
-	spriteDist: path.resolve(dist, './images/sprite'),
+	spriteDist: path.resolve(dist, './images/sprite/sprite.svg'),
 };
 
 const { images, fonts, statics } = directories;
@@ -45,7 +45,7 @@ bundler.watch({
 	debug: debugMode, // optional
 	html: () => Bundler.utils.getDirFiles(directories.html),
 	onStart: () => {
-		server.startServer({
+		server.start({
 			open: true,
 			debug: debugMode,
 			port: 8080,
@@ -56,18 +56,20 @@ bundler.watch({
 	onBuildComplete: () => {
 		// ❇️ Ultra flexible to integrate your packages.
 		// image optimizations on every build (no caching)
-		imgProcessor.process({
+		imgProcessor.start({
 			debug: debugMode,
-			root: directories.imagesDist,
+			entry: directories.imagesDist,
 		});
 		// refresh sprite on every build (no caching)
-		spriteBuilder.build({
+		spriteBuilder.start({
 			debug: debugMode,
-			htmlDir: dist,
+			entry: dist,
 			dist: directories.spriteDist,
+			additionalIcons: './src/images/facebook.svg',
+			spriteIconSelector: 'svg[data-sprite-icon]',
 		});
 	},
 	onCriticalError: () => {
-		server.stopServer();
+		server.stop();
 	},
 });
