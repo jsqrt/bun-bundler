@@ -1,8 +1,5 @@
 /**
  * Development script for bundling and serving a web application.
- * This script sets up a development environment using bun-bundler,
- * watches for file changes, processes images, builds sprites,
- * and starts a local development server.
  */
 
 import path from 'path';

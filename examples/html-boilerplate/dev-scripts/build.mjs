@@ -1,11 +1,7 @@
 /**
- * Build Script
- *
- * This script is responsible for building the project using bun-bundler.
- * It handles bundling HTML, SASS, and JavaScript files, processes images,
- * and creates sprite sheets. The script also supports staging builds and
- * includes debug mode options.
+ * Build script for production bundling a web application.
  */
+
 import path from 'path';
 import { Bundler } from 'bun-bundler';
 import { SpriteBuilder, ImageProcessor } from 'bun-bundler/modules';
