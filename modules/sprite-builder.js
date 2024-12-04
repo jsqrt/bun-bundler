@@ -6,6 +6,7 @@ import { writeFileSync, readFileSync, existsSync, mkdirSync } from 'fs';
 import path from 'path';
 import { Reporter } from './reporter';
 import { getFilesList } from '../utils.mjs';
+import { constants } from './constants';
 
 let unknownIconCounter = 0;
 
@@ -95,8 +96,8 @@ export class SpriteBuilder extends Reporter {
 		const extname = path.extname(fileUrl);
 		const basename = path.parse(fileUrl).name;
 
-		const isHTML = extname === '.html';
-		const isSVG = extname === '.svg';
+		const isHTML = constants.EXTENSIONS.htmlLike.includes(extname);
+		const isSVG = extname === constants.EXT_DIST.svg;
 
 		const fileContent = readFileSync(fileUrl, 'utf8');
 		let htmlContent = fileContent;
@@ -135,7 +136,7 @@ export class SpriteBuilder extends Reporter {
 		const filesToProcess = getFilesList(this.config.entry).concat(getFilesList(this.config.additionalIcons));
 
 		const filteredFilessToProcess = filesToProcess.filter(
-			(filePath) => filePath.endsWith('.html') || filePath.endsWith('.svg'),
+			(filePath) => filePath.endsWith(constants.EXT_DIST.html) || filePath.endsWith(constants.EXT_DIST.svg),
 		);
 
 		if (!filesToProcess.length)

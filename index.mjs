@@ -5,19 +5,12 @@ import fsPromises from 'fs/promises';
 import fs, { existsSync, readFileSync, writeFileSync } from 'fs';
 import { createDir, exec, getDirFiles, getFilesList, getSassFileConfig, removeDir } from './utils.mjs';
 import { Reporter } from './modules/reporter';
+import { constants } from './modules/constants';
 
 const pug = require('pug');
 const sass = require('sass');
 
 export class Bundler extends Reporter {
-	get SUPPORTED_EXTENSIONS() {
-		return {
-			html: ['.pug', '.html'],
-			styles: ['.scss', '.css'],
-			scripts: ['.js', '.mjs', '.jsx', '.ts', '.tsx'],
-		};
-	}
-
 	constructor() {
 		super();
 
@@ -27,7 +20,7 @@ export class Bundler extends Reporter {
 		};
 	}
 
-	async compile({ filePaths, type, renderFn, newFileExt, dist, extensionSkip }) {
+	async compile({ filePaths, type, renderFn, newFileExt, dist, skipExtensions = [] }) {
 		if (!filePaths.length) {
 			this.errThrow(`${type} - No files to compile`);
 		}
@@ -46,7 +39,7 @@ export class Bundler extends Reporter {
 					path: filePath,
 				};
 
-				if (extensionSkip && fileExtname === extensionSkip) {
+				if (skipExtensions && skipExtensions.includes(fileExtname)) {
 					res.compilationRes = readFileSync(filePath, 'utf-8');
 				} else {
 					res.compilationRes = renderFn(filePath);
@@ -73,7 +66,7 @@ export class Bundler extends Reporter {
 			await this.compile({
 				filePaths: this.config.sassFiles,
 				type: 'CSS',
-				newFileExt: '.css',
+				newFileExt: constants.EXT_DIST.css,
 				dist: this.config.cssDist,
 				renderFn: (filePath) =>
 					sass.compile(filePath, {
@@ -92,14 +85,14 @@ export class Bundler extends Reporter {
 
 		const sitemap = this.config.htmlFiles
 			.filter((file) => fs.lstatSync(file).isFile())
-			.map((file) => path.basename(file).replace(/\.pug$/, '.html'));
+			.map((file) => path.basename(file).replace(/\.pug$/, constants.EXT_DIST.html));
 
 		try {
 			await this.compile({
+				type: 'PUG',
 				filePaths: this.config.htmlFiles,
-				extensionSkip: '.html',
-				type: 'Pug',
-				newFileExt: '.html',
+				skipExtensions: constants.EXTENSIONS.html,
+				newFileExt: constants.EXT_DIST.html,
 				dist: this.config.distDir,
 				renderFn: (filePath) => {
 					const fullPath = path.resolve(filePath);
@@ -267,9 +260,11 @@ export class Bundler extends Reporter {
 			const needCompile = ({ extname, folder }) =>
 				this.isFileChangedDuringWatch({ extname, folder, isWatchMode });
 
-			if (needCompile({ extname: this.SUPPORTED_EXTENSIONS.html })) await this.compilePug();
-			if (needCompile({ extname: this.SUPPORTED_EXTENSIONS.styles })) await this.compileStyles();
-			if (needCompile({ extname: this.SUPPORTED_EXTENSIONS.scripts })) await this.compileScripts();
+			const { htmlLike, styles, scripts } = constants.EXTENSIONS;
+
+			if (needCompile({ extname: htmlLike })) await this.compilePug();
+			if (needCompile({ extname: styles })) await this.compileStyles();
+			if (needCompile({ extname: scripts })) await this.compileScripts();
 			if (needCompile({ folder: this.config.staticFolders })) await this.transferStatics();
 
 			const end = Date.now();
