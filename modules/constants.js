@@ -4,7 +4,7 @@ export const constants = {
 		css: '.css',
 		svg: '.svg',
 	},
-	EXTENSIONS: {
+	extensions: {
 		htmlLike: ['.pug', '.html', '.htm'],
 		html: ['.html', '.htm'],
 		styles: ['.scss', '.css'],
