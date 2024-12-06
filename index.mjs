@@ -66,7 +66,7 @@ export class Bundler extends Reporter {
 			await this.compile({
 				filePaths: this.config.sassFiles,
 				type: 'CSS',
-				newFileExt: constants.EXT_DIST.css,
+				newFileExt: constants.extDist.css,
 				dist: this.config.cssDist,
 				renderFn: (filePath) =>
 					sass.compile(filePath, {
@@ -85,14 +85,14 @@ export class Bundler extends Reporter {
 
 		const sitemap = this.config.htmlFiles
 			.filter((file) => fs.lstatSync(file).isFile())
-			.map((file) => path.basename(file).replace(/\.pug$/, constants.EXT_DIST.html));
+			.map((file) => path.basename(file).replace(/\.pug$/, constants.extDist.html));
 
 		try {
 			await this.compile({
 				type: 'PUG',
 				filePaths: this.config.htmlFiles,
-				skipExtensions: constants.EXTENSIONS.html,
-				newFileExt: constants.EXT_DIST.html,
+				skipExtensions: constants.extensions.html,
+				newFileExt: constants.extDist.html,
 				dist: this.config.distDir,
 				renderFn: (filePath) => {
 					const fullPath = path.resolve(filePath);
@@ -260,7 +260,7 @@ export class Bundler extends Reporter {
 			const needCompile = ({ extname, folder }) =>
 				this.isFileChangedDuringWatch({ extname, folder, isWatchMode });
 
-			const { htmlLike, styles, scripts } = constants.EXTENSIONS;
+			const { htmlLike, styles, scripts } = constants.extensions;
 
 			if (needCompile({ extname: htmlLike })) await this.compilePug();
 			if (needCompile({ extname: styles })) await this.compileStyles();

@@ -96,8 +96,8 @@ export class SpriteBuilder extends Reporter {
 		const extname = path.extname(fileUrl);
 		const basename = path.parse(fileUrl).name;
 
-		const isHTML = constants.EXTENSIONS.htmlLike.includes(extname);
-		const isSVG = extname === constants.EXT_DIST.svg;
+		const isHTML = constants.extensions.htmlLike.includes(extname);
+		const isSVG = extname === constants.extDist.svg;
 
 		const fileContent = readFileSync(fileUrl, 'utf8');
 		let htmlContent = fileContent;
@@ -136,7 +136,7 @@ export class SpriteBuilder extends Reporter {
 		const filesToProcess = getFilesList(this.config.entry).concat(getFilesList(this.config.additionalIcons));
 
 		const filteredFilessToProcess = filesToProcess.filter(
-			(filePath) => filePath.endsWith(constants.EXT_DIST.html) || filePath.endsWith(constants.EXT_DIST.svg),
+			(filePath) => filePath.endsWith(constants.extDist.html) || filePath.endsWith(constants.extDist.svg),
 		);
 
 		if (!filesToProcess.length)

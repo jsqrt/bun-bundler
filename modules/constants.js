@@ -1,5 +1,5 @@
 export const constants = {
-	EXT_DIST: {
+	extDist: {
 		html: '.html',
 		css: '.css',
 		svg: '.svg',
