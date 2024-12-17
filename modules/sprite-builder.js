@@ -14,7 +14,8 @@ const { JSDOM } = jsdom;
 const virtualConsole = new jsdom.VirtualConsole();
 
 export class SpriteBuilder extends Reporter {
-	setConfig({ entry, dist, debug, spriteIconSelector, additionalIcons, root }) {
+	setConfig({ htmlDir, entry = htmlDir, dist, debug, spriteIconSelector, additionalIcons, root }) {
+		//htmlDir - legacy prop
 		if (!dist) {
 			this.errThrow('Sprite building: dist directory not provided');
 		}
