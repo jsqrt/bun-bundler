@@ -2,7 +2,7 @@
  * Build script for production bundling a web application.
  */
 
-import path from 'path';
+import { resolve } from 'path';
 import { Bundler } from 'bun-bundler';
 import { SpriteBuilder, ImageProcessor } from 'bun-bundler/modules';
 
@@ -10,27 +10,28 @@ const bundler = new Bundler();
 const spriteBuilder = new SpriteBuilder();
 const imgProcessor = new ImageProcessor();
 
-const src = path.resolve('./src');
-const dist = path.resolve('./build');
+const src = resolve('./src');
+const dist = resolve('./build');
 
 const directories = {
 	src: src,
-	html: path.resolve(src, './html/'),
-	sass: [path.resolve(src, './css/app.css')],
-	js: [path.resolve(src, './js/app.js')],
-	images: path.resolve(src, './images/'),
-	fonts: path.resolve(src, './fonts/'),
-	statics: path.resolve(src, './static/'),
+	html: resolve(src, './html/'),
+	sass: [resolve(src, './css/app.css')],
+	js: [resolve(src, './js/app.js')],
+	images: resolve(src, './images/'),
+	fonts: resolve(src, './fonts/'),
+	statics: resolve(src, './static/'),
 
 	dist: dist,
 	htmlDist: dist,
-	cssDist: path.resolve(dist, './css/'),
-	jsDist: path.resolve(dist, './js/'),
-	imagesDist: path.resolve(dist, './images/'),
-	spriteDist: path.resolve(dist, './images/sprite/sprite.svg'),
+	cssDist: resolve(dist, './css/'),
+	assembleStyles: resolve(dist, './css/app.css'),
+	jsDist: resolve(dist, './js/'),
+	imagesDist: resolve(dist, './images/'),
+	spriteDist: resolve(dist, './images/sprite/sprite.svg'),
 };
 
-const { images, fonts, statics } = directories;
+const { images, fonts, statics, assembleStyles } = directories;
 
 bundler.build({
 	...directories,
@@ -38,6 +39,8 @@ bundler.build({
 	html: () => Bundler.utils.getDirFiles(directories.html),
 	// folders/files to copy into dist root
 	staticFolders: [images, fonts, statics],
+	// assemble styles into one file
+	assembleStyles,
 	// affects on file-minifications in dist
 	production: process.env.NODE_ENV === 'production',
 	onBuildComplete: () => {

@@ -3,7 +3,17 @@ import Bun from 'bun';
 import path, { basename, extname, resolve } from 'path';
 import fsPromises from 'fs/promises';
 import fs, { existsSync, readFileSync, writeFileSync } from 'fs';
-import { createDir, exec, getDirFiles, getFilesList, getSassFileConfig, removeDir } from './utils.mjs';
+import {
+	createDir,
+	exec,
+	getDirFiles,
+	getFilesList,
+	getSassFileConfig,
+	removeDir,
+	moveFile,
+	creatFile,
+	removeFile,
+} from './utils.mjs';
 import { Reporter } from './modules/reporter';
 import { constants } from './modules/constants';
 
@@ -18,6 +28,13 @@ export class Bundler extends Reporter {
 		this.config = {
 			rootDir: process.cwd(),
 		};
+	}
+
+	writeDistFiles(dist, compiledData) {
+		Object.values(compiledData).forEach(({ fileContent, fileName } = {}) => {
+			if (!fileContent === null) return;
+			writeFileSync(path.join(dist, fileName), fileContent);
+		});
 	}
 
 	async compile({ filePaths, type, renderFn, newFileExt, dist, skipExtensions = [] }) {
@@ -40,32 +57,58 @@ export class Bundler extends Reporter {
 				};
 
 				if (skipExtensions && skipExtensions.includes(fileExtname)) {
-					res.compilationRes = readFileSync(filePath, 'utf-8');
+					res.fileContent = readFileSync(filePath, 'utf-8');
 				} else {
-					res.compilationRes = renderFn(filePath);
+					res.fileContent = renderFn(filePath);
 				}
 
 				return res;
 			}),
 		);
 
-		const createDistFiles = () => {
-			Object.values(compiledData).forEach(({ compilationRes, fileName } = {}) => {
-				if (!compilationRes === null) return;
-				writeFileSync(path.join(dist, fileName), compilationRes);
-			});
+		if (constants.compilationTypes.css === type) {
+			this.stylesToAssemble = compiledData;
+			return;
+		}
+
+		this.writeDistFiles(dist, compiledData);
+	}
+
+	// assemble all comppiled files into one file
+	assembleStyles() {
+		if (!this.config.assembleStyles) return;
+
+		this.debugLog('Styles assembling');
+		const distFileURL = path.resolve(this.config.assembleStyles);
+		let distFileContent = '';
+
+		const injectFileContent = (content, fileName) => {
+			distFileContent += `\n\n/* @${fileName} */\n`;
+			distFileContent += content;
 		};
 
-		createDistFiles();
+		this.importedStylesToAssemble?.forEach(({ fileContent, fileName, fileURL }) => {
+			if (!fileContent) return;
+			injectFileContent(fileContent, fileName);
+			removeFile(fileURL);
+		});
+
+		this.stylesToAssemble?.forEach(({ fileContent, fileName }) => {
+			if (!fileContent) return;
+			injectFileContent(fileContent, fileName);
+		});
+
+		creatFile({ url: distFileURL, content: distFileContent });
 	}
 
 	async compileStyles() {
+		this.stylesToAssemble = [];
 		this.debugLog('Styles compilation');
 		createDir(this.config.cssDist);
 		try {
 			await this.compile({
 				filePaths: this.config.sassFiles,
-				type: 'CSS',
+				type: constants.compilationTypes.css,
 				newFileExt: constants.extDist.css,
 				dist: this.config.cssDist,
 				renderFn: (filePath) =>
@@ -89,7 +132,7 @@ export class Bundler extends Reporter {
 
 		try {
 			await this.compile({
-				type: 'PUG',
+				type: constants.compilationTypes.pug,
 				filePaths: this.config.htmlFiles,
 				skipExtensions: constants.extensions.html,
 				newFileExt: constants.extDist.html,
@@ -122,6 +165,7 @@ export class Bundler extends Reporter {
 
 	async compileScripts() {
 		this.debugLog('Scripts compilation');
+		this.importedStylesToAssemble = [];
 		createDir(this.config.jsDist);
 
 		try {
@@ -138,6 +182,26 @@ export class Bundler extends Reporter {
 					this.errLog(message);
 				});
 				this.errThrow();
+			}
+
+			const importedCSS = result.outputs.filter(
+				(output) => path.extname(output.path) === constants.extDist.css,
+			);
+
+			if (importedCSS.length && this.config.cssDist && !this.config.assembleStyles) {
+				importedCSS.forEach((asset) => {
+					const cssModules = path.join(this.config.cssDist, './modules');
+					createDir(cssModules);
+					moveFile(asset.path, cssModules);
+				});
+			}
+
+			if (this.config.assembleStyles) {
+				this.importedStylesToAssemble = importedCSS.map((asset) => ({
+					fileContent: readFileSync(asset.path, 'utf-8'),
+					fileName: path.basename(asset.path),
+					fileURL: asset.path,
+				}));
 			}
 		} catch (error) {
 			this.errLog('Error while compiling js files');
@@ -199,6 +263,7 @@ export class Bundler extends Reporter {
 			pugConfigOverrides = {},
 			jsConfigOverrides = {},
 			sassConfigOverrides = {},
+			assembleStyles,
 		} = cfg;
 
 		if (!this.config.initialCfg) this.config.initialCfg = cfg;
@@ -223,6 +288,7 @@ export class Bundler extends Reporter {
 			this.setConfig(this.config.initialCfg, mode);
 		};
 
+		this.config.assembleStyles = assembleStyles;
 		this.config.pugConfigOverrides = pugConfigOverrides;
 		this.config.jsConfigOverrides = jsConfigOverrides;
 		this.config.sassConfigOverrides = {
@@ -257,15 +323,26 @@ export class Bundler extends Reporter {
 				createDir(this.config.distDir);
 			}
 
-			const needCompile = ({ extname, folder }) =>
-				this.isFileChangedDuringWatch({ extname, folder, isWatchMode });
+			const needCompile = ({ extname, folder }) => {
+				if (this.isFileChangedDuringWatch({ extname, folder, isWatchMode })) return true;
+			};
 
 			const { htmlLike, styles, scripts } = constants.extensions;
 
-			if (needCompile({ extname: htmlLike })) await this.compilePug();
-			if (needCompile({ extname: styles })) await this.compileStyles();
-			if (needCompile({ extname: scripts })) await this.compileScripts();
-			if (needCompile({ folder: this.config.staticFolders })) await this.transferStatics();
+			const modulesToCompile = {
+				styles: needCompile({ extname: styles }),
+				scripts: needCompile({ extname: scripts }),
+				htmlLike: needCompile({ extname: htmlLike }),
+				statics: needCompile({ folder: this.config.staticFolders }),
+			};
+
+			if (modulesToCompile.htmlLike) await this.compilePug();
+			if (modulesToCompile.styles) await this.compileStyles();
+			if (modulesToCompile.scripts) await this.compileScripts();
+			if ((modulesToCompile.scripts || modulesToCompile.styles) && this.config.assembleStyles)
+				this.assembleStyles();
+
+			if (modulesToCompile.statics) await this.transferStatics();
 
 			const end = Date.now();
 			this.log(`[✅ Done ${end - start}ms ]`);

@@ -1,4 +1,13 @@
-import { statSync, existsSync, readdirSync, readFileSync, mkdirSync, rmSync } from 'fs';
+import {
+	statSync,
+	existsSync,
+	readdirSync,
+	readFileSync,
+	mkdirSync,
+	rmSync,
+	renameSync,
+	writeFileSync,
+} from 'fs';
 import path from 'path';
 
 export function readAllFilesInDirectory(directoryPath) {
@@ -76,11 +85,21 @@ export function getFilesList(entry) {
 }
 
 export const createDir = (dirPath) => {
-	if (!existsSync(dirPath)) mkdirSync(dirPath);
+	if (!existsSync(dirPath)) mkdirSync(dirPath, { recursive: true });
 };
 
 export const removeDir = (dirPath) => {
 	if (existsSync(dirPath)) rmSync(dirPath, { recursive: true });
+};
+
+export const creatFile = ({ url, content }) => {
+	const dir = path.dirname(url);
+	createDir(dir);
+	writeFileSync(url, content, 'utf-8');
+};
+
+export const removeFile = (url) => {
+	rmSync(url);
 };
 
 export const promiseWrap = async (fn) => {
@@ -130,3 +149,8 @@ export function getSassFileConfig(entryDir) {
 		return null;
 	}
 }
+
+export const moveFile = (url, newFolder) => {
+	const basename = path.basename(url);
+	renameSync(url, path.join(newFolder, basename));
+};

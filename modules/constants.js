@@ -10,4 +10,9 @@ export const constants = {
 		styles: ['.scss', '.css'],
 		scripts: ['.js', '.mjs', '.jsx', '.ts', '.tsx'],
 	},
+	compilationTypes: {
+		pug: 'PUG',
+		css: 'CSS',
+		js: 'JS',
+	},
 };
