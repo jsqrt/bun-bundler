@@ -59,7 +59,7 @@ export class Bundler extends Reporter {
 				if (skipExtensions && skipExtensions.includes(fileExtname)) {
 					res.fileContent = readFileSync(filePath, 'utf-8');
 				} else {
-					res.fileContent = renderFn(filePath);
+					res.fileContent = renderFn(filePath, fileExtname);
 				}
 
 				return res;
@@ -101,6 +101,32 @@ export class Bundler extends Reporter {
 		creatFile({ url: distFileURL, content: distFileContent });
 	}
 
+	processHTMLTemplate(filePath, visitedFiles = new Set()) {
+		if (visitedFiles.has(filePath)) {
+			throw new Error(`Dependency cycle detected in file ${filePath}`);
+		}
+
+		visitedFiles.add(filePath);
+
+		let content = fs.readFileSync(filePath, 'utf-8');
+		const includeRegex = /<!--\s*@include\s+['"](.+?)['"]\s*-->/g;
+
+		let match;
+		while ((match = includeRegex.exec(content)) !== null) {
+			const includeFile = match[1];
+			const includePath = path.resolve(path.dirname(filePath), includeFile);
+			if (!existsSync(includePath)) {
+				this.errThrow(`File ${includeFile} not found`);
+				return;
+			}
+			const includeContent = this.processHTMLTemplate(includePath, visitedFiles);
+			content = content.replace(match[0], includeContent);
+		}
+
+		visitedFiles.delete(filePath);
+		return content;
+	}
+
 	async compileStyles() {
 		this.stylesToAssemble = [];
 		this.debugLog('Styles compilation');
@@ -134,16 +160,21 @@ export class Bundler extends Reporter {
 			await this.compile({
 				type: constants.compilationTypes.pug,
 				filePaths: this.config.htmlFiles,
-				skipExtensions: constants.extensions.html,
+				skipExtensions: false,
 				newFileExt: constants.extDist.html,
 				dist: this.config.distDir,
-				renderFn: (filePath) => {
+				renderFn: (filePath, fileExtname) => {
 					const fullPath = path.resolve(filePath);
 					const isFile = fs.lstatSync(fullPath).isFile();
 
 					if (!isFile) {
 						this.debugLog(`Skipping: ${fullPath} is a directory.`);
 						return null;
+					}
+
+					if (fileExtname === constants.extDist.html) {
+						const templatedHTML = this.processHTMLTemplate(filePath);
+						return templatedHTML;
 					}
 
 					return pug.renderFile(fullPath, {
