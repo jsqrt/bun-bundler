@@ -16,13 +16,19 @@ const virtualConsole = new jsdom.VirtualConsole();
 export class SpriteBuilder extends Reporter {
 	setConfig({ htmlDir, entry = htmlDir, dist, debug, spriteIconSelector, additionalIcons, root }) {
 		//htmlDir - legacy prop
-		if (!dist) {
+		if (!path.resolve(dist)) {
 			this.errThrow('Sprite building: dist directory not provided');
 		}
 
+		// if dist is directory
+		const distExtname = path.extname(dist);
+		const distFormatted = distExtname !== '.svg' ? path.resolve(dist, 'sprite.svg') : dist;
+		const distRelative = path.relative(entry, distFormatted);
+
 		this.config = {
 			debug,
-			dist: path.resolve(dist),
+			dist: distFormatted,
+			distRelative,
 			spriteIconSelector: spriteIconSelector || 'svg',
 			entry: entry || root || [],
 			additionalIcons,
@@ -76,7 +82,7 @@ export class SpriteBuilder extends Reporter {
 
 			const HTMLUseChunk = `
 					<svg viewBox="${viewBox}">
-						<use xlink:href="images/sprite/sprite.svg#${iconName}"></use>
+						<use xlink:href="${this.config.distRelative}#${iconName}"></use>
 					</svg>
 				`;
 
@@ -109,8 +115,8 @@ export class SpriteBuilder extends Reporter {
 
 		const DOM = new JSDOM(htmlContent, { virtualConsole });
 		const document = DOM.window.document;
-		const newDocument = '<!DOCTYPE html>'.concat(document.documentElement.outerHTML);
 		const icons = this.replaceAndCollectIcons({ document, basename, isHTML, isSVG });
+		const newDocument = '<!DOCTYPE html>'.concat(document.documentElement.outerHTML);
 
 		if (isHTML) writeFileSync(fileUrl, newDocument);
 
