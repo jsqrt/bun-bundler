@@ -78,10 +78,12 @@ export class SpriteBuilder extends Reporter {
 				iconName = `icon-${unknownIconCounter}`;
 			}
 
-			const viewBox = svgNode.getAttribute('viewBox');
+			const svgAttributes = Array.from(svgNode.attributes)
+				.map((attr) => `${attr.name}="${attr.value}"`)
+				.join(' ');
 
 			const HTMLUseChunk = `
-					<svg viewBox="${viewBox}">
+					<svg ${svgAttributes}>
 						<use xlink:href="${this.config.distRelative}#${iconName}"></use>
 					</svg>
 				`;
