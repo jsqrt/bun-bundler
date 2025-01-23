@@ -152,6 +152,11 @@ export class Bundler extends Reporter {
 	async compilePug() {
 		this.debugLog('Pug/html compilation');
 
+		if (!this.config.htmlFiles?.length) {
+			this.debugLog("warning: HTML/pug files doesn't provided");
+			return;
+		}
+
 		const sitemap = this.config.htmlFiles
 			.filter((file) => fs.lstatSync(file).isFile())
 			.map((file) => path.basename(file).replace(/\.pug$/, constants.extDist.html));
