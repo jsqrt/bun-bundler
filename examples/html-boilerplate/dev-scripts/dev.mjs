@@ -15,7 +15,7 @@ const dist = resolve('./build');
 
 const directories = {
 	src: src,
-	html: resolve(src, './html/'),
+	html: () => Bundler.utils.getDirFiles(directories.html),
 	sass: [resolve(src, './css/app.css')],
 	js: [resolve(src, './js/app.js')],
 	images: resolve(src, './images/'),
@@ -42,7 +42,6 @@ bundler.watch({
 	assembleStyles,
 	production: process.env.NODE_ENV === 'production',
 	debug: debugMode, // optional
-	html: () => Bundler.utils.getDirFiles(directories.html),
 	onStart: () => {
 		server.start({
 			open: true,
