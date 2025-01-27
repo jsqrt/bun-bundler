@@ -66,7 +66,7 @@ export class Bundler extends Reporter {
 			}),
 		);
 
-		if (constants.compilationTypes.css === type) {
+		if (constants.compilationTypes.css === type && this.config.assembleStyles) {
 			this.stylesToAssemble = compiledData;
 			return;
 		}
