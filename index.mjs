@@ -11,7 +11,7 @@ import {
 	getSassFileConfig,
 	removeDir,
 	moveFile,
-	creatFile,
+	createFile,
 	removeFile,
 } from './utils.mjs';
 import { Reporter } from './modules/reporter';
@@ -38,7 +38,7 @@ export class Bundler extends Reporter {
 	}
 
 	async compile({ filePaths, type, renderFn, newFileExt, dist, skipExtensions = [] }) {
-		if (!filePaths.length) {
+		if (!Array.isArray(filePaths) || !filePaths.length) {
 			this.errThrow(`${type} - No files to compile`);
 		}
 
@@ -75,7 +75,7 @@ export class Bundler extends Reporter {
 	}
 
 	// assemble all comppiled files into one file
-	assembleStyles() {
+	async assembleStyles() {
 		if (!this.config.assembleStyles) return;
 
 		this.debugLog('Styles assembling');
@@ -98,7 +98,19 @@ export class Bundler extends Reporter {
 			injectFileContent(fileContent, fileName);
 		});
 
-		creatFile({ url: distFileURL, content: distFileContent });
+		createFile({ url: distFileURL, content: distFileContent });
+
+		await this.compile({
+			filePaths: [distFileURL],
+			type: constants.compilationTypes.css,
+			newFileExt: constants.extDist.css,
+			dist: distFileURL,
+			renderFn: (filePath) =>
+				sass.compile(filePath, {
+					style: 'compressed',
+					...this.config.sassConfigOverrides,
+				})?.css,
+		});
 	}
 
 	processHTMLTemplate(filePath, visitedFiles = new Set()) {
@@ -235,6 +247,7 @@ export class Bundler extends Reporter {
 			}
 
 			if (this.config.assembleStyles) {
+				this.debugLog('Assembling styles');
 				this.importedStylesToAssemble = importedCSS.map((asset) => ({
 					fileContent: readFileSync(asset.path, 'utf-8'),
 					fileName: path.basename(asset.path),
@@ -307,10 +320,10 @@ export class Bundler extends Reporter {
 
 		this.config.production = cfg.production;
 
-		this.config.htmlFiles = exec(html);
-		this.config.sassFiles = exec(sass);
-		this.config.jsFiles = exec(js);
-		this.config.staticFolders = exec(staticFolders);
+		this.config.htmlFiles = [exec(html)].flat();
+		this.config.sassFiles = [exec(sass)].flat();
+		this.config.jsFiles = [exec(js)].flat();
+		this.config.staticFolders = [exec(staticFolders)].flat();
 
 		this.config.watchDir = resolve(this.config.rootDir, cfg.watchDir || './src/');
 		this.config.distDir = resolve(this.config.rootDir, dist || './dist/');
@@ -377,7 +390,7 @@ export class Bundler extends Reporter {
 			if (modulesToCompile.styles) await this.compileStyles();
 			if (modulesToCompile.scripts) await this.compileScripts();
 			if ((modulesToCompile.scripts || modulesToCompile.styles) && this.config.assembleStyles)
-				this.assembleStyles();
+				await this.assembleStyles();
 
 			if (modulesToCompile.statics) await this.transferStatics();
 

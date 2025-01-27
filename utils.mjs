@@ -92,7 +92,7 @@ export const removeDir = (dirPath) => {
 	if (existsSync(dirPath)) rmSync(dirPath, { recursive: true });
 };
 
-export const creatFile = ({ url, content }) => {
+export const createFile = ({ url, content }) => {
 	const dir = path.dirname(url);
 	createDir(dir);
 	writeFileSync(url, content, 'utf-8');
