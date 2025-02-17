@@ -388,7 +388,8 @@ export class Bundler extends Reporter {
 
 			if (modulesToCompile.htmlLike) await this.compilePug();
 			if (modulesToCompile.styles) await this.compileStyles();
-			if (modulesToCompile.scripts) await this.compileScripts();
+			if (modulesToCompile.scripts || (modulesToCompile.styles && this.config.assembleStyles))
+				await this.compileScripts();
 			if ((modulesToCompile.scripts || modulesToCompile.styles) && this.config.assembleStyles)
 				await this.assembleStyles();
 
