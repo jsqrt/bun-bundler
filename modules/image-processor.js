@@ -65,15 +65,20 @@ export class ImageProcessor extends Reporter {
 	}
 
 	collectFiles(entry) {
-		const files = getFilesList(entry, true).filter((filePath) => {
+		const files = getDirFiles(entry, true);
+
+		const filteredFiles = files.filter((filePath) => {
 			return this.config.fileTypes.includes(path.extname(filePath));
 		});
-		return files;
+
+		return filteredFiles;
 	}
 
 	start(cfg) {
 		try {
 			this.setConfig(cfg);
+			this.log(`[Please wait, Image optimization... ]`);
+
 			this.debugLog('Img processing');
 			this.filesToProcess = this.collectFiles(this.config.entry);
 			this.sharpProcessing(this.filesToProcess);
