@@ -1,7 +1,7 @@
 import path from 'path';
 import sharp from 'sharp';
 import { Reporter } from './reporter';
-import { getFilesList } from '../utils.mjs';
+import { getFilesList, getDirFiles } from '../utils.mjs';
 
 export class ImageProcessor extends Reporter {
 	setConfig(cfg = {}) {
