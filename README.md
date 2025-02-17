@@ -7,7 +7,7 @@ Bun-Bundler is a powerful and efficient HTML bundler designed for modern web dev
 
 ## Key Features
 
-- **Pug / HTML** support for flexible templating
+- **Pug / HTML** templating
 - **SCSS / CSS** preprocessing
 - **JavaScript** bundling and optimization
 - **SVG Sprite** generation
@@ -15,28 +15,51 @@ Bun-Bundler is a powerful and efficient HTML bundler designed for modern web dev
 - **Static assets** handling
 - **Real-time file watching** and **hot reloading** for rapid development
 
-## Why Choose Bun-Bundler?
-
-Bun-Bundler was created to address the limitations of other popular bundlers. It offers:
-
-- **Efficiency**: Ultra-fast bundling and optimization processes
-- **Flexibility**: Easy integration with other Node.js scripts and modules
-- **Scalability**: Suitable for both small projects and large-scale websites
-- **PUG Support**: Built-in support for the PUG templating engine, enabling efficient front-end development
-
 ## Quick Start
 
 ### Installation
 
+Bun-Bundler works great with both Bun and Node.js. Install Bun-Bundler using npm or Bun:
+
 `npm install bun-bundler`
-
 or
-
 `bun add bun-bundler`
 
-### Basic Configuration
+## Dev bundling example (File watching & Hot Reload)
 
-Create a `build.mjs` file in your project root with the following content:
+Create file `dev.js`
+
+```javascript
+const server = new Server();
+
+bundler.watch({
+	src: './src',
+	html: './src/html/',
+	sass: './src/css/app.css',
+	js: './src/js/app.js',
+	dist: './dist',
+	htmlDist: './dist',
+	cssDist: './dist/css/',
+	jsDist: './dist/js/',
+	staticFolders: ['./src/images/', './src/fonts/', './src/static/'],
+	onStart: () => {
+		server.startServer({
+			open: true,
+			debug: false,
+			port: 8080,
+			root: dist,
+		});
+	},
+	onCriticalError: () => server.stopServer(),
+	debug: false,
+});
+```
+
+Then run it `npm run dev.js` or `bun dev.js`
+
+## Production bundling example (Minification & Optimizations)
+
+Create file `build.js`
 
 ```javascript
 import path from 'path';
@@ -44,96 +67,33 @@ import { Bundler } from 'bun-bundler';
 import { SpriteBuilder, ImageProcessor, Server } from 'bun-bundler/modules';
 
 const bundler = new Bundler();
-const spriteBuilder = new SpriteBuilder();
-const imgProcessor = new ImageProcessor();
+const spriteBuilder = new SpriteBuilder(); // optional
+const imgProcessor = new ImageProcessor(); // optional
 
-// Define your project structure
-const src = path.resolve('./src');
-const dist = path.resolve('./build');
-
-const directories = {
-	src: src,
-	html: path.resolve(src, './pug/pages/'),
-	sass: [path.resolve(src, './scss/app.scss')],
-	js: [path.resolve(src, './js/app.js')],
-	images: path.resolve(src, './images/'),
-	fonts: path.resolve(src, './fonts/'),
-	statics: path.resolve(src, './static/'),
-
-	dist: dist,
-	htmlDist: dist,
-	cssDist: path.resolve(dist, './css/'),
-	jsDist: path.resolve(dist, './js/'),
-	imagesDist: path.resolve(dist, './images/'),
-	spriteDist: path.resolve(dist, './images/sprite'),
-};
-
-const { images, fonts, statics } = directories;
-
-// Configure the bundler
 bundler.build({
-	...directories,
-	// ❇️ You can pass function(it will call on every render), or array of files
-	html: () => Bundler.utils.getDirFiles(directories.html),
-	staticFolders: [images, fonts, statics],
-	production: process.env.NODE_ENV === 'production',
+	src: './src',
+	html: './src/html/',
+	sass: './src/css/app.css',
+	js: './src/js/app.js',
+	dist: './build',
+	htmlDist: './build',
+	cssDist: './build/css/',
+	jsDist: './build/js/',
+	staticFolders: ['./src/images/', './src/fonts/', './src/static/'],
+	production: true,
+	debug: false,
 	onBuildComplete: () => {
-		imgProcessor.process({ root: directories.imagesDist });
+		// optional
+		imgProcessor.process({ root: './build/images/' });
 		spriteBuilder.build({
-			htmlDir: directories.dist,
-			dist: directories.spriteDist,
+			htmlDir: './build/',
+			dist: './build/images/sprite/',
 		});
 	},
 });
 ```
 
-We're ready to takeoff! Run `bun run build.mjs`
-
-## Development Mode
-
-To enable file watching and dev-mode, use the following configuration:
-`dev.mjs`
-
-```javascript
-const debugMode = false;
-const server = new Server();
-
-bundler.watch({
-	...directories,
-	production: process.env.NODE_ENV === 'production',
-	staticFolders: [images, fonts, statics],
-	debug: debugMode,
-	html: () => Bundler.utils.getDirFiles(directories.html),
-	onStart: () => {
-		server.startServer({
-			open: true,
-			debug: debugMode,
-			port: 8080,
-			root: dist,
-			❇️ // custom BrowserSync config, if needed:
-			overrides: {},
-		});
-	},
-	onBuildComplete: () => {
-		// ❇️ image optimizations on every build (no caching)
-		imgProcessor.process({
-			debug: debugMode,
-			root: directories.imagesDist,
-		});
-		// ❇️ refresh sprite on every build (no caching)
-		spriteBuilder.build({
-			debug: debugMode,
-			htmlDir: dist,
-			dist: directories.spriteDist,
-		});
-	},
-	onCriticalError: () => {
-		server.stopServer();
-	},
-});
-```
-
-Run `bun run dev.mjs`
+We're ready to takeoff! Run `npm run build.js` or `bun build.js`
 
 ## Examples and Boilerplate
 
