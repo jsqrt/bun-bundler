@@ -95,6 +95,19 @@ bundler.build({
 
 We're ready to takeoff! Run `npm run build.js` or `bun build.js`
 
+Options:
+| Name                                           | Description                                                                                             | Default / Fallback                                                    |
+| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| `debug`                                        | The primary UI color.                                                                                   | ![#f03c15](https://place-hold.it/15/00b3ff/000000?text=+) `#00b3ff`   |
+| `assembleStyles`                               | Assemble styles from all s files      | `rgba(0, 0, 0, 1)`                                                    |
+| `--plyr-focus-visible-color`                   | The color used for the focus styles when an element is `:focus-visible` (keyboard focused).             | `--plyr-color-main`                                                   |
+| `--plyr-badge-background`                      | The background color for badges in the menu.                                                            | ![#4a5464](https://place-hold.it/15/4a5464/000000?text=+) `#4a5464`   |
+| `--plyr-badge-text-color`                      | The text color for badges.                                                                              | ![#ffffff](https://place-hold.it/15/ffffff/000000?text=+) `#ffffff`   |
+| `--plyr-badge-border-radius`                   | The border radius used for badges.                                                                      | `2px`                                                                 |
+| `--plyr-captions-background`                   | The color for the background of captions.                                                               | `rgba(0, 0, 0, 0.8)`                                                  |
+
+
+
 ## Examples and Boilerplate
 
 - Check the `./examples` directory in the repository to see Bun-Bundler in action.
