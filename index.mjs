@@ -2,7 +2,8 @@
 import Bun from 'bun';
 import path, { basename, extname, resolve } from 'path';
 import fsPromises from 'fs/promises';
-import fs, { existsSync, readFileSync, writeFileSync } from 'fs';
+import fs, { existsSync, readFileSync, renameSync, statSync, writeFileSync } from 'fs';
+import chalk from 'chalk';
 import {
 	createDir,
 	exec,
@@ -10,7 +11,6 @@ import {
 	getFilesList,
 	getSassFileConfig,
 	removeDir,
-	moveFile,
 	createFile,
 	removeFile,
 } from './utils.mjs';
@@ -30,6 +30,74 @@ export class Bundler extends Reporter {
 		};
 	}
 
+	setConfig(cfg, mode) {
+		if (!cfg) this.errThrow('Config is not defined');
+
+		const {
+			dist = '',
+			html = [],
+			sass = [],
+			js = [],
+			staticFolders = [],
+			cssDist = '',
+			jsDist = '',
+			htmlDist = '',
+			pugConfigOverrides = {},
+			jsConfigOverrides = {},
+			sassConfigOverrides = {},
+			assembleStyles,
+		} = cfg;
+
+		if (!this.config.initialCfg) this.config.initialCfg = cfg;
+
+		this.config.production = cfg.production;
+
+		const prepareFiles = (entry, extensions) => {
+			const fallback = [entry];
+
+			if (typeof entry !== 'string') return fallback;
+
+			const entryStat = statSync(entry);
+			const isDirectory = entryStat?.isDirectory();
+
+			return isDirectory ? [getDirFiles(entry, true, extensions)] : fallback;
+		};
+
+		this.config.htmlFiles = prepareFiles(html).flat();
+		this.config.sassFiles = prepareFiles(sass).flat();
+		this.config.jsFiles = prepareFiles(js).flat();
+		this.config.staticFolders = prepareFiles(staticFolders).flat();
+
+		this.config.watchDir = resolve(this.config.rootDir, cfg.watchDir || './src/');
+		this.config.distDir = resolve(this.config.rootDir, dist || './dist/');
+		this.config.cssDist = resolve(this.config.rootDir, cssDist || path.join(this.config.distDir, './css/'));
+		this.config.jsDist = resolve(this.config.rootDir, jsDist || path.join(this.config.distDir, './js/'));
+		this.config.htmlDist = resolve(this.config.rootDir, htmlDist || this.config.distDir);
+		this.config.onStart = cfg.onStart;
+		this.config.onBuildComplete = cfg.onBuildComplete;
+		this.config.onCriticalError = cfg.onCriticalError;
+		this.config.onWatchUpdate = cfg.onWatchUpdate;
+		this.config.debug = cfg.debug;
+		this.config.refresh = () => {
+			this.setConfig(this.config.initialCfg, mode);
+		};
+
+		this.config.assembleStyles = assembleStyles;
+		this.config.pugConfigOverrides = pugConfigOverrides;
+		this.config.jsConfigOverrides = jsConfigOverrides;
+		this.config.sassConfigOverrides = {
+			...(getSassFileConfig.call(this, this.config.rootDir) || {}),
+			...sassConfigOverrides,
+		};
+
+		if (mode === 'watch') {
+			if (!this.config.watchDir) {
+				exec(this.config.onCriticalError);
+				this.errThrow('Can`t resolve watch directory.');
+			}
+		}
+	}
+
 	writeDistFiles(dist, compiledData) {
 		Object.values(compiledData).forEach(({ fileContent, fileName } = {}) => {
 			if (!fileContent === null) return;
@@ -37,7 +105,7 @@ export class Bundler extends Reporter {
 		});
 	}
 
-	async compile({ filePaths, type, renderFn, newFileExt, dist, skipExtensions = [] }) {
+	async compile({ filePaths, type, renderFn, newFileExt, dist, skipExtensions = [], assembleCompilation }) {
 		if (!Array.isArray(filePaths) || !filePaths.length) {
 			this.errThrow(`${type} - No files to compile`);
 		}
@@ -66,12 +134,13 @@ export class Bundler extends Reporter {
 			}),
 		);
 
-		if (constants.compilationTypes.css === type && this.config.assembleStyles) {
-			this.stylesToAssemble = compiledData;
+		if (constants.compilationTypes.css === type && this.config.assembleStyles && !assembleCompilation) {
+			if (!this.stylesToAssemble) this.stylesToAssemble = [];
+			this.stylesToAssemble = [...this.stylesToAssemble, ...compiledData];
 			return;
 		}
 
-		this.writeDistFiles(dist, compiledData);
+		this.writeDistFiles(dist, compiledData); // refactor this, need to be separate method to wrire files
 	}
 
 	// assemble all comppiled files into one file
@@ -79,23 +148,37 @@ export class Bundler extends Reporter {
 		if (!this.config.assembleStyles) return;
 
 		this.debugLog('Styles assembling');
-		const distFileURL = path.resolve(this.config.assembleStyles);
-		let distFileContent = '';
 
-		const injectFileContent = (content, fileName) => {
+		let distFileContent = '';
+		const distFileURL = path.resolve(this.config.assembleStyles);
+
+		if (!Object.values(this.importedCSSToAssemble).length && !this.stylesToAssemble?.length) {
+			if (existsSync(distFileURL)) {
+				removeFile(distFileURL);
+			}
+			return;
+		}
+
+		const concatFileContent = (content, fileName) => {
 			distFileContent += `\n\n/* @${fileName} */\n`;
 			distFileContent += content;
 		};
 
-		this.importedStylesToAssemble?.forEach(({ fileContent, fileName, fileURL }) => {
+		Object.values(this.importedCSSToAssemble)?.forEach(({ fileContent, fileName, fileURL }) => {
+			//refactor- move concationation to the scripts method & check cache before operations
+			// anyway, all module styles go to the one file. so we can take it from there
+			//
 			if (!fileContent) return;
-			injectFileContent(fileContent, fileName);
-			removeFile(fileURL);
+			concatFileContent(fileContent, fileName);
+			if (existsSync(fileURL)) {
+				removeFile(fileURL);
+			}
 		});
 
 		this.stylesToAssemble?.forEach(({ fileContent, fileName }) => {
+			//refactor- check cache before operation
 			if (!fileContent) return;
-			injectFileContent(fileContent, fileName);
+			concatFileContent(fileContent, fileName);
 		});
 
 		createFile({ url: distFileURL, content: distFileContent });
@@ -104,12 +187,14 @@ export class Bundler extends Reporter {
 			filePaths: [distFileURL],
 			type: constants.compilationTypes.css,
 			newFileExt: constants.extDist.css,
-			dist: distFileURL,
-			renderFn: (filePath) =>
-				sass.compile(filePath, {
+			dist: path.dirname(distFileURL),
+			assembleCompilation: true,
+			renderFn: (filePath) => {
+				return sass.compile(filePath, {
 					style: 'compressed',
 					...this.config.sassConfigOverrides,
-				})?.css,
+				})?.css;
+			},
 		});
 	}
 
@@ -214,8 +299,8 @@ export class Bundler extends Reporter {
 	}
 
 	async compileScripts() {
+		if (!this.importedCSSToAssemble) this.importedCSSToAssemble = {};
 		this.debugLog('Scripts compilation');
-		this.importedStylesToAssemble = [];
 		createDir(this.config.jsDist);
 
 		try {
@@ -242,17 +327,26 @@ export class Bundler extends Reporter {
 				importedCSS.forEach((asset) => {
 					const cssModules = path.join(this.config.cssDist, './modules');
 					createDir(cssModules);
-					moveFile(asset.path, cssModules);
+					renameSync(asset.path, path.join(cssModules, 'modules.css')); // move file to modules
 				});
 			}
 
 			if (this.config.assembleStyles) {
-				this.debugLog('Assembling styles');
-				this.importedStylesToAssemble = importedCSS.map((asset) => ({
-					fileContent: readFileSync(asset.path, 'utf-8'),
-					fileName: path.basename(asset.path),
-					fileURL: asset.path,
-				}));
+				this.importedCSSToAssemble = Object.fromEntries(
+					importedCSS.map((asset) => {
+						if (this.importedCSSToAssemble[asset.hash])
+							return [asset.hash, this.importedCSSToAssemble[asset.hash]];
+
+						const assetData = {
+							fileURL: asset.path,
+							fileName: path.basename(asset.path),
+							fileContent: readFileSync(asset.path, 'utf-8'),
+						};
+						return [asset.hash, assetData];
+					}),
+				);
+			} else {
+				this.importedCSSToAssemble = {};
 			}
 		} catch (error) {
 			this.errLog('Error while compiling js files');
@@ -297,73 +391,15 @@ export class Bundler extends Reporter {
 		} else return false;
 	}
 
-	setConfig(cfg, mode) {
-		if (!cfg) this.errThrow('Config is not defined');
-		if (!cfg.dist) this.errThrow('Dist directory is not defined');
-
-		const {
-			html = [],
-			dist = [],
-			sass = [],
-			js = [],
-			staticFolders = [],
-			cssDist = '',
-			jsDist = '',
-			htmlDist = '',
-			pugConfigOverrides = {},
-			jsConfigOverrides = {},
-			sassConfigOverrides = {},
-			assembleStyles,
-		} = cfg;
-
-		if (!this.config.initialCfg) this.config.initialCfg = cfg;
-
-		this.config.production = cfg.production;
-
-		this.config.htmlFiles = [exec(html)].flat();
-		this.config.sassFiles = [exec(sass)].flat();
-		this.config.jsFiles = [exec(js)].flat();
-		this.config.staticFolders = [exec(staticFolders)].flat();
-
-		this.config.watchDir = resolve(this.config.rootDir, cfg.watchDir || './src/');
-		this.config.distDir = resolve(this.config.rootDir, dist || './dist/');
-		this.config.cssDist = resolve(this.config.rootDir, cssDist || this.config.distDir + './css/');
-		this.config.jsDist = resolve(this.config.rootDir, jsDist || this.config.distDir + './js/');
-		this.config.htmlDist = resolve(this.config.rootDir, htmlDist || this.config.distDir);
-		this.config.onStart = cfg.onStart;
-		this.config.onBuildComplete = cfg.onBuildComplete;
-		this.config.onCriticalError = cfg.onCriticalError;
-		this.config.debug = cfg.debug;
-		this.config.refresh = () => {
-			this.setConfig(this.config.initialCfg, mode);
-		};
-
-		this.config.assembleStyles = assembleStyles;
-		this.config.pugConfigOverrides = pugConfigOverrides;
-		this.config.jsConfigOverrides = jsConfigOverrides;
-		this.config.sassConfigOverrides = {
-			...(getSassFileConfig.call(this, this.config.rootDir) || {}),
-			...sassConfigOverrides,
-		};
-
-		if (mode === 'watch') {
-			if (!this.config.watchDir) {
-				exec(this.config.onCriticalError);
-				this.errThrow('Can`t resolve watch directory.');
-			}
-		}
-	}
-
 	async bundle({ onBuildComplete, mode } = {}) {
 		try {
 			const isWatchMode = mode === 'watch';
 
 			if (isWatchMode) {
-				this.log('\n');
-				this.log('[⏳ Refreshing... ]');
+				this.log(`\n${chalk.reset('| ⏳ Refreshing...')}`);
 			} else {
-				this.log('\n');
-				this.log('[✨ Starting... ]');
+				this.log(chalk.dim('# v.0.1.31 Support: https://github.com/jsqrt/bun-bundler/issues'));
+				this.log(`\n${chalk.reset('| ✨ Bundling...')}`);
 			}
 			const start = Date.now();
 
@@ -380,10 +416,10 @@ export class Bundler extends Reporter {
 			const { htmlLike, styles, scripts } = constants.extensions;
 
 			const modulesToCompile = {
-				styles: needCompile({ extname: styles }),
-				scripts: needCompile({ extname: scripts }),
-				htmlLike: needCompile({ extname: htmlLike }),
-				statics: needCompile({ folder: this.config.staticFolders }),
+				styles: this.config.sassFiles?.length && needCompile({ extname: styles }),
+				scripts: this.config.jsFiles?.length && needCompile({ extname: scripts }),
+				htmlLike: this.config.htmlFiles?.length && needCompile({ extname: htmlLike }),
+				statics: this.config.staticFolders?.length && needCompile({ folder: this.config.staticFolders }),
 			};
 
 			if (modulesToCompile.htmlLike) await this.compilePug();
@@ -393,10 +429,14 @@ export class Bundler extends Reporter {
 			if ((modulesToCompile.scripts || modulesToCompile.styles) && this.config.assembleStyles)
 				await this.assembleStyles();
 
+			if (this.config.assembleStyles && !this.config.jsFiles?.length && !this.config.sassFiles?.length) {
+				this.warn('warning: assemble styles: No styles to assemble.');
+			}
+
 			if (modulesToCompile.statics) await this.transferStatics();
 
 			const end = Date.now();
-			this.log(`[✅ Done ${end - start}ms ]`);
+			this.log(`${chalk.reset(`| ✅ Done in ${end - start}ms`)}`);
 
 			exec(onBuildComplete);
 		} catch (error) {
@@ -419,11 +459,14 @@ export class Bundler extends Reporter {
 		this.bundle({
 			mode: 'watch',
 			onBuildComplete: () => {
+				this.config.onWatchUpdate?.({
+					watchChangedExtList: this.watchChangedExtList,
+					watchChangedFileList: this.watchChangedFileList,
+				});
 				this.watchChangedFileList = {};
 				this.watchChangedExtList = {};
 			},
 		});
-		exec(this.config.onWatchUpdate);
 	}
 
 	unwatch() {

@@ -12,10 +12,12 @@
 	},
 	"scripts": {
 		"start": "bun dev",
-		"dev": "cross-env NODE_ENV=development bun run dev-scripts/dev.mjs",
-		"build": "cross-env NODE_ENV=production bun run dev-scripts/build.mjs"
+		"dev": "cross-env NODE_ENV=development bun run _scripts/dev.js",
+		"build": "cross-env NODE_ENV=production bun run _scripts/build.js"
 	},
 	"dependencies": {
-		"cross-env": "^7.0.3"
+		"cross-env": "^7.0.3",
+		"gsap": "^3.12.7",
+		"swiper": "^11.2.4"
 	}
 }

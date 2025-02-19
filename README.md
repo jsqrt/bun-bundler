@@ -7,7 +7,7 @@ Bun-Bundler is a powerful and efficient HTML bundler designed for modern web dev
 
 ## Key Features
 
-- **Pug / HTML** support for flexible templating
+- **Pug / HTML** templating
 - **SCSS / CSS** preprocessing
 - **JavaScript** bundling and optimization
 - **SVG Sprite** generation
@@ -15,125 +15,134 @@ Bun-Bundler is a powerful and efficient HTML bundler designed for modern web dev
 - **Static assets** handling
 - **Real-time file watching** and **hot reloading** for rapid development
 
-## Why Choose Bun-Bundler?
-
-Bun-Bundler was created to address the limitations of other popular bundlers. It offers:
-
-- **Efficiency**: Ultra-fast bundling and optimization processes
-- **Flexibility**: Easy integration with other Node.js scripts and modules
-- **Scalability**: Suitable for both small projects and large-scale websites
-- **PUG Support**: Built-in support for the PUG templating engine, enabling efficient front-end development
-
 ## Quick Start
 
 ### Installation
 
+Bun-Bundler works great with both Bun and Node.js. Install Bun-Bundler using npm or Bun:
+
 `npm install bun-bundler`
-
 or
-
 `bun add bun-bundler`
 
-### Basic Configuration
+## Dev bundling example (File watching & Hot Reload)
 
-Create a `build.mjs` file in your project root with the following content:
+1. Create file `dev.js`, or name it whatever you want.
+2. Here's the full config below that you can use as a template.
 
 ```javascript
-import path from 'path';
-import { Bundler } from 'bun-bundler';
-import { SpriteBuilder, ImageProcessor, Server } from 'bun-bundler/modules';
+import Bundler from 'bun-bundler';
+import { ImageProcessor, Server, SpriteBuilder } from 'bun-bundler/modules';
 
 const bundler = new Bundler();
-const spriteBuilder = new SpriteBuilder();
-const imgProcessor = new ImageProcessor();
-
-// Define your project structure
-const src = path.resolve('./src');
-const dist = path.resolve('./build');
-
-const directories = {
-	src: src,
-	html: path.resolve(src, './pug/pages/'),
-	sass: [path.resolve(src, './scss/app.scss')],
-	js: [path.resolve(src, './js/app.js')],
-	images: path.resolve(src, './images/'),
-	fonts: path.resolve(src, './fonts/'),
-	statics: path.resolve(src, './static/'),
-
-	dist: dist,
-	htmlDist: dist,
-	cssDist: path.resolve(dist, './css/'),
-	jsDist: path.resolve(dist, './js/'),
-	imagesDist: path.resolve(dist, './images/'),
-	spriteDist: path.resolve(dist, './images/sprite'),
-};
-
-const { images, fonts, statics } = directories;
-
-// Configure the bundler
-bundler.build({
-	...directories,
-	// ❇️ You can pass function(it will call on every render), or array of files
-	html: () => Bundler.utils.getDirFiles(directories.html),
-	staticFolders: [images, fonts, statics],
-	production: process.env.NODE_ENV === 'production',
-	onBuildComplete: () => {
-		imgProcessor.process({ root: directories.imagesDist });
-		spriteBuilder.build({
-			htmlDir: directories.dist,
-			dist: directories.spriteDist,
-		});
-	},
-});
-```
-
-We're ready to takeoff! Run `bun run build.mjs`
-
-## Development Mode
-
-To enable file watching and dev-mode, use the following configuration:
-`dev.mjs`
-
-```javascript
-const debugMode = false;
 const server = new Server();
+const spriteBuilder = new SpriteBuilder(); // optional
+const imgProcessor = new ImageProcessor(); // optional
 
 bundler.watch({
-	...directories,
-	production: process.env.NODE_ENV === 'production',
-	staticFolders: [images, fonts, statics],
-	debug: debugMode,
-	html: () => Bundler.utils.getDirFiles(directories.html),
+	dist: './dist',
+	// sass/css bundling
+	sass: './src/css/app.css',
+	cssDist: './dist/css/',
+	// js bundling
+	js: './src/js/app.js',
+	jsDist: './dist/js/',
+	// html/pug bundling
+	html: './src/html/',
+	htmlDist: './dist',
+	staticFolders: [
+		// static assets bundling
+		'./src/images/',
+		'./src/fonts/',
+		'./src/static/',
+	],
+	assembleStyles: './dist/css/app.css', // imported styles form JS goes here
+	production: false,
+	debug: false,
 	onStart: () => {
 		server.startServer({
+			root: './dist',
 			open: true,
-			debug: debugMode,
+			debug: false,
 			port: 8080,
-			root: dist,
-			❇️ // custom BrowserSync config, if needed:
 			overrides: {},
 		});
 	},
 	onBuildComplete: () => {
-		// ❇️ image optimizations on every build (no caching)
-		imgProcessor.process({
-			debug: debugMode,
-			root: directories.imagesDist,
+		imgProcessor.start({
+			debug: false,
+			entry: './dist/images',
 		});
-		// ❇️ refresh sprite on every build (no caching)
-		spriteBuilder.build({
-			debug: debugMode,
-			htmlDir: dist,
-			dist: directories.spriteDist,
+
+		spriteBuilder.start({
+			debug: false,
+			dist: './dist/images/sprite/sprite.svg',
+			entry: './dist/', // detect SVG in html files here
+			spriteIconSelector: 'svg[data-sprite-icon]',
+			additionalIcons: './src/images/facebook.svg', // inline icons, you want to add
 		});
 	},
-	onCriticalError: () => {
-		server.stopServer();
-	},
+	onWatchUpdate: () => {},
+	onCriticalError: () => server.stopServer(),
 });
 ```
 
-Run `bun run dev.mjs`
+3. Run it `npm run dev.js` or `bun dev.js`
+
+## Production bundling example (Minification & Optimizations)
+
+Same config, but with production setup
+
+1. File `build.js`
+
+```javascript
+import Bundler from 'bun-bundler';
+import { ImageProcessor, SpriteBuilder } from 'bun-bundler/modules';
+
+const bundler = new Bundler();
+const spriteBuilder = new SpriteBuilder(); // optional
+const imgProcessor = new ImageProcessor(); // optional
+
+bundler.build({
+	dist: './build',
+	// sass/css bundling
+	sass: './src/css/app.css',
+	cssDist: './build/css/',
+	// js bundling
+	js: './src/js/app.js',
+	jsDist: './build/js/',
+	// html/pug bundling
+	html: './src/html/',
+	htmlDist: './build',
+	staticFolders: [
+		// static assets bundling
+		'./src/images/',
+		'./src/fonts/',
+		'./src/static/',
+	],
+	assembleStyles: './build/css/app.css', // imported styles form JS goes here
+	production: true,
+	debug: false,
+	onStart: () => {},
+	onBuildComplete: () => {
+		imgProcessor.start({
+			debug: false,
+			entry: './build/images',
+		});
+		spriteBuilder.start({
+			debug: false,
+			dist: './build/images/sprite/sprite.svg',
+			entry: './build/', // detect SVG in html files here
+			spriteIconSelector: 'svg[data-sprite-icon]',
+			additionalIcons: './src/images/facebook.svg', // inline icons, you want to add
+		});
+	},
+	onWatchUpdate: () => {},
+	onCriticalError: () => {},
+});
+```
+
+2. We're ready to takeoff, run `npm run build.js` or `bun build.js`
 
 ## Examples and Boilerplate
 

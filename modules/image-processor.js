@@ -1,7 +1,7 @@
 import path from 'path';
 import sharp from 'sharp';
 import { Reporter } from './reporter';
-import { getFilesList, getDirFiles } from '../utils.mjs';
+import { getDirFiles } from '../utils.mjs';
 
 export class ImageProcessor extends Reporter {
 	setConfig(cfg = {}) {
@@ -67,10 +67,14 @@ export class ImageProcessor extends Reporter {
 	collectFiles(entry) {
 		const files = getDirFiles(entry, true);
 
+		if (files instanceof Error) {
+			this.errLog("ImageProcessor: Seems like entry path doesn't exist. Check images entry directory.");
+			this.errThrow(files.message);
+		}
+
 		const filteredFiles = files.filter((filePath) => {
 			return this.config.fileTypes.includes(path.extname(filePath));
 		});
-
 		return filteredFiles;
 	}
 
@@ -84,7 +88,8 @@ export class ImageProcessor extends Reporter {
 			this.sharpProcessing(this.filesToProcess);
 			return null;
 		} catch (err) {
-			this.errLog('ImgOptimization error:', err);
+			this.errLog('ImageProcessor:');
+			this.errLog(err.message);
 			return null;
 		}
 	}

@@ -5,8 +5,9 @@ import jsdom from 'jsdom';
 import { writeFileSync, readFileSync, existsSync, mkdirSync } from 'fs';
 import path from 'path';
 import { Reporter } from './reporter';
-import { getFilesList } from '../utils.mjs';
+import { generateHash, getFilesList } from '../utils.mjs';
 import { constants } from './constants';
+import chalk from 'chalk';
 
 let unknownIconCounter = 0;
 
@@ -18,6 +19,10 @@ export class SpriteBuilder extends Reporter {
 		//htmlDir - legacy prop
 		if (!path.resolve(dist)) {
 			this.errThrow('Sprite building: dist directory not provided');
+		}
+
+		if (!spriteIconSelector) {
+			this.warn(`Warning: SpriteBuilder: ${chalk.underline('spriteIconSelector')} is not provided!`);
 		}
 
 		// if dist is directory
@@ -69,7 +74,9 @@ export class SpriteBuilder extends Reporter {
 
 		pageIcons.forEach((svgWrap) => {
 			const svgNode = svgWrap.tagName === 'svg' ? svgWrap : svgWrap.querySelector('svg');
-			let iconName = svgWrap.closest('[data-sprite-icon]')?.dataset.spriteIcon || Math.random().toString(36);
+			let iconName =
+				svgWrap.closest(this.config.spriteIconSelector)?.dataset.spriteIcon ||
+				`icon-${generateHash(svgNode.innerHTML)}`;
 
 			if (!svgNode) return;
 
