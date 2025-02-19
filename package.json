@@ -17,5 +17,8 @@
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/jsqrt/bun-bundler.git"
+	},
+	"devDependencies": {
+		"chalk": "^5.4.1"
 	}
 }

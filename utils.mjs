@@ -47,14 +47,19 @@ export function getFileNamesInDirectory(directoryPath) {
 	}
 }
 
-export function getDirFiles(directoryPath, recursive) {
+export function getDirFiles(directoryPath, recursive, matchExtensions) {
 	try {
-		if (!existsSync(directoryPath)) {
-			console.log('path doesn`t exist');
-			return null;
+		const entry = path.resolve(directoryPath);
+
+		if (!existsSync(entry)) {
+			return new Error('path doesn`t exist');
 		}
 
-		const files = readdirSync(directoryPath, { recursive }).map((file) => path.resolve(directoryPath, file));
+		let files = readdirSync(entry, { recursive }).map((file) => path.resolve(entry, file));
+
+		if (matchExtensions) {
+			files = files.filter((file) => matchExtensions.includes(path.extname(file)));
+		}
 
 		return files;
 	} catch (error) {
@@ -153,4 +158,8 @@ export function getSassFileConfig(entryDir) {
 export const moveFile = (url, newFolder) => {
 	const basename = path.basename(url);
 	renameSync(url, path.join(newFolder, basename));
+};
+
+export const generateHash = (str) => {
+	return Buffer.from(str).toString('base64').substring(0, 8);
 };

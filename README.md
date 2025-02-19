@@ -30,6 +30,9 @@ or
 Create file `dev.js`
 
 ```javascript
+import { Bundler } from 'bun-bundler';
+import { Server } from 'bun-bundler/modules';
+const bundler = new Bundler();
 const server = new Server();
 
 bundler.watch({
@@ -44,14 +47,13 @@ bundler.watch({
 	staticFolders: ['./src/images/', './src/fonts/', './src/static/'],
 	onStart: () => {
 		server.startServer({
+			root: dist,
 			open: true,
 			debug: false,
 			port: 8080,
-			root: dist,
 		});
 	},
 	onCriticalError: () => server.stopServer(),
-	debug: false,
 });
 ```
 
@@ -64,7 +66,7 @@ Create file `build.js`
 ```javascript
 import path from 'path';
 import { Bundler } from 'bun-bundler';
-import { SpriteBuilder, ImageProcessor, Server } from 'bun-bundler/modules';
+import { SpriteBuilder, ImageProcessor } from 'bun-bundler/modules';
 
 const bundler = new Bundler();
 const spriteBuilder = new SpriteBuilder(); // optional
@@ -83,12 +85,12 @@ bundler.build({
 	production: true,
 	debug: false,
 	onBuildComplete: () => {
-		// optional
 		imgProcessor.process({ root: './build/images/' });
 		spriteBuilder.build({
 			htmlDir: './build/',
 			dist: './build/images/sprite/',
 		});
+		// optional
 	},
 });
 ```

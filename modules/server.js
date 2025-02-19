@@ -1,5 +1,6 @@
 import browserSync from 'browser-sync';
 import { Reporter } from './reporter';
+import chalk from 'chalk';
 
 export class Server extends Reporter {
 	setConfig(cfg = {}) {
@@ -20,8 +21,8 @@ export class Server extends Reporter {
 
 	onServerStarted(urls) {
 		if (!urls) return;
-		this.log('[👀 Server started ]');
-		this.table(Object.fromEntries(urls));
+		const { local, external, ui } = Object.fromEntries(urls);
+		this.log(`${chalk.reset(`| 👀 Watching started: ${chalk.blue.underline(local)}`)}`);
 	}
 
 	start(cfg) {

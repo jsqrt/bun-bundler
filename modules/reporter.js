@@ -1,3 +1,5 @@
+import chalk from 'chalk';
+
 export class Reporter {
 	debugLog(message) {
 		if (this.config?.debug) console.log(message);
@@ -12,11 +14,11 @@ export class Reporter {
 	}
 
 	errLog(message) {
-		console.error(message);
+		console.error(chalk.red('! ' + message));
 	}
 
 	warn(message) {
-		console.warn(message);
+		console.warn(chalk.yellow('! ' + message));
 	}
 
 	table(message) {
