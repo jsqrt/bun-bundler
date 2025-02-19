@@ -1,9 +1,11 @@
-# Bun-Bundler: Modern, Simple, and Ultra-Fast HTML Bundler
+# Bun-Bundler: Simple and Ultra-Fast HTML Bundler
 
 [![Bun](https://img.shields.io/badge/Bun-Compatible-brightgreen.svg)](https://bun.sh/)
 [![Node.js](https://img.shields.io/badge/Node.js-Compatible-brightgreen.svg)](https://nodejs.org/)
 
-Bun-Bundler is a powerful and efficient HTML bundler designed for modern web development. It offers a comprehensive solution for bundling and optimizing your web projects, with support for various technologies and features that streamline your development workflow.
+Bun-Bundler is a powerful and efficient Markup bundler designed for powerful devs. 
+It offers a comprehensive solution for bundling and optimizing your web projects, 
+with support for various technologies and features that streamline your development workflow.
 
 ## Key Features
 
