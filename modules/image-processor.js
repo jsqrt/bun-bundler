@@ -2,6 +2,7 @@ import path from 'path';
 import sharp from 'sharp';
 import { Reporter } from './reporter';
 import { getDirFiles } from '../utils.mjs';
+import chalk from 'chalk';
 
 export class ImageProcessor extends Reporter {
 	setConfig(cfg = {}) {
@@ -81,7 +82,7 @@ export class ImageProcessor extends Reporter {
 	start(cfg) {
 		try {
 			this.setConfig(cfg);
-			this.log(`[Please wait, Image optimization... ]`);
+			this.log(`${chalk.reset(`| ➕ Image optimization... `)}`);
 
 			this.debugLog('Img processing');
 			this.filesToProcess = this.collectFiles(this.config.entry);

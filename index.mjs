@@ -63,10 +63,10 @@ export class Bundler extends Reporter {
 			return isDirectory ? [getDirFiles(entry, true, extensions)] : fallback;
 		};
 
-		this.config.htmlFiles = prepareFiles(html).flat();
-		this.config.sassFiles = prepareFiles(sass).flat();
-		this.config.jsFiles = prepareFiles(js).flat();
-		this.config.staticFolders = prepareFiles(staticFolders).flat();
+		this.config.htmlFiles = prepareFiles(exec(html)).flat();
+		this.config.sassFiles = prepareFiles(exec(sass)).flat();
+		this.config.jsFiles = prepareFiles(exec(js)).flat();
+		this.config.staticFolders = prepareFiles(exec(staticFolders)).flat();
 
 		this.config.watchDir = resolve(this.config.rootDir, cfg.watchDir || './src/');
 		this.config.distDir = resolve(this.config.rootDir, dist || './dist/');
@@ -398,7 +398,7 @@ export class Bundler extends Reporter {
 			if (isWatchMode) {
 				this.log(`\n${chalk.reset('| ⏳ Refreshing...')}`);
 			} else {
-				this.log(chalk.dim('# v.0.1.33 Support: https://github.com/jsqrt/bun-bundler/issues'));
+				this.log(chalk.dim('# v.0.1.34 Support: https://github.com/jsqrt/bun-bundler/issues'));
 				this.log(`\n${chalk.reset('| ✨ Bundling...')}`);
 			}
 			const start = Date.now();

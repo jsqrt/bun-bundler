@@ -4,6 +4,7 @@
 
 import Bundler from 'bun-bundler';
 import { ImageProcessor, Server, SpriteBuilder } from 'bun-bundler/modules';
+import { getDirFiles } from '../../../utils.mjs';
 
 const bundler = new Bundler();
 const server = new Server();
@@ -19,7 +20,7 @@ bundler.watch({
 	js: './src/js/app.js',
 	jsDist: './dist/js/',
 	// html/pug bundling
-	html: './src/pug/',
+	html: () => getDirFiles('./src/pug/'),
 	htmlDist: './dist',
 	staticFolders: [
 		// static assets bundling

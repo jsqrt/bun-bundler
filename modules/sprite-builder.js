@@ -142,6 +142,7 @@ export class SpriteBuilder extends Reporter {
 
 	start(cfg = {}) {
 		if (!cfg) this.errThrow('Sprite building: no config provided');
+		this.log(`${chalk.reset(`| ➕ Sprite building... `)}`);
 
 		this.setConfig(cfg);
 		this.setupEvents(this.config.debug);
