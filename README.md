@@ -27,88 +27,122 @@ or
 
 ## Dev bundling example (File watching & Hot Reload)
 
-Create file `dev.js`
+1. Create file `dev.js`, or name it whatever you want.
+2. Here's the full config below that you can use as a template.
 
 ```javascript
-import { Bundler } from 'bun-bundler';
-import { Server } from 'bun-bundler/modules';
+import Bundler from 'bun-bundler';
+import { ImageProcessor, Server, SpriteBuilder } from 'bun-bundler/modules';
+
 const bundler = new Bundler();
 const server = new Server();
+const spriteBuilder = new SpriteBuilder(); // optional
+const imgProcessor = new ImageProcessor(); // optional
 
 bundler.watch({
-	src: './src',
-	html: './src/html/',
-	sass: './src/css/app.css',
-	js: './src/js/app.js',
 	dist: './dist',
-	htmlDist: './dist',
+	// sass/css bundling
+	sass: './src/css/app.css',
 	cssDist: './dist/css/',
+	// js bundling
+	js: './src/js/app.js',
 	jsDist: './dist/js/',
-	staticFolders: ['./src/images/', './src/fonts/', './src/static/'],
+	// html/pug bundling
+	html: './src/html/',
+	htmlDist: './dist',
+	staticFolders: [
+		// static assets bundling
+		'./src/images/',
+		'./src/fonts/',
+		'./src/static/',
+	],
+	assembleStyles: './dist/css/app.css', // imported styles form JS goes here
+	production: false,
+	debug: false,
 	onStart: () => {
 		server.startServer({
-			root: dist,
+			root: './dist',
 			open: true,
 			debug: false,
 			port: 8080,
+			overrides: {},
 		});
 	},
+	onBuildComplete: () => {
+		imgProcessor.start({
+			debug: false,
+			entry: './dist/images',
+		});
+
+		spriteBuilder.start({
+			debug: false,
+			dist: './dist/images/sprite/sprite.svg',
+			entry: './dist/', // detect SVG in html files here
+			spriteIconSelector: 'svg[data-sprite-icon]',
+			additionalIcons: './src/images/facebook.svg', // inline icons, you want to add
+		});
+	},
+	onWatchUpdate: () => {},
 	onCriticalError: () => server.stopServer(),
 });
 ```
 
-Then run it `npm run dev.js` or `bun dev.js`
+3. Run it `npm run dev.js` or `bun dev.js`
 
 ## Production bundling example (Minification & Optimizations)
 
-Create file `build.js`
+Same config, but with production setup
+
+1. File `build.js`
 
 ```javascript
-import path from 'path';
-import { Bundler } from 'bun-bundler';
-import { SpriteBuilder, ImageProcessor } from 'bun-bundler/modules';
+import Bundler from 'bun-bundler';
+import { ImageProcessor, SpriteBuilder } from 'bun-bundler/modules';
 
 const bundler = new Bundler();
 const spriteBuilder = new SpriteBuilder(); // optional
 const imgProcessor = new ImageProcessor(); // optional
 
 bundler.build({
-	src: './src',
-	html: './src/html/',
-	sass: './src/css/app.css',
-	js: './src/js/app.js',
 	dist: './build',
-	htmlDist: './build',
+	// sass/css bundling
+	sass: './src/css/app.css',
 	cssDist: './build/css/',
+	// js bundling
+	js: './src/js/app.js',
 	jsDist: './build/js/',
-	staticFolders: ['./src/images/', './src/fonts/', './src/static/'],
+	// html/pug bundling
+	html: './src/html/',
+	htmlDist: './build',
+	staticFolders: [
+		// static assets bundling
+		'./src/images/',
+		'./src/fonts/',
+		'./src/static/',
+	],
+	assembleStyles: './build/css/app.css', // imported styles form JS goes here
 	production: true,
 	debug: false,
+	onStart: () => {},
 	onBuildComplete: () => {
-		imgProcessor.process({ root: './build/images/' });
-		spriteBuilder.build({
-			htmlDir: './build/',
-			dist: './build/images/sprite/',
+		imgProcessor.start({
+			debug: false,
+			entry: './build/images',
 		});
-		// optional
+		spriteBuilder.start({
+			debug: false,
+			dist: './build/images/sprite/sprite.svg',
+			entry: './build/', // detect SVG in html files here
+			spriteIconSelector: 'svg[data-sprite-icon]',
+			additionalIcons: './src/images/facebook.svg', // inline icons, you want to add
+		});
 	},
+	onWatchUpdate: () => {},
+	onCriticalError: () => {},
 });
 ```
 
-We're ready to takeoff! Run `npm run build.js` or `bun build.js`
-
-Options:
-| Name                                           | Description                                                                                             | Default / Fallback                                                    |
-| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
-| `debug`                                        | The primary UI color.                                                                                   | ![#f03c15](https://place-hold.it/15/00b3ff/000000?text=+) `#00b3ff`   |
-| `assembleStyles`                               | Assemble styles from all s files      | `rgba(0, 0, 0, 1)`                                                    |
-| `--plyr-focus-visible-color`                   | The color used for the focus styles when an element is `:focus-visible` (keyboard focused).             | `--plyr-color-main`                                                   |
-| `--plyr-badge-background`                      | The background color for badges in the menu.                                                            | ![#4a5464](https://place-hold.it/15/4a5464/000000?text=+) `#4a5464`   |
-| `--plyr-badge-text-color`                      | The text color for badges.                                                                              | ![#ffffff](https://place-hold.it/15/ffffff/000000?text=+) `#ffffff`   |
-| `--plyr-badge-border-radius`                   | The border radius used for badges.                                                                      | `2px`                                                                 |
-| `--plyr-captions-background`                   | The color for the background of captions.                                                               | `rgba(0, 0, 0, 0.8)`                                                  |
-
-
+2. We're ready to takeoff, run `npm run build.js` or `bun build.js`
 
 ## Examples and Boilerplate
 
