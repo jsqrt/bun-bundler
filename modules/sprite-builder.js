@@ -76,6 +76,7 @@ export class SpriteBuilder extends Reporter {
 			const svgNode = svgWrap.tagName === 'svg' ? svgWrap : svgWrap.querySelector('svg');
 			let iconName =
 				svgWrap.closest(this.config.spriteIconSelector)?.dataset.spriteIcon ||
+				svgWrap.closest('[data-sprite-icon]')?.dataset.spriteIcon ||
 				`icon-${generateHash(svgNode.innerHTML)}-${Math.random().toString()}`;
 
 			if (!svgNode) return;
