@@ -398,7 +398,7 @@ export class Bundler extends Reporter {
 			if (isWatchMode) {
 				this.log(`\n${chalk.reset('| ⏳ Refreshing...')}`);
 			} else {
-				this.log(chalk.dim('# v.0.1.35 Support: https://github.com/jsqrt/bun-bundler/issues'));
+				this.log(chalk.dim('# v.0.1.36 Support: https://github.com/jsqrt/bun-bundler/issues'));
 				this.log(`\n${chalk.reset('| ✨ Bundling...')}`);
 			}
 			const start = Date.now();
