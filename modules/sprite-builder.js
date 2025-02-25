@@ -142,11 +142,10 @@ export class SpriteBuilder extends Reporter {
 
 	start(cfg = {}) {
 		if (!cfg) this.errThrow('Sprite building: no config provided');
-		this.log(`${chalk.reset(`| ➕ Sprite building... `)}`);
+		this.log(runtimeMessages['image-building-start']);
 
 		this.setConfig(cfg);
 		this.setupEvents(this.config.debug);
-		this.debugLog('Sprite building');
 
 		const icons = {};
 

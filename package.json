@@ -9,16 +9,17 @@
 		"browser-sync": "^3.0.2",
 		"bun": "^1.1.17",
 		"cross-env": "^7.0.3",
+		"effect": "^3.13.2",
 		"jsdom": "^24.1.0",
 		"pug": "^3.0.3",
 		"sass": "^1.77.6",
-		"sharp": "^0.33.5"
+		"sharp": "^0.33.5",
+		"chalk": "^5.4.1",
+		"typescript": "^5.7.3"
 	},
+	"types": "./index.d.ts",
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/jsqrt/bun-bundler.git"
-	},
-	"devDependencies": {
-		"chalk": "^5.4.1"
 	}
 }

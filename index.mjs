@@ -3,7 +3,7 @@ import Bun from 'bun';
 import path, { basename, extname, resolve } from 'path';
 import fsPromises from 'fs/promises';
 import fs, { existsSync, readFileSync, renameSync, statSync, writeFileSync } from 'fs';
-import chalk from 'chalk';
+
 import {
 	createDir,
 	exec,
@@ -16,6 +16,7 @@ import {
 } from './utils.mjs';
 import { Reporter } from './modules/reporter';
 import { constants } from './modules/constants';
+import { runtimeMessages } from './stdout/runtime-messages';
 
 const pug = require('pug');
 const sass = require('sass');
@@ -392,16 +393,16 @@ export class Bundler extends Reporter {
 	}
 
 	async bundle({ onBuildComplete, mode } = {}) {
+		const startTime = Date.now();
 		try {
 			const isWatchMode = mode === 'watch';
 
 			if (isWatchMode) {
-				this.log(`\n${chalk.reset('| ⏳ Refreshing...')}`);
+				this.log(runtimeMessages['bundler-refresh']);
 			} else {
-				this.log(chalk.dim('# v.0.1.35 Support: https://github.com/jsqrt/bun-bundler/issues'));
-				this.log(`\n${chalk.reset('| ✨ Bundling...')}`);
+				this.log(runtimeMessages['version-notation']);
+				this.log(runtimeMessages['bundler-start']);
 			}
-			const start = Date.now();
 
 			if (!isWatchMode) {
 				this.debugLog('Clearing old dist.');
@@ -435,8 +436,8 @@ export class Bundler extends Reporter {
 
 			if (modulesToCompile.statics) await this.transferStatics();
 
-			const end = Date.now();
-			this.log(`${chalk.reset(`| ✅ Done in ${end - start}ms`)}`);
+			const doneTime = Date.now();
+			this.log(runtimeMessages['bundler-done'](doneTime - startTime));
 
 			exec(onBuildComplete);
 		} catch (error) {

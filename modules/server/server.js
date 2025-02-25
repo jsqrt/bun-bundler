@@ -1,6 +1,7 @@
 import browserSync from 'browser-sync';
-import { Reporter } from './reporter';
+import { Reporter } from '../reporter';
 import chalk from 'chalk';
+import { Effect } from 'effect';
 
 export class Server extends Reporter {
 	setConfig(cfg = {}) {
@@ -22,6 +23,7 @@ export class Server extends Reporter {
 	onServerStarted(urls) {
 		if (!urls) return;
 		const { local, external, ui } = Object.fromEntries(urls);
+		this.debugLog(external, ui);
 		this.log(`${chalk.reset(`| 👀 Watching started: ${chalk.blue.underline(local)}`)}`);
 	}
 
