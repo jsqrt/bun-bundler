@@ -1,3 +1,5 @@
+import { version } from './package.json';
+
 /* eslint-disable prefer-template */
 import Bun from 'bun';
 import path, { basename, extname, resolve } from 'path';
@@ -400,7 +402,11 @@ export class Bundler extends Reporter {
 			if (isWatchMode) {
 				this.log(`\n${chalk.reset('| ⏳ Refreshing...')}`);
 			} else {
-				this.log(chalk.dim('# v.0.1.36 Support: https://github.com/jsqrt/bun-bundler/issues'));
+				this.log(
+					chalk.dim(
+						`# v.${version}, Node ${process.version} Support: https://github.com/jsqrt/bun-bundler/issues`,
+					),
+				);
 				this.log(`\n${chalk.reset('| ✨ Bundling...')}`);
 			}
 			const start = Date.now();
