@@ -3,8 +3,8 @@
 [![Bun](https://img.shields.io/badge/Bun-Compatible-brightgreen.svg)](https://bun.sh/)
 [![Node.js](https://img.shields.io/badge/Node.js-Compatible-brightgreen.svg)](https://nodejs.org/)
 
-Bun-Bundler is a powerful markup bundler designed for powerful devs. 
-It offers a comprehensive solution for bundling and optimizing your web projects, 
+Bun-Bundler is a powerful markup bundler designed for powerful devs.
+It offers a comprehensive solution for bundling and optimizing your web projects,
 with support for various technologies and features that streamline your development workflow.
 
 ## Key Features
@@ -70,22 +70,23 @@ bundler.watch({
 			overrides: {},
 		});
 	},
-	onBuildComplete: () => {
-		imgProcessor.start({
-			debug: false,
-			entry: './dist/images',
-		});
+	onUpdate: ({ changes }) => {
+		if (changes.staticFolders) {
+			imgProcessor.start({
+				debug: false,
+				entry: './dist/images',
+			});
 
-		spriteBuilder.start({
-			debug: false,
-			dist: './dist/images/sprite/sprite.svg',
-			entry: './dist/', // detect SVG in html files here
-			spriteIconSelector: 'svg[data-sprite-icon]',
-			additionalIcons: './src/images/facebook.svg', // inline icons, you want to add
-		});
+			spriteBuilder.start({
+				debug: false,
+				dist: './dist/images/sprite/sprite.svg',
+				entry: './dist/', // detect SVG in html files here
+				spriteIconSelector: 'svg[data-sprite-icon]',
+				additionalIcons: './src/images/facebook.svg', // inline icons, you want to add
+			});
+		}
 	},
-	onWatchUpdate: () => {},
-	onCriticalError: () => server.stopServer(),
+	onError: () => server.stopServer(),
 });
 ```
 
@@ -139,8 +140,7 @@ bundler.build({
 			additionalIcons: './src/images/facebook.svg', // inline icons, you want to add
 		});
 	},
-	onWatchUpdate: () => {},
-	onCriticalError: () => {},
+	onError: () => {},
 });
 ```
 

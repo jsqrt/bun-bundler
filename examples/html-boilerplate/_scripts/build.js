@@ -43,6 +43,5 @@ bundler.build({
 			additionalIcons: './src/images/facebook.svg', // inline icons, you want to add
 		});
 	},
-	onWatchUpdate: () => {},
-	onCriticalError: () => {},
+	onError: () => {},
 });
