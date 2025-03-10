@@ -4,7 +4,6 @@
 
 import Bundler from 'bun-bundler';
 import { ImageProcessor, Server, SpriteBuilder } from 'bun-bundler/modules';
-import { getDirFiles } from '../../../utils.mjs';
 
 const bundler = new Bundler();
 const server = new Server();
@@ -20,7 +19,7 @@ bundler.watch({
 	js: './src/js/app.js',
 	jsDist: './dist/js/',
 	// html/pug bundling
-	html: () => getDirFiles('./src/pug/'),
+	html: './src/pug/',
 	htmlDist: './dist',
 	staticFolders: [
 		// static assets bundling
@@ -40,20 +39,21 @@ bundler.watch({
 			overrides: {},
 		});
 	},
-	onBuildComplete: () => {
-		imgProcessor.start({
-			debug: false,
-			entry: './dist/images',
-		});
+	onUpdate: ({ changes }) => {
+		if (changes.staticFolders) {
+			imgProcessor.start({
+				debug: false,
+				entry: './dist/images',
+			});
 
-		spriteBuilder.start({
-			debug: false,
-			dist: './dist/images/sprite/sprite.svg',
-			entry: './dist/', // detect SVG in html files here
-			spriteIconSelector: 'svg[data-sprite-icon]',
-			additionalIcons: './src/images/facebook.svg', // inline icons, you want to add
-		});
+			spriteBuilder.start({
+				debug: false,
+				dist: './dist/images/sprite/sprite.svg',
+				entry: './dist/', // detect SVG in html files here
+				spriteIconSelector: 'svg[data-sprite-icon]',
+				additionalIcons: './src/images/facebook.svg', // inline icons, you want to add
+			});
+		}
 	},
-	onWatchUpdate: () => {},
-	onCriticalError: () => server.stopServer(),
+	onError: () => server.stopServer(),
 });

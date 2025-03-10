@@ -76,8 +76,9 @@ export class Bundler extends Reporter {
 		this.config.htmlDist = resolve(this.config.rootDir, htmlDist || this.config.distDir);
 		this.config.onStart = cfg.onStart;
 		this.config.onBuildComplete = cfg.onBuildComplete;
-		this.config.onCriticalError = cfg.onCriticalError;
-		this.config.onWatchUpdate = cfg.onWatchUpdate;
+		this.config.onUpdate = cfg.onUpdate;
+		this.config.onError = cfg.onError || cfg.onCriticalError; //legacy def
+		this.config.onWatchUpdate = cfg.onWatchUpdate; //legacy def
 		this.config.debug = cfg.debug;
 		this.config.refresh = () => {
 			this.setConfig(this.config.initialCfg, mode);
@@ -93,7 +94,7 @@ export class Bundler extends Reporter {
 
 		if (mode === 'watch') {
 			if (!this.config.watchDir) {
-				exec(this.config.onCriticalError);
+				exec(this.config.onError);
 				this.errThrow('Can`t resolve watch directory.');
 			}
 		}
@@ -364,6 +365,7 @@ export class Bundler extends Reporter {
 				if (!fs.existsSync(folderPath)) this.errThrow(`${folderPath} doesn't exist`);
 
 				const folderName = path.basename(folderPath);
+				removeDir(path.join(this.config.distDir, folderName));
 
 				return fsPromises.cp(folderPath, path.join(this.config.distDir, folderName), {
 					recursive: true,
@@ -392,8 +394,9 @@ export class Bundler extends Reporter {
 		} else return false;
 	}
 
-	async bundle({ onBuildComplete, mode } = {}) {
+	async bundle({ onComplete, mode } = {}) {
 		const startTime = Date.now();
+
 		try {
 			const isWatchMode = mode === 'watch';
 
@@ -439,7 +442,15 @@ export class Bundler extends Reporter {
 			const doneTime = Date.now();
 			this.log(runtimeMessages['bundler-done'](doneTime - startTime));
 
-			exec(onBuildComplete);
+			exec(onComplete);
+			this.config.onUpdate?.({
+				changes: {
+					html: modulesToCompile.htmlLike,
+					styles: modulesToCompile.styles,
+					scripts: modulesToCompile.scripts,
+					staticFolders: modulesToCompile.statics,
+				},
+			});
 		} catch (error) {
 			this.errLog(error.message);
 		}
@@ -450,7 +461,7 @@ export class Bundler extends Reporter {
 		exec(this.config.onStart);
 		this.bundle({
 			mode: 'build',
-			onBuildComplete: () => exec(this.config.onBuildComplete),
+			onComplete: () => exec(this.config.onBuildComplete),
 		});
 	}
 
@@ -459,7 +470,7 @@ export class Bundler extends Reporter {
 
 		this.bundle({
 			mode: 'watch',
-			onBuildComplete: () => {
+			onComplete: () => {
 				this.config.onWatchUpdate?.({
 					watchChangedExtList: this.watchChangedExtList,
 					watchChangedFileList: this.watchChangedFileList,
@@ -501,7 +512,7 @@ export class Bundler extends Reporter {
 			this.watchChangedExtList = {};
 
 			if (!fs.existsSync(this.config.watchDir)) {
-				exec(this.config.onCriticalError);
+				exec(this.config.onError);
 				return this.errThrow('Can`t resolve watch directory.');
 			}
 
@@ -512,7 +523,7 @@ export class Bundler extends Reporter {
 				this.handleWatchChangeFile(fileUrl, eventType === 'rename' && 100);
 			});
 			this.bundle({
-				onBuildComplete: () => exec(this.config.onBuildComplete),
+				onComplete: () => exec(this.config.onBuildComplete),
 			});
 		} catch (error) {
 			this.errLog(error.message);
