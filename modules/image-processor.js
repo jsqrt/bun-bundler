@@ -15,8 +15,9 @@ export class ImageProcessor extends Reporter {
 			debug: false,
 			entry: cfg.entry,
 			reduceColors: false,
-			resize: { x: 1, y: 1 },
-			fileTypes: ['.png', '.jpg', '.jpeg', '.avif'],
+			resize: null, // { x: N, y: N } or null
+			fileTypes: ['.png', '.jpg', '.jpeg', '.avif', '.webp'],
+			fileTemplate: '${name}.webp', // template for output file name
 			optimization: {
 				jpeg: {
 					loseless: true,
@@ -35,12 +36,6 @@ export class ImageProcessor extends Reporter {
 		};
 	}
 
-	resize(img, metadata) {
-		if (this.config.resize.x === 1 && this.config.resize.y === 1) return img;
-		const { x, y } = this.config.resize;
-		return img.resize(Math.round(metadata.width * x), Math.round(metadata.height * y));
-	}
-
 	reduceColors(img) {
 		if (!this.config.reduceColors) return img;
 		return img.colorspace('rgb16').toColorspace('srgb');
@@ -50,11 +45,18 @@ export class ImageProcessor extends Reporter {
 		files.forEach((filePath) => {
 			const image = sharp(filePath);
 			const extname = path.extname(filePath);
-			const dist = filePath.replace(extname, '.webp');
+			if (extname === '.webp') return;
+
+			let pos = filePath.lastIndexOf('.');
+			const fileName = path.basename(filePath.substr(0, pos < 0 ? filePath.length : pos));
+			const dirName = path.dirname(filePath);
+
+			const fileTemplate = this.config.fileTemplate || '${name}.webp';
+			const dist = path.join(dirName, fileTemplate.replace('${name}', fileName));
 
 			image.metadata().then((metadata) => {
 				let img = image;
-				img = this.resize(img, metadata);
+				if (this.config.resize) img = img.resize(this.config.resize.x, this.config.resize.y);
 				img = this.reduceColors(img);
 				img
 					.webp({
