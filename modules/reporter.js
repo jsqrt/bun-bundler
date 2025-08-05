@@ -14,7 +14,12 @@ export class Reporter {
 	}
 
 	errLog(message) {
-		console.error(chalk.red('! ' + message));
+		if (typeof message === 'string') {
+			console.error(chalk.red('! ' + message));
+		} else {
+			console.error(chalk.red('! ' + message.message));
+			console.error(message);
+		}
 	}
 
 	warn(message) {
