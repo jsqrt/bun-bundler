@@ -2,8 +2,8 @@
  * Build script for production bundling a web application.
  */
 
-import Bundler from 'bun-bundler';
-import { ImageProcessor, SpriteBuilder } from 'bun-bundler/modules';
+import Bundler from '../../../index.mjs';
+import { ImageProcessor, SpriteBuilder } from '../../../index.mjs';
 
 const bundler = new Bundler();
 const spriteBuilder = new SpriteBuilder(); // optional
