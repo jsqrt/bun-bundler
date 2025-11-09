@@ -8,7 +8,7 @@
 		"url": "git+https://github.com/jsqrt/bun-bundler.git"
 	},
 	"devDependencies": {
-		"bun-bundler": "file:../../"
+		"bun-bundler": "file:../../../index.mjs"
 	},
 	"scripts": {
 		"start": "bun dev",
@@ -16,6 +16,7 @@
 		"build": "cross-env NODE_ENV=production bun run _scripts/build.js"
 	},
 	"dependencies": {
-		"cross-env": "^7.0.3"
+		"cross-env": "^7.0.3",
+		"sharp": "^0.34.5"
 	}
 }

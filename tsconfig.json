@@ -1,0 +1,23 @@
+{
+	"compilerOptions": {
+		"target": "ES2022",
+		"module": "ESNext",
+		"lib": ["ES2022"],
+		"moduleResolution": "bundler",
+		"strict": false,
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"forceConsistentCasingInFileNames": true,
+		"resolveJsonModule": true,
+		"declaration": true,
+		"declarationMap": true,
+		"outDir": "./dist",
+		"rootDir": "./src",
+		"noUnusedLocals": false,
+		"noUnusedParameters": false,
+		"allowSyntheticDefaultImports": true,
+		"types": ["bun-types"]
+	},
+	"include": ["src/**/*"],
+	"exclude": ["node_modules", "dist", "examples"]
+}

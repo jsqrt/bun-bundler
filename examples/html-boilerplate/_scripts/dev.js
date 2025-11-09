@@ -9,6 +9,8 @@ const server = new Server();
 const spriteBuilder = new SpriteBuilder(); // optional
 const imgProcessor = new ImageProcessor(); // optional
 
+let serverStarted = false;
+
 bundler.watch({
 	dist: './dist',
 	// sass/css bundling
@@ -28,15 +30,18 @@ bundler.watch({
 	],
 	assembleStyles: './dist/css/app.css', // imported styles form JS goes here
 	production: false,
-	debug: false,
-	onStart: () => {
-		server.startServer({
-			root: './dist',
-			open: true,
-			debug: false,
-			port: 8080,
-			overrides: {},
-		});
+	debug: true,
+	onBuildComplete: () => {
+		if (!serverStarted) {
+			server.startServer({
+				root: './dist',
+				open: true,
+				debug: false,
+				port: 8080,
+				overrides: {},
+			});
+			serverStarted = true;
+		}
 	},
 	onUpdate: ({ changes }) => {
 		if (changes.staticFolders) {
