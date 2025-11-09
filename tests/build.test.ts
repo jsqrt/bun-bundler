@@ -102,9 +102,9 @@ describe('HTML Boilerplate', () => {
 	it('should start dev watch mode and generate files', async () => {
 		const result = await runDevWatch(HTML_BOILERPLATE, 5000);
 
-		expect(result.output).toContain('Bundling');
+		expect(result.output).toContain('Building');
 		expect(result.output).toContain('Done');
-		expect(result.output).toContain('Watching started');
+		expect(result.output).toContain('👀 http://localhost:8080');
 
 		// Check dist directory was created
 		expect(existsSync(distDir)).toBe(true);
@@ -178,9 +178,9 @@ describe('Pug Boilerplate', () => {
 	it('should start dev watch mode and compile Pug', async () => {
 		const result = await runDevWatch(PUG_BOILERPLATE, 5000);
 
-		expect(result.output).toContain('Bundling');
+		expect(result.output).toContain('Building');
 		expect(result.output).toContain('Done');
-		expect(result.output).toContain('Watching started');
+		expect(result.output).toContain('👀 http://localhost:8080');
 
 		// Check dist directory was created
 		expect(existsSync(distDir)).toBe(true);

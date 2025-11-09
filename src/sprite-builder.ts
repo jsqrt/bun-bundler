@@ -2,7 +2,6 @@ import { Effect, Context, Layer } from 'effect';
 import jsdom from 'jsdom';
 import { writeFileSync, readFileSync, existsSync, mkdirSync } from 'fs';
 import path from 'path';
-import chalk from 'chalk';
 import type { Reporter } from './reporter';
 import { ReporterService } from './reporter';
 import type { Constants } from './constants';
@@ -169,11 +168,7 @@ class SpriteBuilderImpl {
 				}
 
 				if (!config.spriteIconSelector) {
-					yield* _(
-						self.reporter.warn(
-							`Warning: SpriteBuilder: ${chalk.underline('spriteIconSelector')} is not provided!`,
-						),
-					);
+					yield* _(self.reporter.warn(`SpriteBuilder: 'spriteIconSelector' is not provided`));
 				}
 
 				const distExtname = path.extname(config.dist);
@@ -192,7 +187,8 @@ class SpriteBuilderImpl {
 					additionalIcons: config.additionalIcons ?? [],
 				};
 
-				yield* _(self.reporter.log('Sprite building'));
+				const spinner = self.reporter.spinner('Building sprite');
+				spinner.start();
 
 				self.setupEvents(self.config.debug);
 
@@ -233,6 +229,8 @@ class SpriteBuilderImpl {
 				}
 
 				writeFileSync(path.join(distDir, distFileName), spriteHTML);
+
+				spinner.succeed('Sprite built');
 			}.bind(this),
 		);
 }

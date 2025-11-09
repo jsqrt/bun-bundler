@@ -130,7 +130,8 @@ class ImageProcessorImpl {
 					},
 				};
 
-				yield* _(self.reporter.log('Image optimization'));
+				const spinner = self.reporter.spinner('Optimizing images');
+				spinner.start();
 
 				const filesToProcess = yield* _(
 					Effect.catchAll(self.collectFiles(self.config.entry), (error) =>
@@ -146,6 +147,8 @@ class ImageProcessorImpl {
 				);
 
 				yield* _(self.sharpProcessing(filesToProcess));
+
+				spinner.succeed('Images optimized');
 			}.bind(this),
 		);
 }

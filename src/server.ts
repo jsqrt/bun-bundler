@@ -1,6 +1,5 @@
 import { Effect, Context, Layer } from 'effect';
 import browserSync from 'browser-sync';
-import chalk from 'chalk';
 import type { Reporter } from './reporter';
 import { ReporterService } from './reporter';
 
@@ -43,7 +42,7 @@ class ServerImpl {
 
 			yield* _(
 				Effect.sync(() => {
-					console.log(chalk.reset(`| 👀 Watching started: ${chalk.blue.underline(local)}`));
+					console.log(`👀 ${local}`);
 				}),
 			);
 		});

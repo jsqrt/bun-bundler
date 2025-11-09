@@ -89,6 +89,8 @@ class BundlerImpl {
 	private stylesToAssemble: any[] = [];
 	private importedCSSToAssemble: Record<string, any> = {};
 	private config!: ProcessedConfig;
+	private currentSpinner: any = null; // Temporary spinner for current build
+	private lastBuildSucceeded: boolean = false; // Track if last build was successful
 
 	constructor(private reporter: Reporter, private constants: Constants) {}
 
@@ -172,11 +174,11 @@ class BundlerImpl {
 	private compile = (options: {
 		filePaths: string[];
 		type: string;
-		renderFn: (filePath: string, fileExtname: string) => any;
+		renderFn: any;
 		newFileExt?: string;
 		dist: string;
 		skipExtensions?: string[];
-		assembleCompilation?: boolean;
+		assembleCompilation?: any;
 	}): Effect.Effect<void, BundlerError> =>
 		Effect.gen(
 			function* (_) {
@@ -197,24 +199,48 @@ class BundlerImpl {
 				const compiledData = yield* _(
 					Effect.all(
 						filePaths.map((filePath) =>
-							Effect.sync(() => {
-								if (!existsSync(filePath)) {
-									throw new BundlerError(`${type} compilation: File ${filePath} doesn't exist`);
-								}
+							Effect.try({
+								try: () => {
+									if (!existsSync(filePath)) {
+										throw new BundlerError(`${type} compilation: File ${filePath} doesn't exist`);
+									}
 
-								const fileExtname = extname(filePath);
-								let fileName = basename(filePath);
-								if (newFileExt) fileName = fileName.replace(path.extname(filePath), newFileExt);
+									const fileExtname = extname(filePath);
+									let fileName = basename(filePath);
+									if (newFileExt) fileName = fileName.replace(path.extname(filePath), newFileExt);
 
-								const res: any = { fileName, path: filePath };
+									const res: any = { fileName, path: filePath };
 
-								if (skipExtensions && skipExtensions.includes(fileExtname)) {
-									res.fileContent = readFileSync(filePath, 'utf-8');
-								} else {
-									res.fileContent = renderFn(filePath, fileExtname);
-								}
+									if (skipExtensions && skipExtensions.includes(fileExtname)) {
+										res.fileContent = readFileSync(filePath, 'utf-8');
+									} else {
+										try {
+											res.fileContent = renderFn(filePath, fileExtname);
+										} catch (error: any) {
+											// Stop spinner first
+											if (this.currentSpinner) {
+												this.currentSpinner.fail('Compilation failed');
+												this.currentSpinner = null;
+											}
+											this.lastBuildSucceeded = false; // Mark build as failed
 
-								return res;
+											// Output the error details (sass/pug do this themselves but we caught it)
+											console.error(error.toString());
+
+											// Re-throw to stop compilation
+											throw error;
+										}
+									}
+
+									return res;
+								},
+								catch: (error) => {
+									// Don't wrap compilation errors - just propagate them
+									if (error instanceof Error) {
+										return error;
+									}
+									return new BundlerError(`${type} compilation failed`, error);
+								},
 							}),
 						),
 					),
@@ -281,7 +307,8 @@ class BundlerImpl {
 						(error) =>
 							Effect.gen(
 								function* (_) {
-									yield* _(this.reporter.errLog('Error while compiling css/scss files'));
+									// Error already logged in the try-catch block above
+									// Just propagate it
 									return yield* _(Effect.fail(error));
 								}.bind(this),
 							),
@@ -340,7 +367,7 @@ class BundlerImpl {
 						(error) =>
 							Effect.gen(
 								function* (_) {
-									yield* _(this.reporter.errLog('Error while compiling pug files'));
+									// Error already logged in the try-catch block
 									return yield* _(Effect.fail(error));
 								}.bind(this),
 							),
@@ -366,14 +393,39 @@ class BundlerImpl {
 								format: 'esm',
 								...this.config.jsConfigOverrides,
 							}),
-						catch: (error) => new BundlerError('Failed to build scripts', error),
+						catch: (error) => {
+							// Stop spinner first
+							if (this.currentSpinner) {
+								this.currentSpinner.fail('Compilation failed');
+								this.currentSpinner = null;
+							}
+							this.lastBuildSucceeded = false; // Mark build as failed
+
+							// Output the Bun build error - show full details
+							if (error && typeof error === 'object') {
+								console.error(error);
+							} else {
+								console.error(String(error));
+							}
+
+							return new BundlerError('Failed to build scripts', error);
+						},
 					}),
 				);
 
 				if (!result.success) {
+					// Output errors first
 					result?.logs?.forEach((message) => {
-						Effect.runSync(this.reporter.errLog(String(message)));
+						console.error(String(message));
 					});
+
+					// Then stop spinner
+					if (this.currentSpinner) {
+						this.currentSpinner.fail('Compilation failed');
+						this.currentSpinner = null;
+					}
+					this.lastBuildSucceeded = false; // Mark build as failed
+
 					return yield* _(Effect.fail(new BundlerError('Script compilation failed')));
 				}
 
@@ -530,13 +582,21 @@ class BundlerImpl {
 				const startTime = Date.now();
 				const isWatchMode = options.mode === 'watch';
 
-				if (isWatchMode) {
-					yield* _(this.reporter.log(runtimeMessages['bundler-refresh']));
-				} else {
-					const pkg = JSON.parse(readFileSync(path.join(__dirname, '../package.json'), 'utf-8'));
-					yield* _(this.reporter.log(runtimeMessages['version-notation'](pkg.version)));
-					yield* _(this.reporter.log(runtimeMessages['bundler-start']));
+				// In watch mode, clear previous "Done" message if last build succeeded
+				if (isWatchMode && this.lastBuildSucceeded) {
+					process.stdout.moveCursor(0, -1);
+					process.stdout.clearLine(0);
 				}
+
+				// In watch mode, if previous build failed and now starting new build,
+				// add many empty lines to "clear" the error from view
+				if (isWatchMode && !this.lastBuildSucceeded) {
+					console.log('\n'.repeat(50));
+				}
+
+				// Create fresh spinner for each build and store it
+				this.currentSpinner = this.reporter.spinner(isWatchMode ? '⟳ Rebuilding' : 'Building');
+				this.currentSpinner.start();
 
 				if (!isWatchMode) {
 					yield* _(this.reporter.debugLog('Clearing old dist.'));
@@ -565,13 +625,18 @@ class BundlerImpl {
 					yield* _(this.assembleStyles());
 
 				if (this.config.assembleStyles && !this.config.jsFiles?.length && !this.config.sassFiles?.length) {
-					yield* _(this.reporter.warn('warning: assemble styles: No styles to assemble.'));
+					yield* _(this.reporter.warn('No styles to assemble'));
 				}
 
 				if (modulesToCompile.statics) yield* _(this.transferStatics());
 
 				const doneTime = Date.now();
-				yield* _(this.reporter.log(runtimeMessages['bundler-done'](doneTime - startTime)));
+				const message = `Done in ${doneTime - startTime}ms`;
+
+				// Succeed always creates a new line (which is what we want in watch mode)
+				this.currentSpinner.succeed(message);
+				this.currentSpinner = null;
+				this.lastBuildSucceeded = true; // Mark build as successful
 
 				exec(this.config.onBuildComplete);
 				this.config.onUpdate?.({
@@ -583,6 +648,17 @@ class BundlerImpl {
 					},
 				});
 			}.bind(this),
+		).pipe(
+			Effect.catchAll((error) => {
+				// Ensure spinner is stopped on any error (if not already stopped in compile)
+				if (this.currentSpinner) {
+					this.currentSpinner.fail('Build failed');
+					this.currentSpinner = null;
+				}
+				this.lastBuildSucceeded = false; // Mark build as failed
+				// Don't re-throw - error already logged
+				return Effect.void;
+			}),
 		);
 
 	build = (cfg: BundlerConfig): Effect.Effect<void, BundlerError> =>
@@ -620,7 +696,9 @@ class BundlerImpl {
 		clearTimeout(this.watchDebounce);
 		this.registerWatchFileChanged(fileUrl);
 		this.watchDebounce = setTimeout(() => {
-			Effect.runSync(this.watchBuild());
+			Effect.runPromise(this.watchBuild()).catch((error) => {
+				// Error already handled in compile() - spinner already marked as failed
+			});
 		}, interval);
 	}
 

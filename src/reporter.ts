@@ -1,5 +1,5 @@
 import { Effect, Context, Layer, Console } from 'effect';
-import chalk from 'chalk';
+import ora, { type Ora } from 'ora';
 
 export class ReporterError {
 	readonly _tag = 'ReporterError';
@@ -13,6 +13,7 @@ export interface Reporter {
 	readonly warn: (message: string) => Effect.Effect<void>;
 	readonly table: (data: any) => Effect.Effect<void>;
 	readonly error: (message: string, error?: unknown) => Effect.Effect<never, ReporterError>;
+	readonly spinner: (text: string) => Ora;
 }
 
 export class ReporterService extends Context.Tag('ReporterService')<ReporterService, Reporter>() {}
@@ -29,22 +30,25 @@ export const makeReporter = (debug: boolean = false): Reporter => ({
 
 	errLog: (message: string | Error) =>
 		Effect.sync(() => {
+			const spinner = ora().fail();
 			if (typeof message === 'string') {
-				console.error(chalk.red('! ' + message));
+				spinner.text = message;
 			} else {
-				console.error(chalk.red('! ' + message.message));
-				console.error(message);
+				spinner.text = message.message;
+				if (debug) console.error(message);
 			}
 		}),
 
 	warn: (message: string) =>
 		Effect.sync(() => {
-			console.warn(chalk.yellow('! ' + message));
+			ora().warn(message);
 		}),
 
 	table: (data: any) => Console.table(data),
 
 	error: (message: string, error?: unknown) => Effect.fail(new ReporterError(message, error)),
+
+	spinner: (text: string) => ora(text),
 });
 
 export const ReporterLive = (debug: boolean = false) => Layer.succeed(ReporterService, makeReporter(debug));
