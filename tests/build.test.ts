@@ -104,7 +104,7 @@ describe('HTML Boilerplate', () => {
 
 		expect(result.output).toContain('Building');
 		expect(result.output).toContain('Done');
-		expect(result.output).toContain('👀 http://localhost:8080');
+		expect(result.output).toContain('👀 http://localhost:'); // Port may vary (8080, 8081, etc.)
 
 		// Check dist directory was created
 		expect(existsSync(distDir)).toBe(true);
@@ -180,7 +180,7 @@ describe('Pug Boilerplate', () => {
 
 		expect(result.output).toContain('Building');
 		expect(result.output).toContain('Done');
-		expect(result.output).toContain('👀 http://localhost:8080');
+		expect(result.output).toContain('👀 http://localhost:'); // Port may vary (8080, 8081, etc.)
 
 		// Check dist directory was created
 		expect(existsSync(distDir)).toBe(true);

@@ -1,5 +1,6 @@
 import { Effect, Context, Layer } from 'effect';
 import path from 'path';
+import fs from 'fs';
 import type { Reporter } from './reporter';
 import { ReporterService } from './reporter';
 import { getDirFiles } from './utils';
@@ -43,46 +44,55 @@ class ImageProcessorImpl {
 	}
 
 	private sharpProcessing = (files: string[]) =>
-		Effect.forEach(files, (filePath) =>
-			Effect.gen(
-				function* (_) {
-					const image = sharp(filePath);
-					const extname = path.extname(filePath);
-					if (extname === '.webp') return;
+		Effect.forEach(
+			files,
+			(filePath) =>
+				Effect.gen(
+					function* (_) {
+						// Check if file still exists before processing
+						if (!fs.existsSync(filePath)) {
+							yield* _(this.reporter.debugLog(`Image file no longer exists, skipping: ${filePath}`));
+							return;
+						}
 
-					const pos = filePath.lastIndexOf('.');
-					const fileName = path.basename(filePath.substr(0, pos < 0 ? filePath.length : pos));
-					const dirName = path.dirname(filePath);
+						const image = sharp(filePath);
+						const extname = path.extname(filePath);
+						if (extname === '.webp') return;
 
-					const fileTemplate = this.config.fileTemplate || '${name}.webp';
-					const dist = path.join(dirName, fileTemplate.replace('${name}', fileName));
+						const pos = filePath.lastIndexOf('.');
+						const fileName = path.basename(filePath.substr(0, pos < 0 ? filePath.length : pos));
+						const dirName = path.dirname(filePath);
 
-					const metadata = yield* _(
-						Effect.tryPromise({
-							try: () => image.metadata(),
-							catch: (error) => new ImageProcessorError('Failed to read image metadata', error),
-						}),
-					);
+						const fileTemplate = this.config.fileTemplate || '${name}.webp';
+						const dist = path.join(dirName, fileTemplate.replace('${name}', fileName));
 
-					let img = image;
-					if (this.config.resize) {
-						img = img.resize(this.config.resize.x, this.config.resize.y);
-					}
-					img = this.reduceColors(img);
+						const metadata = yield* _(
+							Effect.tryPromise({
+								try: () => image.metadata(),
+								catch: (error) => new ImageProcessorError('Failed to read image metadata', error),
+							}),
+						);
 
-					yield* _(
-						Effect.tryPromise({
-							try: () =>
-								img
-									.webp({
-										...(this.config.optimization?.[extname] || {}),
-									})
-									.toFile(dist),
-							catch: (error) => new ImageProcessorError('Failed to process image', error),
-						}),
-					);
-				}.bind(this),
-			),
+						let img = image;
+						if (this.config.resize) {
+							img = img.resize(this.config.resize.x, this.config.resize.y);
+						}
+						img = this.reduceColors(img);
+
+						yield* _(
+							Effect.tryPromise({
+								try: () =>
+									img
+										.webp({
+											...(this.config.optimization?.[extname] || {}),
+										})
+										.toFile(dist),
+								catch: (error) => new ImageProcessorError('Failed to process image', error),
+							}),
+						);
+					}.bind(this),
+				),
+			{ concurrency: 'unbounded' }, // Process all images in parallel
 		);
 
 	private collectFiles = (entry: string) =>
