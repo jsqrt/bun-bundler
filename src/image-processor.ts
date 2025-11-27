@@ -11,6 +11,7 @@ export interface ImageProcessorConfig {
 	readonly debug?: boolean;
 	readonly reduceColors?: boolean;
 	readonly resize?: { x: number; y: number } | null;
+	readonly scale?: number; // масштаб для SVG (density)
 	readonly fileTypes?: string[];
 	readonly fileTemplate?: string;
 	readonly outputFormat?: 'webp' | 'png' | 'jpeg' | 'avif'; // новий параметр
@@ -57,11 +58,13 @@ class ImageProcessorImpl {
 							return;
 						}
 
-						const image = sharp(filePath);
 						const extname = path.extname(filePath);
 						const outputFormat = this.config.outputFormat || 'webp';
 
-						// Skip if already in target format
+						// Для SVG використовуємо density для контролю масштабу
+						const sharpOptions =
+							extname === '.svg' && this.config.scale ? { density: this.config.scale } : {};
+						const image = sharp(filePath, sharpOptions); // Skip if already in target format
 						if (extname === `.${outputFormat}`) return;
 
 						const pos = filePath.lastIndexOf('.');
@@ -117,7 +120,8 @@ class ImageProcessorImpl {
 					debug: config.debug ?? false,
 					reduceColors: config.reduceColors ?? false,
 					resize: config.resize ?? null,
-					fileTypes: config.fileTypes ?? ['.png', '.jpg', '.jpeg', '.avif', '.webp'],
+					scale: config.scale ?? 1,
+					fileTypes: config.fileTypes ?? ['.png', '.jpg', '.jpeg', '.avif', '.webp', '.svg'],
 					fileTemplate: config.fileTemplate ?? `\${name}.${config.outputFormat ?? 'webp'}`,
 					outputFormat: config.outputFormat ?? 'webp',
 					optimization: config.optimization ?? {
