@@ -13,9 +13,12 @@ export interface ImageProcessorConfig {
 	readonly resize?: { x: number; y: number } | null;
 	readonly fileTypes?: string[];
 	readonly fileTemplate?: string;
+	readonly outputFormat?: 'webp' | 'png' | 'jpeg' | 'avif'; // новий параметр
 	readonly optimization?: {
 		jpeg?: any;
 		png?: any;
+		webp?: any;
+		avif?: any;
 	};
 }
 
@@ -49,7 +52,6 @@ class ImageProcessorImpl {
 			(filePath) =>
 				Effect.gen(
 					function* (_) {
-						// Check if file still exists before processing
 						if (!fs.existsSync(filePath)) {
 							yield* _(this.reporter.debugLog(`Image file no longer exists, skipping: ${filePath}`));
 							return;
@@ -57,21 +59,17 @@ class ImageProcessorImpl {
 
 						const image = sharp(filePath);
 						const extname = path.extname(filePath);
-						if (extname === '.webp') return;
+						const outputFormat = this.config.outputFormat || 'webp';
+
+						// Skip if already in target format
+						if (extname === `.${outputFormat}`) return;
 
 						const pos = filePath.lastIndexOf('.');
 						const fileName = path.basename(filePath.substr(0, pos < 0 ? filePath.length : pos));
 						const dirName = path.dirname(filePath);
 
-						const fileTemplate = this.config.fileTemplate || '${name}.webp';
+						const fileTemplate = this.config.fileTemplate || `\${name}.${outputFormat}`;
 						const dist = path.join(dirName, fileTemplate.replace('${name}', fileName));
-
-						const metadata = yield* _(
-							Effect.tryPromise({
-								try: () => image.metadata(),
-								catch: (error) => new ImageProcessorError('Failed to read image metadata', error),
-							}),
-						);
 
 						let img = image;
 						if (this.config.resize) {
@@ -79,14 +77,11 @@ class ImageProcessorImpl {
 						}
 						img = this.reduceColors(img);
 
+						const formatOptions = this.config.optimization?.[outputFormat] || {};
+
 						yield* _(
 							Effect.tryPromise({
-								try: () =>
-									img
-										.webp({
-											...(this.config.optimization?.[extname] || {}),
-										})
-										.toFile(dist),
+								try: () => img[outputFormat](formatOptions).toFile(dist),
 								catch: (error) => new ImageProcessorError('Failed to process image', error),
 							}),
 						);
@@ -123,20 +118,13 @@ class ImageProcessorImpl {
 					reduceColors: config.reduceColors ?? false,
 					resize: config.resize ?? null,
 					fileTypes: config.fileTypes ?? ['.png', '.jpg', '.jpeg', '.avif', '.webp'],
-					fileTemplate: config.fileTemplate ?? '${name}.webp',
+					fileTemplate: config.fileTemplate ?? `\${name}.${config.outputFormat ?? 'webp'}`,
+					outputFormat: config.outputFormat ?? 'webp',
 					optimization: config.optimization ?? {
-						jpeg: {
-							loseless: true,
-							nearLossless: true,
-							quality: 95,
-							effort: 5,
-						},
-						png: {
-							loseless: true,
-							nearLossless: true,
-							quality: 95,
-							effort: 5,
-						},
+						jpeg: { quality: 95 },
+						png: { quality: 95, compressionLevel: 9 },
+						webp: { lossless: true, nearLossless: true, quality: 95, effort: 5 },
+						avif: { quality: 80 },
 					},
 				};
 
