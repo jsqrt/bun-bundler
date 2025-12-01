@@ -16,6 +16,7 @@ with support for various technologies and features that streamline your developm
 - **Image optimizations** for improved performance
 - **Static assets** handling
 - **Real-time file watching** and **hot reloading** for rapid development
+- **CLI interface** for terminal usage without additional scripts
 
 ## Quick Start
 
@@ -27,7 +28,130 @@ Bun-Bundler works great with both Bun and Node.js. Install Bun-Bundler using npm
 or
 `bun add bun-bundler`
 
-## Dev bundling example (File watching & Hot Reload)
+## CLI Usage (Recommended)
+
+After installation, you can use the CLI to manage your project:
+
+### Initialize a new project
+
+```bash
+bun-bundler init
+```
+
+This creates a `bundler.config.js` file in your project.
+
+### Build for production
+
+```bash
+bun-bundler build
+```
+
+### Watch mode (development)
+
+```bash
+bun-bundler watch
+```
+
+### Dev mode with server
+
+```bash
+bun-bundler dev
+```
+
+This starts a development server with live-reload at `http://localhost:8080`
+
+### Custom port
+
+```bash
+bun-bundler dev --port 3000
+```
+
+### Custom config file
+
+```bash
+bun-bundler build --config my-bundler.config.js
+```
+
+### CLI Help
+
+```bash
+bun-bundler --help
+```
+
+## Configuration File (bundler.config.js)
+
+Create a `bundler.config.js` in your project root:
+
+```javascript
+export default {
+	dist: './dist',
+	html: './src/html/',
+	htmlDist: './dist',
+	sass: './src/css/app.css',
+	cssDist: './dist/css/',
+	js: './src/js/app.js',
+	jsDist: './dist/js/',
+	staticFolders: [
+		'./src/images/',
+		'./src/fonts/',
+		'./src/static/',
+	],
+	assembleStyles: './dist/css/app.css',
+	production: false,
+	debug: false,
+	onStart: () => {},
+	onBuildComplete: () => {},
+	onUpdate: ({ changes }) => {
+		// Handle updates (e.g., optimize images)
+	},
+	onError: () => {},
+};
+```
+
+### Advanced Configuration with Image Processing
+
+```javascript
+import { ImageProcessor, SpriteBuilder } from 'bun-bundler/modules';
+
+const imgProcessor = new ImageProcessor();
+const spriteBuilder = new SpriteBuilder();
+
+export default {
+	dist: './dist',
+	html: './src/html/',
+	sass: './src/css/app.css',
+	js: './src/js/app.js',
+	staticFolders: ['./src/images/', './src/fonts/'],
+	assembleStyles: './dist/css/app.css',
+	production: false,
+	debug: false,
+	onUpdate: ({ changes }) => {
+		if (changes.staticFolders) {
+			imgProcessor.start({
+				entry: './dist/images',
+				debug: false,
+			});
+
+			spriteBuilder.start({
+				dist: './dist/images/sprite/sprite.svg',
+				entry: './dist/',
+				spriteIconSelector: 'svg[data-sprite-icon]',
+				debug: false,
+			});
+		}
+	},
+};
+```
+
+## Programmatic API (Alternative)
+
+You can also use Bun-Bundler programmatically in your scripts:
+
+## Programmatic API (Alternative)
+
+You can also use Bun-Bundler programmatically in your scripts:
+
+### Dev bundling example (File watching & Hot Reload)
 
 1. Create file `dev.js`, or name it whatever you want.
 2. Here's the full config below that you can use as a template.
@@ -92,7 +216,7 @@ bundler.watch({
 
 3. Run it `npm run dev.js` or `bun dev.js`
 
-## Production bundling example (Minification & Optimizations)
+### Production bundling example (Minification & Optimizations)
 
 Same config, but with production setup
 

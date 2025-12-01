@@ -50,6 +50,11 @@ class ServerImpl {
 	start = (config: ServerConfig): Effect.Effect<any, ServerError> => {
 		const self = this;
 		return Effect.gen(function* (_) {
+			// Stop existing server if running
+			if (self.server && self.server.active) {
+				yield* _(self.stop());
+			}
+
 			const fullConfig: Required<ServerConfig> = {
 				root: config.root,
 				port: config.port ?? 8080,
@@ -85,6 +90,10 @@ class ServerImpl {
 							injectChanges: fullConfig.injectChanges,
 							callbacks: {
 								ready: (err: any, bs: any) => {
+									if (err) {
+										console.error('BrowserSync error:', err);
+										return;
+									}
 									Effect.runSync(self.onServerStarted(bs.options.get('urls')));
 								},
 							},
@@ -100,7 +109,9 @@ class ServerImpl {
 
 	stop = (): Effect.Effect<void> =>
 		Effect.sync(() => {
-			this.server?.exit();
+			if (this.server && this.server.active) {
+				this.server.exit();
+			}
 			this.server = null;
 		});
 

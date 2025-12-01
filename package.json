@@ -10,6 +10,9 @@
 	},
 	"main": "./index.mjs",
 	"types": "./index.d.ts",
+	"bin": {
+		"bun-bundler": "./bin/cli.ts"
+	},
 	"exports": {
 		".": "./index.mjs",
 		"./modules": "./modules/index.js"
@@ -42,6 +45,7 @@
 		"interfaces.ts",
 		"src/",
 		"modules/",
+		"bin/",
 		"stdout/",
 		"README.md",
 		"LICENSE"
