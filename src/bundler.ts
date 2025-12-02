@@ -344,6 +344,8 @@ class BundlerImpl {
 								const fullPath = path.resolve(filePath);
 								const isFile = fs.lstatSync(fullPath).isFile();
 
+								if (path.basename(fullPath).includes('._')) return null;
+
 								if (!isFile) {
 									Effect.runSync(this.reporter.debugLog(`Skipping: ${fullPath} is a directory.`));
 									return null;
