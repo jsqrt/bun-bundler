@@ -85,7 +85,7 @@ class ImageProcessorImpl {
 						yield* _(
 							Effect.tryPromise({
 								try: () => img[outputFormat](formatOptions).toFile(dist),
-								catch: (error) => new ImageProcessorError('Failed to process image', error),
+								catch: (error) => new ImageProcessorError(`Failed to process image (${filePath})`, error),
 							}),
 						);
 					}.bind(this),
@@ -98,9 +98,10 @@ class ImageProcessorImpl {
 			function* (_) {
 				const files = yield* _(getDirFiles(entry, true));
 
-				const filteredFiles = files.filter((filePath) =>
-					this.config.fileTypes.includes(path.extname(filePath)),
-				);
+				const filteredFiles = files.filter((filePath) => {
+					const fileName = path.basename(filePath);
+					return !fileName.startsWith('._') && this.config.fileTypes.includes(path.extname(filePath));
+				});
 
 				return filteredFiles;
 			}.bind(this),
@@ -138,6 +139,7 @@ class ImageProcessorImpl {
 				const filesToProcess = yield* _(
 					Effect.catchAll(self.collectFiles(self.config.entry), (error) =>
 						Effect.gen(function* (_) {
+							spinner.fail('Failed to collect image files');
 							yield* _(
 								self.reporter.errLog(
 									"ImageProcessor: Seems like entry path doesn't exist. Check images entry directory.",
@@ -148,13 +150,17 @@ class ImageProcessorImpl {
 					),
 				);
 
-				yield* _(self.sharpProcessing(filesToProcess));
+				yield* _(
+					Effect.catchAll(self.sharpProcessing(filesToProcess), (error) => {
+						spinner.fail('Image optimization failed');
+						return Effect.fail(error);
+					}),
+				);
 
 				spinner.succeed('Images optimized');
 			}.bind(this),
-		);
+		) as Effect.Effect<void, ImageProcessorError>;
 }
-
 export const makeImageProcessor = (reporter: Reporter): ImageProcessor => {
 	const impl = new ImageProcessorImpl(reporter);
 	return {

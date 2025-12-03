@@ -105,63 +105,68 @@ class BundlerImpl {
 	}
 
 	private setConfig(cfg: BundlerConfig, mode?: string): Effect.Effect<void, BundlerError> {
-		return Effect.gen(
-			function* (_) {
-				if (!cfg) {
-					return yield* _(Effect.fail(new BundlerError('Config is not defined')));
-				}
+		return pipe(
+			Effect.gen(
+				function* (_) {
+					if (!cfg) {
+						return yield* _(Effect.fail(new BundlerError('Config is not defined')));
+					}
 
-				const {
-					dist = '',
-					html = [],
-					sass = [],
-					js = [],
-					staticFolders = [],
-					cssDist = '',
-					jsDist = '',
-					htmlDist = '',
-					pugConfigOverrides = {},
-					jsConfigOverrides = {},
-					sassConfigOverrides = {},
-					assembleStyles,
-				} = cfg;
+					const {
+						dist = '',
+						html = [],
+						sass = [],
+						js = [],
+						staticFolders = [],
+						cssDist = '',
+						jsDist = '',
+						htmlDist = '',
+						pugConfigOverrides = {},
+						jsConfigOverrides = {},
+						sassConfigOverrides = {},
+						assembleStyles,
+					} = cfg;
 
-				const rootDir = cfg.rootDir || process.cwd();
-				const production = cfg.production;
+					const rootDir = cfg.rootDir || process.cwd();
+					const production = cfg.production;
 
-				this.config = {
-					rootDir,
-					production,
-					htmlFiles: this.prepareFiles(exec(html)).flat(),
-					sassFiles: this.prepareFiles(exec(sass)).flat(),
-					jsFiles: this.prepareFiles(exec(js)).flat(),
-					staticFolders: this.prepareFiles(exec(staticFolders)).flat(),
-					watchDir: resolve(rootDir, cfg.watchDir || './src/'),
-					distDir: resolve(rootDir, dist || './dist/'),
-					cssDist: resolve(rootDir, cssDist || path.join(resolve(rootDir, dist || './dist/'), './css/')),
-					jsDist: resolve(rootDir, jsDist || path.join(resolve(rootDir, dist || './dist/'), './js/')),
-					htmlDist: resolve(rootDir, htmlDist || resolve(rootDir, dist || './dist/')),
-					debug: cfg.debug,
-					assembleStyles,
-					pugConfigOverrides,
-					jsConfigOverrides,
-					sassConfigOverrides: {
-						...(Effect.runSync(getSassFileConfig(rootDir)) || {}),
-						...sassConfigOverrides,
-					},
-					onStart: cfg.onStart,
-					onBuildComplete: cfg.onBuildComplete,
-					onUpdate: cfg.onUpdate,
-					onError: cfg.onError,
-					onWatchUpdate: cfg.onWatchUpdate,
-				};
+					this.config = {
+						rootDir,
+						production,
+						htmlFiles: this.prepareFiles(exec(html)).flat(),
+						sassFiles: this.prepareFiles(exec(sass)).flat(),
+						jsFiles: this.prepareFiles(exec(js)).flat(),
+						staticFolders: this.prepareFiles(exec(staticFolders)).flat(),
+						watchDir: resolve(rootDir, cfg.watchDir || './src/'),
+						distDir: resolve(rootDir, dist || './dist/'),
+						cssDist: resolve(rootDir, cssDist || path.join(resolve(rootDir, dist || './dist/'), './css/')),
+						jsDist: resolve(rootDir, jsDist || path.join(resolve(rootDir, dist || './dist/'), './js/')),
+						htmlDist: resolve(rootDir, htmlDist || resolve(rootDir, dist || './dist/')),
+						debug: cfg.debug,
+						assembleStyles,
+						pugConfigOverrides,
+						jsConfigOverrides,
+						sassConfigOverrides: {
+							...(Effect.runSync(getSassFileConfig(rootDir)) || {}),
+							...sassConfigOverrides,
+						},
+						onStart: cfg.onStart,
+						onBuildComplete: cfg.onBuildComplete,
+						onUpdate: cfg.onUpdate,
+						onError: cfg.onError,
+						onWatchUpdate: cfg.onWatchUpdate,
+					};
 
-				if (mode === 'watch' && !this.config.watchDir) {
-					exec(this.config.onError);
-					return yield* _(Effect.fail(new BundlerError('Can`t resolve watch directory.')));
-				}
-			}.bind(this),
-		);
+					if (mode === 'watch' && !this.config.watchDir) {
+						exec(this.config.onError);
+						return yield* _(Effect.fail(new BundlerError('Can`t resolve watch directory.')));
+					}
+				}.bind(this),
+			),
+			Effect.mapError((error) =>
+				error instanceof BundlerError ? error : new BundlerError('Configuration error', error),
+			),
+		) as Effect.Effect<void, BundlerError>;
 	}
 
 	private writeDistFiles(dist: string, compiledData: any[]) {
@@ -257,8 +262,7 @@ class BundlerImpl {
 
 				this.writeDistFiles(dist, compiledData);
 			}.bind(this),
-		);
-
+		) as Effect.Effect<void, BundlerError>;
 	private processHTMLTemplate(filePath: string, visitedFiles = new Set<string>()): string {
 		if (visitedFiles.has(filePath)) {
 			throw new Error(`Dependency cycle detected in file ${filePath}`);
@@ -315,8 +319,7 @@ class BundlerImpl {
 					),
 				);
 			}.bind(this),
-		);
-
+		) as Effect.Effect<void, BundlerError>;
 	private compilePug = (): Effect.Effect<void, BundlerError> =>
 		Effect.gen(
 			function* (_) {
@@ -344,8 +347,7 @@ class BundlerImpl {
 								const fullPath = path.resolve(filePath);
 								const isFile = fs.lstatSync(fullPath).isFile();
 
-								if (path.basename(fullPath).includes('._')) return null;
-
+								if (path.basename(fullPath).startsWith('._')) return null;
 								if (!isFile) {
 									Effect.runSync(this.reporter.debugLog(`Skipping: ${fullPath} is a directory.`));
 									return null;
@@ -376,8 +378,7 @@ class BundlerImpl {
 					),
 				);
 			}.bind(this),
-		);
-
+		) as Effect.Effect<void, BundlerError>;
 	private compileScripts = (): Effect.Effect<void, BundlerError> =>
 		Effect.gen(
 			function* (_) {
@@ -462,8 +463,7 @@ class BundlerImpl {
 					this.importedCSSToAssemble = {};
 				}
 			}.bind(this),
-		);
-
+		) as Effect.Effect<void, BundlerError>;
 	private assembleStyles = (): Effect.Effect<void, BundlerError> =>
 		Effect.gen(
 			function* (_) {
@@ -517,8 +517,7 @@ class BundlerImpl {
 					}),
 				);
 			}.bind(this),
-		);
-
+		) as Effect.Effect<void, BundlerError>;
 	private transferStatics = (): Effect.Effect<void, BundlerError> =>
 		Effect.gen(
 			function* (_) {
@@ -548,8 +547,7 @@ class BundlerImpl {
 					),
 				);
 			}.bind(this),
-		);
-
+		) as Effect.Effect<void, BundlerError>;
 	private isFileChangedDuringWatch(params: {
 		extname?: string[];
 		folder?: string[];
@@ -661,7 +659,7 @@ class BundlerImpl {
 				// Don't re-throw - error already logged
 				return Effect.void;
 			}),
-		);
+		) as unknown as Effect.Effect<void, BundlerError>;
 
 	build = (cfg: BundlerConfig): Effect.Effect<void, BundlerError> =>
 		Effect.gen(
@@ -670,8 +668,7 @@ class BundlerImpl {
 				exec(this.config.onStart);
 				yield* _(this.bundle({ mode: 'build' }));
 			}.bind(this),
-		);
-
+		) as Effect.Effect<void, BundlerError>;
 	private watchBuild = (): Effect.Effect<void, BundlerError> =>
 		Effect.gen(
 			function* (_) {
@@ -683,8 +680,7 @@ class BundlerImpl {
 				this.watchChangedFileList = {};
 				this.watchChangedExtList = {};
 			}.bind(this),
-		);
-
+		) as Effect.Effect<void, BundlerError>;
 	private registerWatchFileChanged(fileUrl: string) {
 		const extName = path.extname(fileUrl);
 		if (!extName) return;
@@ -737,9 +733,8 @@ class BundlerImpl {
 				// Then start watch mode
 				yield* _(this.bundle({ mode: 'watch' }));
 			}.bind(this),
-		);
+		) as Effect.Effect<void, BundlerError>;
 }
-
 export const makeBundler = (reporter: Reporter, constants: Constants): Bundler => {
 	const impl = new BundlerImpl(reporter, constants);
 	return {

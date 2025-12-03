@@ -27,7 +27,7 @@ export const readAllFilesInDirectory = (directoryPath: string) =>
 			if (!existsSync(directoryPath)) {
 				throw new PathNotFoundError(directoryPath);
 			}
-			const files = readdirSync(directoryPath);
+			const files = readdirSync(directoryPath).filter((file) => !file.startsWith('._'));
 			return files.map((file) => {
 				const filePath = `${directoryPath}/${file}`;
 				return readFileSync(filePath, 'utf-8');
@@ -42,7 +42,7 @@ export const getFileNamesInDirectory = (directoryPath: string) =>
 			if (!existsSync(directoryPath)) {
 				throw new PathNotFoundError(directoryPath);
 			}
-			return readdirSync(directoryPath);
+			return readdirSync(directoryPath).filter((file) => !file.startsWith('._'));
 		},
 		catch: (error) => (error instanceof PathNotFoundError ? error : new FileSystemError(String(error))),
 	});
@@ -56,6 +56,9 @@ export const getDirFiles = (directoryPath: string, recursive: boolean = false, m
 			}
 
 			let files = readdirSync(entry, { recursive }).map((file) => path.resolve(entry, file as string));
+
+			// Filter out files/directories starting with ._
+			files = files.filter((file) => !path.basename(file).startsWith('._'));
 
 			if (matchExtensions) {
 				files = files.filter((file) => matchExtensions.includes(path.extname(file)));
@@ -99,7 +102,7 @@ export const createDir = (dirPath: string) =>
 export const removeDir = (dirPath: string) =>
 	Effect.sync(() => {
 		if (existsSync(dirPath)) {
-			rmSync(dirPath, { recursive: true });
+			rmSync(dirPath, { recursive: true, force: true });
 		}
 	});
 
@@ -116,7 +119,7 @@ export const createFile = (url: string, content: string) =>
 
 export const removeFile = (url: string) =>
 	Effect.sync(() => {
-		rmSync(url);
+		rmSync(url, { force: true });
 	});
 
 export const moveFile = (url: string, newFolder: string) =>
@@ -135,7 +138,7 @@ export const exec = <T>(func: T | ((...args: any[]) => T), attr: any[] = []): T 
 export const findClosestFile = (entryDir: string, fileName: string): string | null => {
 	if (!entryDir) return null;
 
-	const files = readdirSync(entryDir);
+	const files = readdirSync(entryDir).filter((file) => !file.startsWith('._'));
 	for (const file of files) {
 		if (file === fileName) return path.join(entryDir, file);
 	}

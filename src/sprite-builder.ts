@@ -135,6 +135,11 @@ class SpriteBuilderImpl {
 	}
 
 	private collectIconData(fileUrl: string): Record<string, IconData> {
+		// Skip files starting with ._
+		if (path.basename(fileUrl).startsWith('._')) {
+			return {};
+		}
+
 		const extname = path.extname(fileUrl);
 		const isHTML = this.constants.extensions.htmlLike.includes(extname);
 		const isSVG = extname === this.constants.extDist.svg;
@@ -202,11 +207,13 @@ class SpriteBuilderImpl {
 					),
 				);
 
-				const filteredFilesToProcess = filesToProcess.filter(
-					(filePath) =>
-						filePath.endsWith(self.constants.extDist.html) || filePath.endsWith(self.constants.extDist.svg),
-				);
-
+				const filteredFilesToProcess = filesToProcess.filter((filePath) => {
+					const fileName = path.basename(filePath);
+					return (
+						!fileName.startsWith('._') &&
+						(filePath.endsWith(self.constants.extDist.html) || filePath.endsWith(self.constants.extDist.svg))
+					);
+				});
 				if (!filteredFilesToProcess.length) {
 					return yield* _(
 						Effect.fail(
