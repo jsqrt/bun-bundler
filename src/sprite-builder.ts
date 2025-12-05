@@ -121,10 +121,12 @@ class SpriteBuilderImpl {
         </svg>
       `;
 
-			icons[iconName] = {
-				viewBox: svgNode.getAttribute('viewBox') || '0 0 18 18',
-				paths: svgNode.innerHTML,
-			};
+			if (!icons[iconName]) {
+				icons[iconName] = {
+					viewBox: svgNode.getAttribute('viewBox') || '0 0 18 18',
+					paths: svgNode.innerHTML,
+				};
+			}
 
 			if (isHTML) {
 				svgNode.outerHTML = HTMLUseChunk;
