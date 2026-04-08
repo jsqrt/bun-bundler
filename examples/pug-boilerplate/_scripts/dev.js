@@ -56,6 +56,8 @@ bundler.watch({
 			await imgProcessor.start({
 				debug: false,
 				entry: './dist/images',
+				keepOriginals: false,
+				cache: true
 			});
 		}
 	},

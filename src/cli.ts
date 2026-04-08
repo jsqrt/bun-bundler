@@ -50,6 +50,7 @@ interface JsonImageProcessorConfig {
 	resize?: { x: number; y: number };
 	scale?: number;
 	useCache?: boolean;
+	cache?: boolean;
 	cacheDir?: string;
 	concurrency?: number;
 	keepOriginals?: boolean;

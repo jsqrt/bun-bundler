@@ -8,7 +8,7 @@ import { getDirFiles } from './utils';
 import { HIDDEN_FILE_PREFIX } from './constants';
 import { WorkerPool } from './worker-pool';
 import type { ImageWorkerTask, ImageWorkerResult } from './image-worker';
-import { loadImageCache, saveImageCache, hashFile } from './image-cache';
+import { loadImageCache, saveImageCache, hashFile, hashConfig } from './image-cache';
 
 const WORKER_THRESHOLD = 4;
 
@@ -29,6 +29,7 @@ export interface ImageProcessorConfig {
 	};
 	readonly cacheDir?: string;
 	readonly useCache?: boolean;
+	readonly cache?: boolean;
 	readonly concurrency?: number;
 	readonly keepOriginals?: boolean;
 	readonly performance?: boolean;
@@ -119,11 +120,21 @@ class ImageProcessorImpl {
 	private processWithWorkers = (files: string[], spinner: any) =>
 		Effect.gen(
 			function* (_: any) {
-				const useCache = this.config.useCache;
+				const useCache = this.config.cache;
 				const cacheDir = this.config.cacheDir;
 
-				const cache = useCache ? yield* _(loadImageCache(cacheDir)) : { version: '', files: {} };
-				const nextCache = { version: cache.version, files: { ...cache.files } };
+				// Hash includes optimization settings — changing format/quality/resize invalidates cache
+				const configFingerprint = useCache ? hashConfig({
+					outputFormat: this.config.outputFormat,
+					optimization: this.config.optimization,
+					resize: this.config.resize,
+					scale: this.config.scale,
+					reduceColors: this.config.reduceColors,
+					fileTemplate: this.config.fileTemplate,
+				}) : '';
+
+				const cache = useCache ? yield* _(loadImageCache(cacheDir, configFingerprint)) : { version: '', configHash: '', files: {} };
+				const nextCache = { version: cache.version, configHash: configFingerprint, files: { ...cache.files } };
 
 				const outputFormat = this.config.outputFormat;
 				const formatOptions = this.config.optimization?.[outputFormat] || {};
@@ -357,7 +368,8 @@ class ImageProcessorImpl {
 						avif: { quality: 80 },
 					},
 					cacheDir: config.cacheDir ?? './.cache',
-					useCache: config.useCache ?? true,
+					useCache: config.cache ?? config.useCache ?? true,
+					cache: config.cache ?? config.useCache ?? true,
 					concurrency: config.concurrency ?? 0,
 					keepOriginals: config.keepOriginals ?? false,
 					performance: config.performance ?? false,

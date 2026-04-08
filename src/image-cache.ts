@@ -8,20 +8,23 @@ const CACHE_VERSION = 'bun-bundler-img-v1';
 
 export interface ImageCache {
 	version: string;
+	configHash: string;
 	files: Record<string, string>;
 }
 
-export const loadImageCache = (cacheDir: string): Effect.Effect<ImageCache> =>
+export const loadImageCache = (cacheDir: string, configHash: string): Effect.Effect<ImageCache> =>
 	Effect.tryPromise({
 		try: async () => {
 			const cachePath = path.join(cacheDir, 'image-cache.json');
 			const raw = await fsPromises.readFile(cachePath, 'utf8');
 			const data = JSON.parse(raw);
-			if (data.version !== CACHE_VERSION) return { version: CACHE_VERSION, files: {} };
+			if (data.version !== CACHE_VERSION || data.configHash !== configHash) {
+				return { version: CACHE_VERSION, configHash, files: {} };
+			}
 			return data as ImageCache;
 		},
-		catch: () => ({ version: CACHE_VERSION, files: {} } as ImageCache),
-	}).pipe(Effect.catchAll(() => Effect.succeed({ version: CACHE_VERSION, files: {} } as ImageCache)));
+		catch: () => ({ version: CACHE_VERSION, configHash, files: {} } as ImageCache),
+	}).pipe(Effect.catchAll(() => Effect.succeed({ version: CACHE_VERSION, configHash, files: {} } as ImageCache)));
 
 export const saveImageCache = (cacheDir: string, cache: ImageCache): Effect.Effect<void> =>
 	Effect.tryPromise({
@@ -43,3 +46,8 @@ export const hashFile = (filePath: string): Effect.Effect<string> =>
 		},
 		catch: () => '',
 	}).pipe(Effect.catchAll(() => Effect.succeed('')));
+
+export const hashConfig = (config: Record<string, any>): string => {
+	const normalized = JSON.stringify(config, Object.keys(config).sort());
+	return crypto.createHash('sha1').update(normalized).update(CACHE_VERSION).digest('hex');
+};
