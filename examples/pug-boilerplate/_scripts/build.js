@@ -30,17 +30,18 @@ bundler.build({
 	production: true,
 	debug: false,
 	onStart: () => {},
-	onBuildComplete: () => {
-		imgProcessor.start({
-			debug: false,
-			entry: './build/images',
-		});
-		spriteBuilder.start({
+	onBuildComplete: async () => {
+		await spriteBuilder.start({
 			debug: false,
 			dist: './build/images/sprite/sprite.svg',
 			entry: './build/', // detect SVG in html files here
 			spriteIconSelector: 'svg[data-sprite-icon]',
 			additionalIcons: './src/images/facebook.svg', // inline icons, you want to add
+		});
+		await imgProcessor.start({
+			debug: false,
+			entry: './build/images',
+			keepOriginals: true,
 		});
 	},
 });

@@ -1,0 +1,29 @@
+{
+	"mode": "build",
+	"bundler": {
+		"dist": "./build",
+		"sass": "./src/css/app.css",
+		"cssDist": "./build/css/",
+		"js": "./src/js/app.js",
+		"jsDist": "./build/js/",
+		"html": "./src/html/",
+		"htmlDist": "./build",
+		"staticFolders": [
+			"./src/images/",
+			"./src/fonts/",
+			"./src/static/"
+		],
+		"assembleStyles": "./build/css/app.css",
+		"production": true,
+		"debug": false
+	},
+	"imageProcessor": {
+		"entry": "./build/images"
+	},
+	"spriteBuilder": {
+		"dist": "./build/images/sprite/sprite.svg",
+		"entry": "./build/",
+		"spriteIconSelector": "svg[data-sprite-icon]",
+		"additionalIcons": "./src/images/facebook.svg"
+	}
+}

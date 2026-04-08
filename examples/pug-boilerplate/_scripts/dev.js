@@ -2,8 +2,8 @@
  * Development script for bundling and serving a web application.
  */
 
-import Bundler from 'bun-bundler';
-import { ImageProcessor, Server, SpriteBuilder } from 'bun-bundler/modules';
+import Bundler from '../../../index.mjs';
+import { ImageProcessor, Server, SpriteBuilder } from '../../../index.mjs';
 
 const bundler = new Bundler();
 const server = new Server();
@@ -44,19 +44,18 @@ bundler.watch({
 			serverStarted = true;
 		}
 	},
-	onUpdate: ({ changes }) => {
+	onUpdate: async ({ changes }) => {
 		if (changes.staticFolders) {
-			imgProcessor.start({
-				debug: false,
-				entry: './dist/images',
-			});
-
-			spriteBuilder.start({
+			await spriteBuilder.start({
 				debug: false,
 				dist: './dist/images/sprite/sprite.svg',
 				entry: './dist/', // detect SVG in html files here
 				spriteIconSelector: 'svg[data-sprite-icon]',
 				additionalIcons: './src/images/facebook.svg', // inline icons, you want to add
+			});
+			await imgProcessor.start({
+				debug: false,
+				entry: './dist/images',
 			});
 		}
 	},

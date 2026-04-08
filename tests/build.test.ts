@@ -1,10 +1,11 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { existsSync, readFileSync, rmSync } from 'fs';
 import { join } from 'path';
-import { spawn } from 'child_process';
+import { spawn, execSync } from 'child_process';
 
 const HTML_BOILERPLATE = join(__dirname, '../examples/html-boilerplate');
 const PUG_BOILERPLATE = join(__dirname, '../examples/pug-boilerplate');
+const IS_WINDOWS = process.platform === 'win32';
 
 function runCommand(cwd: string, command: string, args: string[]): Promise<{ code: number; output: string }> {
 	return new Promise((resolve) => {
@@ -25,9 +26,23 @@ function runCommand(cwd: string, command: string, args: string[]): Promise<{ cod
 	});
 }
 
+function killProcessTree(pid: number) {
+	try {
+		if (IS_WINDOWS) {
+			execSync(`taskkill /PID ${pid} /T /F`, { stdio: 'ignore' });
+		} else {
+			process.kill(-pid, 'SIGKILL');
+		}
+	} catch {}
+}
+
 function runDevWatch(cwd: string, timeoutMs: number): Promise<{ output: string }> {
 	return new Promise((resolve) => {
-		const proc = spawn('npm', ['run', 'dev'], { cwd, shell: true });
+		const proc = spawn('npm', ['run', 'dev'], {
+			cwd,
+			shell: true,
+			detached: !IS_WINDOWS,
+		});
 		let output = '';
 
 		proc.stdout?.on('data', (data) => {
@@ -39,13 +54,8 @@ function runDevWatch(cwd: string, timeoutMs: number): Promise<{ output: string }
 		});
 
 		setTimeout(() => {
-			proc.kill('SIGTERM');
-			setTimeout(() => {
-				if (!proc.killed) {
-					proc.kill('SIGKILL');
-				}
-				resolve({ output });
-			}, 500);
+			if (proc.pid) killProcessTree(proc.pid);
+			setTimeout(() => resolve({ output }), 1000);
 		}, timeoutMs);
 	});
 }
@@ -55,15 +65,17 @@ describe('HTML Boilerplate', () => {
 	const distDir = join(HTML_BOILERPLATE, 'dist');
 
 	beforeAll(() => {
-		// Clean up
-		if (existsSync(buildDir)) rmSync(buildDir, { recursive: true });
-		if (existsSync(distDir)) rmSync(distDir, { recursive: true });
+		try {
+			if (existsSync(buildDir)) rmSync(buildDir, { recursive: true, force: true });
+			if (existsSync(distDir)) rmSync(distDir, { recursive: true, force: true });
+		} catch {}
 	});
 
 	afterAll(() => {
-		// Clean up after tests
-		if (existsSync(buildDir)) rmSync(buildDir, { recursive: true });
-		if (existsSync(distDir)) rmSync(distDir, { recursive: true });
+		try {
+			if (existsSync(buildDir)) rmSync(buildDir, { recursive: true, force: true });
+			if (existsSync(distDir)) rmSync(distDir, { recursive: true, force: true });
+		} catch {}
 	});
 
 	it('should build production successfully', async () => {
@@ -124,15 +136,17 @@ describe('Pug Boilerplate', () => {
 	const distDir = join(PUG_BOILERPLATE, 'dist');
 
 	beforeAll(() => {
-		// Clean up
-		if (existsSync(buildDir)) rmSync(buildDir, { recursive: true });
-		if (existsSync(distDir)) rmSync(distDir, { recursive: true });
+		try {
+			if (existsSync(buildDir)) rmSync(buildDir, { recursive: true, force: true });
+			if (existsSync(distDir)) rmSync(distDir, { recursive: true, force: true });
+		} catch {}
 	});
 
 	afterAll(() => {
-		// Clean up after tests
-		if (existsSync(buildDir)) rmSync(buildDir, { recursive: true });
-		if (existsSync(distDir)) rmSync(distDir, { recursive: true });
+		try {
+			if (existsSync(buildDir)) rmSync(buildDir, { recursive: true, force: true });
+			if (existsSync(distDir)) rmSync(distDir, { recursive: true, force: true });
+		} catch {}
 	});
 
 	it('should build production successfully', async () => {

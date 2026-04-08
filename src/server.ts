@@ -1,4 +1,5 @@
 import { Effect, Context, Layer } from 'effect';
+// @ts-ignore
 import browserSync from 'browser-sync';
 import type { Reporter } from './reporter';
 import { ReporterService } from './reporter';
@@ -32,8 +33,8 @@ class ServerImpl {
 
 	constructor(private reporter: Reporter) {}
 
-	private onServerStarted = (urls: any) =>
-		Effect.gen(function* (_) {
+	private onServerStarted = (urls: any): Effect.Effect<void> =>
+		Effect.gen(function* (_: any) {
 			if (!urls) return;
 			const entries = urls._root?.entries;
 			if (!entries) return;
@@ -45,11 +46,11 @@ class ServerImpl {
 					console.log(`👀 ${local}`);
 				}),
 			);
-		});
+		}) as Effect.Effect<void>;
 
 	start = (config: ServerConfig): Effect.Effect<any, ServerError> => {
 		const self = this;
-		return Effect.gen(function* (_) {
+		return Effect.gen(function* (_: any) {
 			const fullConfig: Required<ServerConfig> = {
 				root: config.root,
 				port: config.port ?? 8080,
@@ -95,21 +96,21 @@ class ServerImpl {
 					catch: (error) => new ServerError('Server error', error),
 				}),
 			);
-		});
+		}) as Effect.Effect<any, ServerError>;
 	};
 
 	stop = (): Effect.Effect<void> =>
 		Effect.sync(() => {
 			this.server?.exit();
 			this.server = null;
-		});
+		}) as Effect.Effect<void>;
 
 	restart = (config: ServerConfig): Effect.Effect<any, ServerError> => {
 		const self = this;
-		return Effect.gen(function* (_) {
+		return Effect.gen(function* (_: any) {
 			yield* _(self.stop());
 			return yield* _(self.start(config));
-		});
+		}) as Effect.Effect<any, ServerError>;
 	};
 }
 

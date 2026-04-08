@@ -2,10 +2,9 @@ export {
 	BundlerService,
 	BundlerLive,
 	makeBundler,
-	type Bundler,
-	type BundlerConfig,
 	BundlerError,
 } from './bundler';
+export type { Bundler, BundlerConfig, ProcessedConfig, BundlerState } from './bundler-types';
 export { ServerService, ServerLive, makeServer, type Server, type ServerConfig, ServerError } from './server';
 export {
 	ImageProcessorService,

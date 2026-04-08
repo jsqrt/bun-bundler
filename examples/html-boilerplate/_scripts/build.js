@@ -2,8 +2,8 @@
  * Build script for production bundling a web application.
  */
 
-import Bundler from 'bun-bundler';
-import { ImageProcessor, SpriteBuilder } from 'bun-bundler/modules';
+import Bundler from '../../../index.mjs';
+import { ImageProcessor, SpriteBuilder } from '../../../index.mjs';
 
 const bundler = new Bundler();
 const spriteBuilder = new SpriteBuilder(); // optional
@@ -30,17 +30,17 @@ bundler.build({
 	production: true,
 	debug: false,
 	onStart: () => {},
-	onBuildComplete: () => {
-		imgProcessor.start({
-			debug: false,
-			entry: './build/images',
-		});
-		spriteBuilder.start({
+	onBuildComplete: async () => {
+		await spriteBuilder.start({
 			debug: false,
 			dist: './build/images/sprite/sprite.svg',
 			entry: './build/', // detect SVG in html files here
 			spriteIconSelector: 'svg[data-sprite-icon]',
 			additionalIcons: './src/images/facebook.svg', // inline icons, you want to add
+		});
+		await imgProcessor.start({
+			debug: false,
+			entry: './build/images',
 		});
 	},
 	onError: () => {},

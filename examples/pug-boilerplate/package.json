@@ -7,13 +7,13 @@
 		"type": "git",
 		"url": "git+https://github.com/jsqrt/bun-bundler.git"
 	},
-	"devDependencies": {
-		"bun-bundler": "file:../../"
-	},
+	"devDependencies": {},
 	"scripts": {
 		"start": "bun dev",
 		"dev": "cross-env NODE_ENV=development bun run _scripts/dev.js",
-		"build": "cross-env NODE_ENV=production bun run _scripts/build.js"
+		"build": "cross-env NODE_ENV=production bun run _scripts/build.js",
+		"dev:json": "cross-env NODE_ENV=development bun run ../../src/cli.ts bundler.dev.json",
+		"build:json": "cross-env NODE_ENV=production bun run ../../src/cli.ts bundler.build.json"
 	},
 	"dependencies": {
 		"cross-env": "^7.0.3",

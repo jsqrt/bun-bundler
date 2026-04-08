@@ -1,4 +1,5 @@
 import { Effect, Context, Layer } from 'effect';
+// @ts-ignore
 import jsdom from 'jsdom';
 import { writeFileSync, readFileSync, existsSync, mkdirSync } from 'fs';
 import path from 'path';
@@ -46,7 +47,7 @@ class SpriteBuilderImpl {
 	constructor(private reporter: Reporter, private constants: Constants) {}
 
 	private setupEvents(isDebug: boolean) {
-		virtualConsole.on('jsdomError', (err) => {
+		virtualConsole.on('jsdomError', (err: any) => {
 			if (err.message.includes('Could not parse CSS stylesheet')) return;
 			if (isDebug) {
 				Effect.runSync(this.reporter.errLog(err.message));
@@ -84,14 +85,14 @@ class SpriteBuilderImpl {
 	}
 
 	private replaceAndCollectIcons(
-		document: Document,
+		document: any,
 		isHTML: boolean,
 		isSVG: boolean,
 	): Record<string, IconData> {
 		const icons: Record<string, IconData> = {};
 		const pageIcons = document.querySelectorAll(isSVG ? 'svg' : this.config.spriteIconSelector);
 
-		pageIcons.forEach((svgWrap) => {
+		pageIcons.forEach((svgWrap: any) => {
 			const svgNode = svgWrap.tagName === 'svg' ? svgWrap : svgWrap.querySelector('svg');
 
 			if (!svgNode) return;
@@ -112,7 +113,7 @@ class SpriteBuilderImpl {
 			}
 
 			const svgAttributes = Array.from(svgNode.attributes)
-				.map((attr) => `${attr.name}="${attr.value}"`)
+				.map((attr: any) => `${attr.name}="${attr.value}"`)
 				.join(' ');
 
 			const HTMLUseChunk = `
@@ -138,7 +139,7 @@ class SpriteBuilderImpl {
 
 	private collectIconData(fileUrl: string): Record<string, IconData> {
 		// Skip files starting with ._
-		if (path.basename(fileUrl).startsWith('._')) {
+		if (path.basename(fileUrl).startsWith(this.constants.hiddenFilePrefix)) {
 			return {};
 		}
 
@@ -165,7 +166,7 @@ class SpriteBuilderImpl {
 
 	build = (config: SpriteBuilderConfig): Effect.Effect<void, SpriteBuilderError> =>
 		Effect.gen(
-			function* (_) {
+			function* (_: any) {
 				const self = this;
 
 				if (!path.resolve(config.dist)) {
@@ -209,14 +210,15 @@ class SpriteBuilderImpl {
 					),
 				);
 
-				const filteredFilesToProcess = filesToProcess.filter((filePath) => {
+				const filteredFilesToProcess = filesToProcess.filter((filePath: string) => {
 					const fileName = path.basename(filePath);
 					return (
-						!fileName.startsWith('._') &&
+						!fileName.startsWith(self.constants.hiddenFilePrefix) &&
 						(filePath.endsWith(self.constants.extDist.html) || filePath.endsWith(self.constants.extDist.svg))
 					);
 				});
 				if (!filteredFilesToProcess.length) {
+					spinner.fail('Sprite build failed');
 					return yield* _(
 						Effect.fail(
 							new SpriteBuilderError('Sprite building: Entry prop - directory/HTML files is not provided'),
@@ -224,7 +226,7 @@ class SpriteBuilderImpl {
 					);
 				}
 
-				filteredFilesToProcess.forEach((file) => {
+				filteredFilesToProcess.forEach((file: string) => {
 					Object.assign(icons, self.collectIconData(file));
 				});
 
@@ -241,7 +243,7 @@ class SpriteBuilderImpl {
 
 				spinner.succeed('Sprite built');
 			}.bind(this),
-		);
+		) as Effect.Effect<void, SpriteBuilderError>;
 }
 
 export const makeSpriteBuilder = (reporter: Reporter, constants: Constants): SpriteBuilder => {

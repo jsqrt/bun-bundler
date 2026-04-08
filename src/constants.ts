@@ -17,6 +17,8 @@ export interface Constants {
 		readonly css: string;
 		readonly js: string;
 	};
+	readonly hiddenFilePrefix: string;
+	readonly sassConfigFile: string;
 }
 
 export class ConstantsService extends Context.Tag('ConstantsService')<ConstantsService, Constants>() {}
@@ -38,6 +40,11 @@ const constants: Constants = {
 		css: 'CSS',
 		js: 'JS',
 	},
+	hiddenFilePrefix: '._',
+	sassConfigFile: '.sassrc',
 };
 
 export const ConstantsLive = Layer.succeed(ConstantsService, constants);
+
+export const HIDDEN_FILE_PREFIX = '._';
+export const SASS_CONFIG_FILE = '.sassrc';

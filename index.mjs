@@ -70,7 +70,7 @@ export class Server {
 
   stop() {
     if (!this.serverInstance) return;
-    
+
     const program = Effect.gen(function* (_) {
       const server = yield* _(ServerService);
       yield* _(server.stop());
@@ -101,7 +101,7 @@ export class ImageProcessor {
       yield* _(processor.process(config));
     });
 
-    Effect.runPromise(program.pipe(Effect.provide(ImageProcessorLayer))).catch((error) => {
+    return Effect.runPromise(program.pipe(Effect.provide(ImageProcessorLayer))).catch((error) => {
       console.error('Image processing error:', error);
     });
   }
@@ -116,7 +116,7 @@ export class SpriteBuilder {
       yield* _(builder.build(config));
     });
 
-    Effect.runPromise(program.pipe(Effect.provide(SpriteBuilderLayer))).catch((error) => {
+    return Effect.runPromise(program.pipe(Effect.provide(SpriteBuilderLayer))).catch((error) => {
       console.error('Sprite building error:', error);
     });
   }
