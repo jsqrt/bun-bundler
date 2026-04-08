@@ -53,6 +53,7 @@ interface JsonImageProcessorConfig {
 	cacheDir?: string;
 	concurrency?: number;
 	keepOriginals?: boolean;
+	performance?: boolean;
 	optimization?: Record<string, any>;
 }
 
@@ -85,7 +86,7 @@ function resolveConfigPath(arg?: string): string {
 }
 
 function loadJsonConfig(configPath: string): BunBundlerJsonConfig {
-	const raw = fs.readFileSync(configPath, 'utf-8');
+	const raw = fs.readFileSync(configPath, 'utf-8').replace(/^\uFEFF/, '').trim();
 	return JSON.parse(raw);
 }
 

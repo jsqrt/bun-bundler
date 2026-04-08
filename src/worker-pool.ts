@@ -16,16 +16,38 @@ export class WorkerPool<T extends WorkerTask = WorkerTask, R extends WorkerResul
 	private workers: Worker[] = [];
 	private active = 0;
 	private drainResolvers: (() => void)[] = [];
+	private readyPromise: Promise<void>;
 
 	constructor(
 		workerUrl: string | URL,
 		size = Math.max(2, Math.floor(os.cpus().length / 2)),
 	) {
+		const readyPromises: Promise<void>[] = [];
+
 		for (let i = 0; i < size; i++) {
 			const w = new Worker(workerUrl, { type: 'module' });
 			this.workers.push(w);
-			this.idle.push(w);
+
+			readyPromises.push(
+				new Promise<void>((resolve) => {
+					const onReady = (event: MessageEvent) => {
+						if (event.data?.type === 'ready') {
+							w.removeEventListener('message', onReady);
+							this.idle.push(w);
+							this.next();
+							resolve();
+						}
+					};
+					w.addEventListener('message', onReady);
+				}),
+			);
 		}
+
+		this.readyPromise = Promise.all(readyPromises).then(() => {});
+	}
+
+	ready(): Promise<void> {
+		return this.readyPromise;
 	}
 
 	run(task: T): Promise<R> {
@@ -44,10 +66,31 @@ export class WorkerPool<T extends WorkerTask = WorkerTask, R extends WorkerResul
 		for (const w of this.workers) w.terminate();
 		this.workers = [];
 		this.idle = [];
+		this.active = 0;
+
+		// Reject any queued tasks so their promises don't hang forever
+		const pending = this.queue.splice(0);
+		for (const { reject } of pending) {
+			reject(new Error('Worker pool terminated'));
+		}
+
+		this.drainResolvers.splice(0).forEach((r) => r());
 	}
 
 	get pending() {
 		return this.queue.length + this.active;
+	}
+
+	get size() {
+		return this.workers.length;
+	}
+
+	get activeCount() {
+		return this.active;
+	}
+
+	get idleCount() {
+		return this.idle.length;
 	}
 
 	private next() {

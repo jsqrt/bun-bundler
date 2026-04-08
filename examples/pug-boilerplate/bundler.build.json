@@ -19,12 +19,14 @@
 	},
 	"imageProcessor": {
 		"entry": "./build/images",
-		"keepOriginals": false
+		"keepOriginals": false,
+		"performance": true
 	},
 	"spriteBuilder": {
 		"dist": "./build/images/sprite/sprite.svg",
 		"entry": "./build/",
 		"spriteIconSelector": "svg[data-sprite-icon]",
 		"additionalIcons": "./src/images/facebook.svg"
+
 	}
 }

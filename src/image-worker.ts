@@ -24,6 +24,8 @@ export interface ImageWorkerResult {
 
 declare var self: Worker;
 
+self.postMessage({ type: 'ready' });
+
 self.onmessage = async ({ data }: MessageEvent<ImageWorkerTask>) => {
 	const { src, dist, outputFormat, formatOptions = {}, resize, scale, reduceColors } = data;
 
@@ -44,6 +46,7 @@ self.onmessage = async ({ data }: MessageEvent<ImageWorkerTask>) => {
 		}
 
 		img = img.rotate();
+
 		await (img as any).toFormat(outputFormat, formatOptions).toFile(dist);
 
 		const { size } = await fs.stat(dist);

@@ -10,6 +10,8 @@ import { WorkerPool } from './worker-pool';
 import type { ImageWorkerTask, ImageWorkerResult } from './image-worker';
 import { loadImageCache, saveImageCache, hashFile } from './image-cache';
 
+const WORKER_THRESHOLD = 4;
+
 export interface ImageProcessorConfig {
 	readonly entry: string;
 	readonly debug?: boolean;
@@ -29,6 +31,7 @@ export interface ImageProcessorConfig {
 	readonly useCache?: boolean;
 	readonly concurrency?: number;
 	readonly keepOriginals?: boolean;
+	readonly performance?: boolean;
 }
 
 export class ImageProcessorError {
@@ -90,6 +93,29 @@ class ImageProcessorImpl {
 		return path.join(dirName, fileTemplate.replace('${name}', fileName));
 	}
 
+	private processInline = async (task: ImageWorkerTask): Promise<void> => {
+		const sharp = (await import('sharp')).default;
+		const fsPromises = (await import('fs/promises')).default;
+
+		await fsPromises.mkdir(path.dirname(task.dist), { recursive: true });
+
+		const extname = path.extname(task.src).toLowerCase();
+		const sharpOptions: any = extname === '.svg' && task.scale ? { density: task.scale * 72 } : {};
+
+		let img = sharp(task.src, sharpOptions);
+
+		if (task.resize) {
+			img = img.resize(task.resize.x, task.resize.y);
+		}
+
+		if (task.reduceColors) {
+			img = (img as any).colorspace('rgb16').toColorspace('srgb');
+		}
+
+		img = img.rotate();
+		await (img as any).toFormat(task.outputFormat, task.formatOptions || {}).toFile(task.dist);
+	};
+
 	private processWithWorkers = (files: string[], spinner: any) =>
 		Effect.gen(
 			function* (_: any) {
@@ -102,16 +128,20 @@ class ImageProcessorImpl {
 				const outputFormat = this.config.outputFormat;
 				const formatOptions = this.config.optimization?.[outputFormat] || {};
 
-				const workerUrl = new URL('./image-worker.ts', import.meta.url).href;
-				const poolSize = this.config.concurrency || Math.max(2, Math.floor(os.cpus().length / 2));
-				const pool = new WorkerPool<ImageWorkerTask, ImageWorkerResult>(workerUrl, poolSize);
-
 				let processed = 0;
 				let skipped = 0;
 				const total = files.length;
-				const tasks: Promise<void>[] = [];
 				const filesToRemove: string[] = [];
 
+				interface PendingTask {
+					filePath: string;
+					dist: string;
+					task: ImageWorkerTask;
+				}
+				const pendingTasks: PendingTask[] = [];
+
+				// Step 1: validate and filter (fast, sync)
+				const validFiles: string[] = [];
 				for (const filePath of files) {
 					const validation = this.validateFile(filePath);
 					if (!validation.valid) {
@@ -129,8 +159,39 @@ class ImageProcessorImpl {
 						continue;
 					}
 
+					validFiles.push(filePath);
+				}
+
+				// Step 2: pre-create worker pool so workers start loading sharp
+				// while we hash files — overlaps worker init with hashing
+				const cpuCount = os.cpus().length;
+				const workerUrl = new URL('./image-worker.ts', import.meta.url).href;
+				const maxPoolSize = this.config.concurrency
+					|| (this.config.performance ? Math.max(2, cpuCount - 2) : Math.max(2, Math.floor(cpuCount / 2)));
+				const poolSize = Math.min(maxPoolSize, validFiles.length);
+				const useWorkers = validFiles.length >= WORKER_THRESHOLD;
+				const pool = useWorkers
+					? new WorkerPool<ImageWorkerTask, ImageWorkerResult>(workerUrl, poolSize)
+					: null;
+
+				yield* _(this.reporter.debugLog(
+					`[ImageProcessor] CPU cores: ${cpuCount} | Workers: ${poolSize} | Mode: ${useWorkers ? 'worker pool' : 'inline'}`,
+				));
+
+				// Step 3: parallel hashing (runs while workers warm up)
+				let hashMap = new Map<string, string>();
+				if (useCache && validFiles.length > 0) {
+					const hashEffects = validFiles.map((filePath) =>
+						Effect.map(hashFile(filePath), (hash): [string, string] => [filePath, hash]),
+					);
+					const results = yield* _(Effect.all(hashEffects, { concurrency: 16 }));
+					hashMap = new Map(results);
+				}
+
+				// Step 4: build pending tasks using pre-computed hashes
+				for (const filePath of validFiles) {
 					if (useCache) {
-						const fileHash = yield* _(hashFile(filePath));
+						const fileHash = hashMap.get(filePath) || '';
 						const rel = path.relative(this.config.entry, filePath);
 						const prevHash = cache.files[rel];
 						nextCache.files[rel] = fileHash;
@@ -148,9 +209,10 @@ class ImageProcessorImpl {
 					}
 
 					const dist = this.buildDistPath(filePath);
-
-					const task = pool
-						.run({
+					pendingTasks.push({
+						filePath,
+						dist,
+						task: {
 							src: filePath,
 							dist,
 							outputFormat,
@@ -158,40 +220,82 @@ class ImageProcessorImpl {
 							resize: this.config.resize,
 							scale: this.config.scale,
 							reduceColors: this.config.reduceColors,
-						})
-						.then(() => {
-							if (!this.config.keepOriginals && filePath !== dist) {
-								filesToRemove.push(filePath);
-							}
-							processed++;
-							spinner.text = `Optimizing images ${processed}/${total}`;
-						})
-						.catch((err) => {
-							processed++;
-							spinner.text = `Optimizing images ${processed}/${total}`;
-							Effect.runSync(
-								this.reporter.warn(`Skipping problematic image: ${path.basename(filePath)} - ${err.message}`),
-							);
-						});
-
-					tasks.push(task);
+						},
+					});
 				}
 
-				yield* _(
-					Effect.tryPromise({
-						try: () => Promise.all(tasks),
-						catch: (error) => new ImageProcessorError('Worker pool processing failed', error),
-					}),
-				);
+				// Step 5: wait for workers to be ready, then dispatch
+				if (pool && pendingTasks.length >= WORKER_THRESHOLD) {
+					yield* _(
+						Effect.ensuring(
+							Effect.gen(function* (_: any) {
+								yield* _(
+									Effect.tryPromise({
+										try: () => pool.ready(),
+										catch: (error) => new ImageProcessorError('Worker pool initialization failed', error),
+									}),
+								);
 
-				yield* _(
-					Effect.tryPromise({
-						try: () => pool.drain(),
-						catch: (error) => new ImageProcessorError('Worker pool drain failed', error),
-					}),
-				);
+								yield* _(this.reporter.debugLog(
+									`[ImageProcessor] Pool ready — ${pool.size} workers initialized | Tasks to process: ${pendingTasks.length}`,
+								));
 
-				pool.terminate();
+								const promises = pendingTasks.map(({ filePath, dist, task }) =>
+									pool.run(task)
+										.then(() => {
+											if (!this.config.keepOriginals && filePath !== dist) {
+												filesToRemove.push(filePath);
+											}
+											processed++;
+											spinner.text = `Optimizing images ${processed}/${total} (active workers: ${pool.activeCount}, idle: ${pool.idleCount})`;
+										})
+										.catch((err) => {
+											processed++;
+											spinner.text = `Optimizing images ${processed}/${total}`;
+											Effect.runSync(
+												this.reporter.warn(`Skipping problematic image: ${path.basename(filePath)} - ${err.message}`),
+											);
+										}),
+								);
+
+								yield* _(
+									Effect.tryPromise({
+										try: () => Promise.all(promises),
+										catch: (error) => new ImageProcessorError('Worker pool processing failed', error),
+									}),
+								);
+							}.bind(this)),
+							Effect.sync(() => pool.terminate()),
+						),
+					);
+				} else {
+					pool?.terminate();
+					for (const { filePath, dist, task } of pendingTasks) {
+						yield* _(
+							Effect.tryPromise({
+								try: async () => {
+									await this.processInline(task);
+									if (!this.config.keepOriginals && filePath !== dist) {
+										filesToRemove.push(filePath);
+									}
+									processed++;
+									spinner.text = `Optimizing images ${processed}/${total}`;
+								},
+								catch: () => new ImageProcessorError(`Failed to process ${filePath}`),
+							}).pipe(
+								Effect.catchAll((err) =>
+									Effect.sync(() => {
+										processed++;
+										spinner.text = `Optimizing images ${processed}/${total}`;
+										Effect.runSync(
+											this.reporter.warn(`Skipping problematic image: ${path.basename(filePath)} - ${err.message}`),
+										);
+									}),
+								),
+							),
+						);
+					}
+				}
 
 				for (const file of filesToRemove) {
 					yield* _(Effect.tryPromise({
@@ -204,7 +308,9 @@ class ImageProcessorImpl {
 					yield* _(saveImageCache(cacheDir, nextCache));
 				}
 
-				yield* _(this.reporter.debugLog(`Processed: ${processed - skipped}, Skipped (cached): ${skipped}`));
+				yield* _(this.reporter.debugLog(
+					`[ImageProcessor] Done — Processed: ${processed - skipped}, Skipped (cached): ${skipped}, Total: ${total}`,
+				));
 			}.bind(this),
 		);
 
@@ -250,6 +356,7 @@ class ImageProcessorImpl {
 					useCache: config.useCache ?? true,
 					concurrency: config.concurrency ?? 0,
 					keepOriginals: config.keepOriginals ?? false,
+					performance: config.performance ?? false,
 				};
 
 				const spinner = self.reporter.spinner('Optimizing images...');

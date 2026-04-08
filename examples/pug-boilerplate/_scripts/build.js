@@ -42,6 +42,7 @@ bundler.build({
 			debug: false,
 			entry: './build/images',
 			keepOriginals: true,
+			performance: true,
 		});
 	},
 });
