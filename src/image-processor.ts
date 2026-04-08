@@ -301,7 +301,11 @@ class ImageProcessorImpl {
 					yield* _(Effect.tryPromise({
 						try: () => this.unlinkWithRetry(file),
 						catch: () => new ImageProcessorError(`Failed to remove original: ${file}`),
-					}));
+					}).pipe(
+						Effect.catchAll((err) =>
+							this.reporter.warn(`Could not remove original: ${path.basename(file)} - ${err.message}`),
+						),
+					));
 				}
 
 				if (useCache) {
