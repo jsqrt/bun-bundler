@@ -9,6 +9,7 @@ import { HIDDEN_FILE_PREFIX } from './constants';
 import { WorkerPool } from './worker-pool';
 import type { ImageWorkerTask, ImageWorkerResult } from './image-worker';
 import { loadImageCache, saveImageCache, hashFile, hashConfig } from './image-cache';
+import { onCleanup } from './cleanup';
 
 const WORKER_THRESHOLD = 4;
 
@@ -51,6 +52,8 @@ export class ImageProcessorService extends Context.Tag('ImageProcessorService')<
 
 class ImageProcessorImpl {
 	private config!: Required<ImageProcessorConfig>;
+	private activePool: WorkerPool<ImageWorkerTask, ImageWorkerResult> | null = null;
+	private unregisterCleanup: (() => void) | null = null;
 
 	constructor(private reporter: Reporter) {}
 
@@ -185,6 +188,14 @@ class ImageProcessorImpl {
 					? new WorkerPool<ImageWorkerTask, ImageWorkerResult>(workerUrl, poolSize)
 					: null;
 
+				if (pool) {
+					this.activePool = pool;
+					this.unregisterCleanup = onCleanup(() => {
+						pool.terminate();
+						this.activePool = null;
+					});
+				}
+
 				yield* _(this.reporter.debugLog(
 					`[ImageProcessor] CPU cores: ${cpuCount} | Workers: ${poolSize} | Mode: ${useWorkers ? 'worker pool' : 'inline'}`,
 				));
@@ -276,11 +287,19 @@ class ImageProcessorImpl {
 									}),
 								);
 							}.bind(this)),
-							Effect.sync(() => pool.terminate()),
+							Effect.sync(() => {
+								pool.terminate();
+								this.unregisterCleanup?.();
+								this.unregisterCleanup = null;
+								this.activePool = null;
+							}),
 						),
 					);
 				} else {
 					pool?.terminate();
+					this.unregisterCleanup?.();
+					this.unregisterCleanup = null;
+					this.activePool = null;
 					for (const { filePath, dist, task } of pendingTasks) {
 						yield* _(
 							Effect.tryPromise({

@@ -3,6 +3,7 @@ import { Effect, Context, Layer } from 'effect';
 import browserSync from 'browser-sync';
 import type { Reporter } from './reporter';
 import { ReporterService } from './reporter';
+import { onCleanup } from './cleanup';
 
 export interface ServerConfig {
 	readonly root: string;
@@ -30,6 +31,7 @@ export class ServerService extends Context.Tag('ServerService')<ServerService, S
 class ServerImpl {
 	private server: any = null;
 	private currentConfig: ServerConfig | null = null;
+	private unregisterCleanup: (() => void) | null = null;
 
 	constructor(private reporter: Reporter) {}
 
@@ -73,6 +75,10 @@ class ServerImpl {
 				Effect.try({
 					try: () => {
 						self.server = browserSync.create();
+						self.unregisterCleanup = onCleanup(() => {
+							self.server?.exit();
+							self.server = null;
+						});
 						self.server.init({
 							server: fullConfig.root,
 							port: fullConfig.port,
@@ -101,6 +107,8 @@ class ServerImpl {
 
 	stop = (): Effect.Effect<void> =>
 		Effect.sync(() => {
+			this.unregisterCleanup?.();
+			this.unregisterCleanup = null;
 			this.server?.exit();
 			this.server = null;
 		}) as Effect.Effect<void>;

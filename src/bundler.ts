@@ -6,6 +6,7 @@ import { ReporterService } from './reporter';
 import type { Constants } from './constants';
 import { ConstantsService } from './constants';
 import { createDir, exec, getDirFiles, getSassFileConfig, removeDir } from './utils';
+import { onCleanup } from './cleanup';
 import type { BundlerConfig, ProcessedConfig, BundlerState, Bundler } from './bundler-types';
 import { BundlerError, BundlerService } from './bundler-types';
 import {
@@ -282,6 +283,10 @@ class BundlerImpl {
 	}
 
 	private unwatch() {
+		if (this.watchDebounce) {
+			clearTimeout(this.watchDebounce);
+			this.watchDebounce = null;
+		}
 		if (this.watcher) {
 			this.watcher.close();
 			this.watcher = null;
@@ -308,6 +313,7 @@ class BundlerImpl {
 					const fileUrl = path.resolve(this.config.watchDir, fileName);
 					this.handleWatchChangeFile(fileUrl, eventType === 'rename' ? 100 : undefined);
 				});
+				onCleanup(() => this.unwatch());
 
 				exec(this.config.onStart);
 				yield* _(this.bundle({ mode: 'build' }));
