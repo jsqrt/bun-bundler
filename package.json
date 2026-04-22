@@ -1,5 +1,5 @@
 {
-	"description": "Bun-Bundler: Modern, Simple, and Ultra-Fast HTML Bundler. Requires Bun runtime. Bun | Pug/HTML | SCSS/CSS | JS | SVG Sprite | Image optimizations",
+	"description": "A fast, zero-config-friendly bundler for HTML/Pug, SCSS/CSS, and JavaScript projects.",
 	"author": "jsqrt",
 	"license": "MIT",
 	"name": "bun-bundler",
@@ -8,16 +8,24 @@
 	"engines": {
 		"bun": ">=1.0.0"
 	},
-	"main": "./index.mjs",
-	"types": "./index.d.ts",
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
 	"bin": {
-		"bun-bundler": "./src/cli.ts"
+		"bun-bundler": "./dist/cli.js"
 	},
 	"exports": {
-		".": "./index.mjs",
-		"./modules": "./modules/index.js"
+		".": {
+			"types": "./dist/index.d.ts",
+			"default": "./dist/index.js"
+		},
+		"./modules": {
+			"types": "./dist/index.d.ts",
+			"default": "./dist/index.js"
+		}
 	},
 	"scripts": {
+		"build": "bun run build.ts",
+		"prepublishOnly": "bun run build",
 		"test": "vitest run",
 		"test:watch": "vitest",
 		"typecheck": "tsc --noEmit",
@@ -40,12 +48,7 @@
 		"url": "git+https://github.com/jsqrt/bun-bundler.git"
 	},
 	"files": [
-		"index.mjs",
-		"index.d.ts",
-		"interfaces.ts",
-		"src/",
-		"modules/",
-		"stdout/",
+		"dist",
 		"README.md",
 		"LICENSE"
 	],
