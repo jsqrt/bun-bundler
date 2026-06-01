@@ -54,6 +54,25 @@ if (!cliBuild.success) {
 	throw new Error('CLI bundle failed');
 }
 
+// The image worker runs as a separate Worker thread, so it must be emitted as
+// its own runtime entry (dist/image-worker.js). Without this the worker URL
+// resolves to a non-existent file and image optimization can't use the pool.
+const workerBuild = await Bun.build({
+	entrypoints: [join(root, 'src/image-worker.ts')],
+	outdir: dist,
+	target: 'bun',
+	format: 'esm',
+	minify: true,
+	sourcemap: 'linked',
+	external,
+	naming: 'image-worker.[ext]',
+});
+
+if (!workerBuild.success) {
+	for (const log of workerBuild.logs) console.error(log);
+	throw new Error('Image worker bundle failed');
+}
+
 console.log('[build] emitting .d.ts...');
 
 const tsc = spawnSync(

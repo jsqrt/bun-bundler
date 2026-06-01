@@ -63,14 +63,18 @@ export class WorkerPool<T extends WorkerTask = WorkerTask, R extends WorkerResul
 			);
 		}
 
+		// allSettled (not all) so that *every* worker's rejection is consumed —
+		// with Promise.all only the first rejection is handled and the rest
+		// surface as unhandled promise rejections that crash the process.
 		// If any worker fails to initialize, tear the whole pool down so its
 		// workers don't linger as orphaned processes holding file handles.
-		this.readyPromise = Promise.all(readyPromises)
-			.then(() => {})
-			.catch((error) => {
+		this.readyPromise = Promise.allSettled(readyPromises).then((results) => {
+			const failure = results.find((r): r is PromiseRejectedResult => r.status === 'rejected');
+			if (failure) {
 				this.terminate();
-				throw error;
-			});
+				throw failure.reason;
+			}
+		});
 	}
 
 	ready(): Promise<void> {

@@ -179,7 +179,10 @@ class ImageProcessorImpl {
 				// Step 2: pre-create worker pool so workers start loading sharp
 				// while we hash files — overlaps worker init with hashing
 				const cpuCount = os.cpus().length;
-				const workerUrl = new URL('./image-worker.ts', import.meta.url).href;
+				// Resolve the sibling worker with the right extension: ".ts" when
+				// running from source, ".js" when running from the built dist.
+				const workerExt = import.meta.url.endsWith('.js') ? 'js' : 'ts';
+				const workerUrl = new URL(`./image-worker.${workerExt}`, import.meta.url).href;
 				const maxPoolSize = this.config.concurrency
 					|| (this.config.performance ? Math.max(2, cpuCount - 2) : Math.max(2, Math.floor(cpuCount / 2)));
 				const poolSize = Math.min(maxPoolSize, validFiles.length);
