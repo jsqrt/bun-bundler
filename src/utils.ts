@@ -129,6 +129,23 @@ export const moveFile = (url: string, newFolder: string) =>
 		renameSync(url, path.join(newFolder, basename));
 	});
 
+// Longest directory shared by all the given files (used to derive page sections when no html root is known).
+export const getCommonBaseDir = (files: string[]): string => {
+	if (!files.length) return '';
+
+	const dirs = files.map((file) => path.dirname(path.resolve(file)).split(path.sep));
+	const [first, ...rest] = dirs;
+
+	let length = first.length;
+	for (const dir of rest) {
+		let i = 0;
+		while (i < length && i < dir.length && dir[i] === first[i]) i++;
+		length = i;
+	}
+
+	return first.slice(0, length).join(path.sep);
+};
+
 export const isFunction = (func: unknown): func is Function => func instanceof Function;
 
 export const exec = <T>(func: T | ((...args: any[]) => T), attr: any[] = []): T => {

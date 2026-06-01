@@ -34,6 +34,7 @@ export interface ProcessedConfig {
 	rootDir: string;
 	production?: boolean;
 	htmlFiles: string[];
+	htmlRoot: string;
 	sassFiles: string[];
 	jsFiles: string[];
 	staticFolders: string[];

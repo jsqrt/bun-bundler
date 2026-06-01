@@ -48,6 +48,16 @@ class BundlerImpl {
 		return isDirectory ? [Effect.runSync(getDirFiles(entry, true, extensions))].flat() : fallback;
 	}
 
+	// Resolves the base directory pages are relative to, used to group them into sections (dev widget).
+	private resolveHtmlRoot(entry: any, rootDir: string): string {
+		if (typeof entry !== 'string') return '';
+
+		const resolved = resolve(rootDir, entry);
+		if (!fs.existsSync(resolved)) return '';
+
+		return statSync(resolved).isDirectory() ? resolved : path.dirname(resolved);
+	}
+
 	private setConfig(cfg: BundlerConfig, mode?: string): Effect.Effect<void, BundlerError> {
 		return pipe(
 			Effect.gen(
@@ -77,6 +87,7 @@ class BundlerImpl {
 					this.config = {
 						rootDir,
 						production,
+						htmlRoot: this.resolveHtmlRoot(exec(html), rootDir),
 						htmlFiles: this.prepareFiles(exec(html)).flat(),
 						sassFiles: this.prepareFiles(exec(sass)).flat(),
 						jsFiles: this.prepareFiles(exec(js)).flat(),

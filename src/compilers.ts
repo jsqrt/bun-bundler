@@ -6,7 +6,7 @@ import type { Reporter } from './reporter';
 import type { Constants } from './constants';
 import type { ProcessedConfig, BundlerState } from './bundler-types';
 import { BundlerError } from './bundler-types';
-import { createDir, createFile, removeDir, removeFile } from './utils';
+import { createDir, createFile, getCommonBaseDir, removeDir, removeFile } from './utils';
 
 const pug = require('pug');
 const sass = require('sass');
@@ -180,9 +180,20 @@ export const compilePug = (
 			return;
 		}
 
-		const sitemap = config.htmlFiles
-			?.filter((file: string) => fs.lstatSync(file).isFile())
-			.map((file: string) => path.basename(file).replace(/\.pug$/, constants.extDist.html));
+		const htmlSourceFiles = config.htmlFiles?.filter((file: string) => fs.lstatSync(file).isFile()) ?? [];
+
+		const sitemap = htmlSourceFiles.map((file: string) =>
+			path.basename(file).replace(/\.pug$/, constants.extDist.html),
+		);
+
+		// Pages enriched with their source folder, so templates can group the dev widget into sections.
+		const sectionBase = config.htmlRoot || getCommonBaseDir(htmlSourceFiles);
+		const pages = htmlSourceFiles.map((file: string) => {
+			const url = path.basename(file).replace(/\.pug$/, constants.extDist.html);
+			const relDir = sectionBase ? path.relative(sectionBase, path.dirname(file)) : '';
+			const section = relDir && !relDir.startsWith('..') ? relDir.split(path.sep).join('/') : '';
+			return { url, section };
+		});
 
 		yield* _(
 			Effect.catchAll(
@@ -220,6 +231,7 @@ export const compilePug = (
 								cache: false,
 								compileDebug: config.debug,
 								sitemap,
+								pages,
 								readFileSync: safeReadFileSync,
 								env: config.production ? 'production' : 'development',
 								...config.pugConfigOverrides,
