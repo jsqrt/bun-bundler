@@ -21,6 +21,7 @@ export class WorkerPool<T extends WorkerTask = WorkerTask, R extends WorkerResul
 	constructor(
 		workerUrl: string | URL,
 		size = Math.max(2, Math.floor(os.cpus().length / 2)),
+		readyTimeoutMs = 30_000,
 	) {
 		const readyPromises: Promise<void>[] = [];
 
@@ -29,21 +30,47 @@ export class WorkerPool<T extends WorkerTask = WorkerTask, R extends WorkerResul
 			this.workers.push(w);
 
 			readyPromises.push(
-				new Promise<void>((resolve) => {
+				new Promise<void>((resolve, reject) => {
+					// Guard against a worker that never signals readiness (failed import,
+					// crash on load, or a saturated machine) — without this the whole
+					// pool, and the build, hangs forever waiting on ready().
+					const timer = setTimeout(() => {
+						cleanup();
+						reject(new Error(`Worker failed to become ready within ${readyTimeoutMs}ms`));
+					}, readyTimeoutMs);
+
 					const onReady = (event: MessageEvent) => {
 						if (event.data?.type === 'ready') {
-							w.removeEventListener('message', onReady);
+							cleanup();
 							this.idle.push(w);
 							this.next();
 							resolve();
 						}
 					};
+					const onError = (event: ErrorEvent) => {
+						cleanup();
+						reject(new Error(event.message || 'Worker failed during initialization'));
+					};
+					const cleanup = () => {
+						clearTimeout(timer);
+						w.removeEventListener('message', onReady);
+						w.removeEventListener('error', onError);
+					};
+
 					w.addEventListener('message', onReady);
+					w.addEventListener('error', onError);
 				}),
 			);
 		}
 
-		this.readyPromise = Promise.all(readyPromises).then(() => {});
+		// If any worker fails to initialize, tear the whole pool down so its
+		// workers don't linger as orphaned processes holding file handles.
+		this.readyPromise = Promise.all(readyPromises)
+			.then(() => {})
+			.catch((error) => {
+				this.terminate();
+				throw error;
+			});
 	}
 
 	ready(): Promise<void> {

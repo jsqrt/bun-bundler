@@ -16,12 +16,14 @@ import type { ServerConfig } from './server';
 import type { ImageProcessorConfig } from './image-processor';
 import type { SpriteBuilderConfig } from './sprite-builder';
 
-const BaseLayer = Layer.mergeAll(ReporterLive(false), ConstantsLive);
+const makeBaseLayer = (debug: boolean) => Layer.mergeAll(ReporterLive(debug), ConstantsLive);
 
-const BundlerLayer = BundlerLive.pipe(Layer.provide(BaseLayer));
-const ServerLayer = ServerLive.pipe(Layer.provide(BaseLayer));
-const ImageProcessorLayer = ImageProcessorLive.pipe(Layer.provide(BaseLayer));
-const SpriteBuilderLayer = SpriteBuilderLive.pipe(Layer.provide(BaseLayer));
+const makeBundlerLayer = (debug: boolean) => BundlerLive.pipe(Layer.provide(makeBaseLayer(debug)));
+const makeServerLayer = (debug: boolean) => ServerLive.pipe(Layer.provide(makeBaseLayer(debug)));
+const makeImageProcessorLayer = (debug: boolean) =>
+	ImageProcessorLive.pipe(Layer.provide(makeBaseLayer(debug)));
+const makeSpriteBuilderLayer = (debug: boolean) =>
+	SpriteBuilderLive.pipe(Layer.provide(makeBaseLayer(debug)));
 
 export class Bundler {
 	build(config: BundlerConfig): void {
@@ -30,7 +32,7 @@ export class Bundler {
 			yield* _(bundler.build(config));
 		});
 
-		Effect.runPromise(program.pipe(Effect.provide(BundlerLayer))).catch((error) => {
+		Effect.runPromise(program.pipe(Effect.provide(makeBundlerLayer(config.debug ?? false)))).catch((error) => {
 			console.error('Build error:', error);
 			if (config.onError) config.onError();
 		});
@@ -42,7 +44,7 @@ export class Bundler {
 			yield* _(bundler.watch(config));
 		});
 
-		Effect.runPromise(program.pipe(Effect.provide(BundlerLayer))).catch((error) => {
+		Effect.runPromise(program.pipe(Effect.provide(makeBundlerLayer(config.debug ?? false)))).catch((error) => {
 			console.error('Watch error:', error);
 			if (config.onError) config.onError();
 		});
@@ -59,7 +61,7 @@ export class Server {
 		});
 
 		try {
-			this.serverInstance = Effect.runSync(program.pipe(Effect.provide(ServerLayer)));
+			this.serverInstance = Effect.runSync(program.pipe(Effect.provide(makeServerLayer(config.debug ?? false))));
 			return this.serverInstance;
 		} catch (error) {
 			console.error('Server start error:', error);
@@ -76,7 +78,7 @@ export class Server {
 		});
 
 		try {
-			Effect.runSync(program.pipe(Effect.provide(ServerLayer)));
+			Effect.runSync(program.pipe(Effect.provide(makeServerLayer(false))));
 			this.serverInstance = null;
 		} catch (error) {
 			console.error('Server stop error:', error);
@@ -108,7 +110,7 @@ export class ImageProcessor {
 			yield* _(processor.process(config));
 		});
 
-		return Effect.runPromise(program.pipe(Effect.provide(ImageProcessorLayer))).catch((error) => {
+		return Effect.runPromise(program.pipe(Effect.provide(makeImageProcessorLayer(config.debug ?? false)))).catch((error) => {
 			console.error('Image processing error:', error);
 		});
 	}
@@ -125,7 +127,7 @@ export class SpriteBuilder {
 			yield* _(builder.build(config));
 		});
 
-		return Effect.runPromise(program.pipe(Effect.provide(SpriteBuilderLayer))).catch((error) => {
+		return Effect.runPromise(program.pipe(Effect.provide(makeSpriteBuilderLayer(config.debug ?? false)))).catch((error) => {
 			console.error('Sprite building error:', error);
 		});
 	}

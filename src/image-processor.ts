@@ -246,85 +246,110 @@ class ImageProcessorImpl {
 					});
 				}
 
-				// Step 5: wait for workers to be ready, then dispatch
-				if (pool && pendingTasks.length >= WORKER_THRESHOLD) {
-					yield* _(
-						Effect.ensuring(
-							Effect.gen(function* (_: any) {
-								yield* _(
-									Effect.tryPromise({
-										try: () => pool.ready(),
-										catch: (error) => new ImageProcessorError('Worker pool initialization failed', error),
-									}),
-								);
-
-								yield* _(this.reporter.debugLog(
-									`[ImageProcessor] Pool ready — ${pool.size} workers initialized | Tasks to process: ${pendingTasks.length}`,
-								));
-
-								const promises = pendingTasks.map(({ filePath, dist, task }) =>
-									pool.run(task)
-										.then(() => {
-											if (!this.config.keepOriginals && filePath !== dist) {
-												filesToRemove.push(filePath);
-											}
-											processed++;
-											spinner.text = `Optimizing images ${processed}/${total} (active workers: ${pool.activeCount}, idle: ${pool.idleCount})`;
-										})
-										.catch((err) => {
+				// Inline fallback: used when there are too few files to justify a
+				// worker pool, or when the pool fails to initialize. Processing in
+				// the main thread is slower but never leaves orphaned workers.
+				const runInline = (tasks: PendingTask[]) =>
+					Effect.gen(function* (_: any) {
+						for (const { filePath, dist, task } of tasks) {
+							yield* _(
+								Effect.tryPromise({
+									try: async () => {
+										await this.processInline(task);
+										if (!this.config.keepOriginals && filePath !== dist) {
+											filesToRemove.push(filePath);
+										}
+										processed++;
+										spinner.text = `Optimizing images ${processed}/${total}`;
+									},
+									catch: () => new ImageProcessorError(`Failed to process ${filePath}`),
+								}).pipe(
+									Effect.catchAll((err) =>
+										Effect.sync(() => {
 											processed++;
 											spinner.text = `Optimizing images ${processed}/${total}`;
 											Effect.runSync(
 												this.reporter.warn(`Skipping problematic image: ${path.basename(filePath)} - ${err.message}`),
 											);
 										}),
-								);
+									),
+								),
+							);
+						}
+					}.bind(this));
 
-								yield* _(
-									Effect.tryPromise({
-										try: () => Promise.all(promises),
-										catch: (error) => new ImageProcessorError('Worker pool processing failed', error),
-									}),
-								);
-							}.bind(this)),
-							Effect.sync(() => {
-								pool.terminate();
-								this.unregisterCleanup?.();
-								this.unregisterCleanup = null;
-								this.activePool = null;
-							}),
-						),
-					);
-				} else {
+				const releasePool = () => {
 					pool?.terminate();
 					this.unregisterCleanup?.();
 					this.unregisterCleanup = null;
 					this.activePool = null;
-					for (const { filePath, dist, task } of pendingTasks) {
+				};
+
+				// Step 5: wait for workers to be ready, then dispatch
+				if (pool && pendingTasks.length >= WORKER_THRESHOLD) {
+					// If the pool can't come up (failed worker import, crash on load,
+					// or a saturated machine), fall back to inline instead of hanging
+					// or failing the whole build.
+					const poolReady = yield* _(
+						Effect.tryPromise({
+							try: () => pool.ready(),
+							catch: (error) => new ImageProcessorError('Worker pool initialization failed', error),
+						}).pipe(
+							Effect.as(true),
+							Effect.catchAll((error) =>
+								Effect.gen(function* (_: any) {
+									releasePool();
+									yield* _(this.reporter.warn(
+										`Worker pool unavailable (${error.message}) — falling back to inline image processing`,
+									));
+									return false;
+								}.bind(this)),
+							),
+						),
+					);
+
+					if (poolReady) {
 						yield* _(
-							Effect.tryPromise({
-								try: async () => {
-									await this.processInline(task);
-									if (!this.config.keepOriginals && filePath !== dist) {
-										filesToRemove.push(filePath);
-									}
-									processed++;
-									spinner.text = `Optimizing images ${processed}/${total}`;
-								},
-								catch: () => new ImageProcessorError(`Failed to process ${filePath}`),
-							}).pipe(
-								Effect.catchAll((err) =>
-									Effect.sync(() => {
-										processed++;
-										spinner.text = `Optimizing images ${processed}/${total}`;
-										Effect.runSync(
-											this.reporter.warn(`Skipping problematic image: ${path.basename(filePath)} - ${err.message}`),
-										);
-									}),
-								),
+							Effect.ensuring(
+								Effect.gen(function* (_: any) {
+									yield* _(this.reporter.debugLog(
+										`[ImageProcessor] Pool ready — ${pool.size} workers initialized | Tasks to process: ${pendingTasks.length}`,
+									));
+
+									const promises = pendingTasks.map(({ filePath, dist, task }) =>
+										pool.run(task)
+											.then(() => {
+												if (!this.config.keepOriginals && filePath !== dist) {
+													filesToRemove.push(filePath);
+												}
+												processed++;
+												spinner.text = `Optimizing images ${processed}/${total} (active workers: ${pool.activeCount}, idle: ${pool.idleCount})`;
+											})
+											.catch((err) => {
+												processed++;
+												spinner.text = `Optimizing images ${processed}/${total}`;
+												Effect.runSync(
+													this.reporter.warn(`Skipping problematic image: ${path.basename(filePath)} - ${err.message}`),
+												);
+											}),
+									);
+
+									yield* _(
+										Effect.tryPromise({
+											try: () => Promise.all(promises),
+											catch: (error) => new ImageProcessorError('Worker pool processing failed', error),
+										}),
+									);
+								}.bind(this)),
+								Effect.sync(releasePool),
 							),
 						);
+					} else {
+						yield* _(runInline(pendingTasks));
 					}
+				} else {
+					releasePool();
+					yield* _(runInline(pendingTasks));
 				}
 
 				for (const file of filesToRemove) {
