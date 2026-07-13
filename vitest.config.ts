@@ -11,5 +11,8 @@ export default defineConfig({
 		globals: true,
 		testTimeout: 30000,
 		hookTimeout: 30000,
+		// macOS writes AppleDouble sidecars ("._build.test.ts") next to every file on
+		// non-native volumes; without this vitest collects them as broken test files.
+		exclude: ['**/node_modules/**', '**/dist/**', '**/._*'],
 	},
 });

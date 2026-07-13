@@ -187,7 +187,9 @@ describe('Pug Boilerplate', () => {
 		const sprite = readFileSync(join(buildDir, 'images/sprite/sprite.svg'), 'utf-8');
 		expect(sprite).toContain('<svg');
 		expect(sprite).toContain('symbol');
-	}, 30000);
+		// Generous budget: on Bun < 1.3 the image pass falls back to main-thread
+		// encoding, which is correct but several times slower than the worker pool.
+	}, 120000);
 
 	it('should start dev watch mode and compile Pug', async () => {
 		const result = await runDevWatch(PUG_BOILERPLATE, 5000);

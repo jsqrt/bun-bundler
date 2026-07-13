@@ -7,7 +7,6 @@
 		"type": "git",
 		"url": "git+https://github.com/jsqrt/bun-bundler.git"
 	},
-	"devDependencies": {},
 	"scripts": {
 		"start": "bun dev",
 		"dev": "cross-env NODE_ENV=development bun run _scripts/dev.js",

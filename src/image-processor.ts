@@ -13,6 +13,21 @@ import { onCleanup } from './cleanup';
 
 const WORKER_THRESHOLD = 4;
 
+// Bun < 1.3 segfaults when a worker dlopens sharp's native addon in a process that
+// has already run a build — reproducibly, down to a single worker, so capping the
+// pool doesn't help. A segfault kills the process outright and can't be caught, so
+// the only safe option on those versions is to skip workers and encode on the main
+// thread: slower, but it completes. Fixed upstream in Bun 1.3.
+const bunWorkersUnsafe = (): boolean => {
+	const version = (globalThis as any).Bun?.version;
+	if (typeof version !== 'string') return false;
+
+	const [major, minor] = version.split('.').map(Number);
+	if (!Number.isFinite(major) || !Number.isFinite(minor)) return false;
+
+	return major < 1 || (major === 1 && minor < 3);
+};
+
 export interface ImageProcessorConfig {
 	readonly entry: string;
 	readonly debug?: boolean;
@@ -87,6 +102,23 @@ class ImageProcessorImpl {
 
 		return { valid: true };
 	}
+
+	// sharp resolves its native binary from an optional, platform-specific package
+	// (@img/sharp-<platform>-<arch>). When node_modules was installed on a different
+	// platform that package is missing, and every worker dies on import with sharp's
+	// own install hint — which surfaces as an opaque worker-init failure. Probe it
+	// once on the main thread so the real cause is reported instead.
+	private ensureSharpAvailable = () =>
+		Effect.tryPromise({
+			try: () => import('sharp'),
+			catch: (error) =>
+				new ImageProcessorError(
+					`sharp has no native binary for ${process.platform}-${process.arch}. `
+						+ 'This usually means node_modules was installed on a different platform. '
+						+ `Reinstall it with: npm install --os=${process.platform} --cpu=${process.arch} sharp --force`,
+					error,
+				),
+		});
 
 	private buildDistPath(filePath: string): string {
 		const outputFormat = this.config.outputFormat;
@@ -176,6 +208,11 @@ class ImageProcessorImpl {
 					validFiles.push(filePath);
 				}
 
+				// Fail fast (and legibly) before spinning up a pool that can't import sharp
+				if (validFiles.length > 0) {
+					yield* _(this.ensureSharpAvailable());
+				}
+
 				// Step 2: pre-create worker pool so workers start loading sharp
 				// while we hash files — overlaps worker init with hashing
 				const cpuCount = os.cpus().length;
@@ -186,7 +223,15 @@ class ImageProcessorImpl {
 				const maxPoolSize = this.config.concurrency
 					|| (this.config.performance ? Math.max(2, cpuCount - 2) : Math.max(2, Math.floor(cpuCount / 2)));
 				const poolSize = Math.min(maxPoolSize, validFiles.length);
-				const useWorkers = validFiles.length >= WORKER_THRESHOLD;
+				const workersUnsafe = bunWorkersUnsafe();
+				const useWorkers = validFiles.length >= WORKER_THRESHOLD && !workersUnsafe;
+
+				if (workersUnsafe && validFiles.length >= WORKER_THRESHOLD) {
+					yield* _(this.reporter.warn(
+						`Bun ${(globalThis as any).Bun?.version} crashes when image workers load sharp — `
+							+ 'encoding on the main thread instead. Upgrade to Bun 1.3+ for parallel image processing.',
+					));
+				}
 				const pool = useWorkers
 					? new WorkerPool<ImageWorkerTask, ImageWorkerResult>(workerUrl, poolSize)
 					: null;
@@ -200,7 +245,7 @@ class ImageProcessorImpl {
 				}
 
 				yield* _(this.reporter.debugLog(
-					`[ImageProcessor] CPU cores: ${cpuCount} | Workers: ${poolSize} | Mode: ${useWorkers ? 'worker pool' : 'inline'}`,
+					`[ImageProcessor] CPU cores: ${cpuCount} | Mode: ${useWorkers ? `worker pool (${poolSize} workers)` : 'inline'}`,
 				));
 
 				// Step 3: parallel hashing (runs while workers warm up)
@@ -250,36 +295,37 @@ class ImageProcessorImpl {
 				}
 
 				// Inline fallback: used when there are too few files to justify a
-				// worker pool, or when the pool fails to initialize. Processing in
-				// the main thread is slower but never leaves orphaned workers.
+				// worker pool, when the pool fails to initialize, or on Bun versions
+				// where workers can't load sharp. Encoding happens on libvips' own
+				// threads, so running several at once overlaps them instead of
+				// serializing — a sequential loop here is several times slower.
 				const runInline = (tasks: PendingTask[]) =>
-					Effect.gen(function* (_: any) {
-						for (const { filePath, dist, task } of tasks) {
-							yield* _(
-								Effect.tryPromise({
-									try: async () => {
-										await this.processInline(task);
-										if (!this.config.keepOriginals && filePath !== dist) {
-											filesToRemove.push(filePath);
-										}
+					Effect.all(
+						tasks.map(({ filePath, dist, task }) =>
+							Effect.tryPromise({
+								try: async () => {
+									await this.processInline(task);
+									if (!this.config.keepOriginals && filePath !== dist) {
+										filesToRemove.push(filePath);
+									}
+									processed++;
+									spinner.text = `Optimizing images ${processed}/${total}`;
+								},
+								catch: () => new ImageProcessorError(`Failed to process ${filePath}`),
+							}).pipe(
+								Effect.catchAll((err) =>
+									Effect.sync(() => {
 										processed++;
 										spinner.text = `Optimizing images ${processed}/${total}`;
-									},
-									catch: () => new ImageProcessorError(`Failed to process ${filePath}`),
-								}).pipe(
-									Effect.catchAll((err) =>
-										Effect.sync(() => {
-											processed++;
-											spinner.text = `Optimizing images ${processed}/${total}`;
-											Effect.runSync(
-												this.reporter.warn(`Skipping problematic image: ${path.basename(filePath)} - ${err.message}`),
-											);
-										}),
-									),
+										Effect.runSync(
+											this.reporter.warn(`Skipping problematic image: ${path.basename(filePath)} - ${err.message}`),
+										);
+									}),
 								),
-							);
-						}
-					}.bind(this));
+							),
+						),
+						{ concurrency: Math.max(1, maxPoolSize), discard: true },
+					);
 
 				const releasePool = () => {
 					pool?.terminate();
@@ -442,14 +488,21 @@ class ImageProcessorImpl {
 				spinner.text = `Optimizing images 0/${filesToProcess.length}`;
 
 				yield* _(
-					Effect.catchAll(self.processWithWorkers(filesToProcess, spinner), (error) => {
-						spinner.fail('Image optimization failed');
-						return Effect.fail(
-							error instanceof ImageProcessorError
-								? error
-								: new ImageProcessorError('Image processing failed', error),
-						);
-					}),
+					Effect.catchAll(self.processWithWorkers(filesToProcess, spinner), (error) =>
+						Effect.gen(function* (_: any) {
+							spinner.fail('Image optimization failed');
+							// The bundler's top-level handler discards the error object, so the
+							// reason has to be printed here or it's lost.
+							yield* _(self.reporter.errLog(error instanceof ImageProcessorError ? error.message : String(error)));
+							return yield* _(
+								Effect.fail(
+									error instanceof ImageProcessorError
+										? error
+										: new ImageProcessorError('Image processing failed', error),
+								),
+							);
+						}),
+					),
 				);
 				spinner.succeed('Images optimized');
 			}.bind(this),
