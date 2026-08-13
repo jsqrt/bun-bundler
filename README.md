@@ -3,7 +3,8 @@
 [![Bun](https://img.shields.io/badge/Bun-%3E%3D1.0.0-f472b6.svg)](https://bun.sh/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-A fast, zero-config-friendly bundler for HTML/Pug, SCSS/CSS, and JavaScript projects. Built on [Bun](https://bun.sh/) runtime with [Effect](https://effect.website/) under the hood.
+A fast, zero-config-friendly bundler for HTML/Pug, 
+SCSS/CSS, and JavaScript projects. Built on [Bun](https://bun.sh/) runtime with [Effect](https://effect.website/) under the hood.
 
 ## Features
 
